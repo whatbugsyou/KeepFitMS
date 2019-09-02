@@ -1,0 +1,59 @@
+#服务器配置
+server:
+  address: localhost
+  port: 8080
+#日志配置
+
+#热部署配置
+spring:
+  devtools:
+    restart:
+      #开启热部署
+      enabled: true
+      #添加需要热部署的文件夹
+      additional-paths:
+      - src/main/java
+      - src/main/resources
+      #已热部署文件中需要排除的文件
+#      additional-exclude: scr/main/resources/static
+      #整体排除
+      exclude: src/test/java
+      
+  #百里香页配置
+#  thymeleaf:
+#    enabled: true
+#    #可用范围HTML JAVASCRIPT
+#    mode: JAVASCRIPT
+#    #开发时一般关缓存,上线时开缓存,提高解析效率
+#    cache: false
+#    encoding: UTF-8
+  
+  #数据库连接池配置
+  datasource:
+#    type: 
+    url: jdbc:mysql://localhost:3306/KeepFitMS?useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    data-username: root
+    data-password: 123
+    hikari:
+      username: root
+      password: 123
+     
+  redis:
+    host: localhost
+    port: 6379
+    
+
+mybatis:
+  type-aliases-package: com.KeepFitMS
+  mapper-locations:
+  - classpath:mapper/*.xml
+  
+logging:
+  #存放目录
+  path: 
+  #文件名
+  file: logfile.log 
+  #日志级别,默认INFO以及以上
+  level:
+    root: info

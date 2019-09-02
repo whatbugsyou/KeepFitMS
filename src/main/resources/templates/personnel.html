@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+</head>
+
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">人事管理!</h1>
+            <p class="lead">人事管理包含部门管理和员工管理.</p>
+            <hr class="my-4">
+            <dl>
+                <dt>部门管理</dt>
+                <dd>以分页的形式展示部门列表，列表页应显示添加、删除、修改按钮，以更改部门信息。数据示例：市场部、教练部、人事部。</dd>
+                <dt>员工管理</dt>
+                <dd>以分页的形式按入职时间由近及远展示员工列表，列表页应显示添加、删除、修改按钮，以更改部门信息。</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-3 border-right">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">部门管理</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">员工管理</a>
+                </div>
+            </div>
+            <div id="deptManagement" class="col-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                        <legend>部门列表</legend>
+                        <hr class="my-4">
+                        <table class="table table-bordered table-striped table-hover ">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>部门编号</th>
+                                    <th>部门名字</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(dept,index) in deptList " :key="dept.dept_id">
+                                    <td> <input class="checkBox" type="checkbox" name="dept_id_list" v-model="checked" :value="dept.dept_id"></td>
+                                    <td>{{dept.dept_id}}</td>
+                                    <td>{{dept.dept_name}}</td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-primary  " @click="modifyDept(index)">修改</button>
+                                            <button type="button" class="btn btn-danger  " @click="deleteDept(index)">删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-3">
+                                <button type="button" @click.prevent="deleteDepts" class="btn btn-danger">批量删除部门</button>
+                            </div>
+                            <div class="col-6 ">
+                                <nav aria-label="Page navigation example ">
+                                    <ul class="pagination">
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" @click.prevent="addDept" class="btn btn-primary float-right">添加部门</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                        <legend>员工列表</legend>
+                        <hr class="my-4">
+                        <table class="table table-bordered table-striped table-hover ">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>编号</th>
+                                    <th>姓名</th>
+                                    <th>职位</th>
+                                    <th>受雇日期</th>
+                                    <th>月工资</th>
+                                    <th>所属部门</th>
+                                    <th>电话号码</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(emp,index) in empList " :key="emp.emp_id">
+                                    <td> <input class="checkBox" type="checkbox" name="emp_id_list" v-model="checked" :value="emp.emp_id"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-primary  " @click="modifyEmp(index)">修改</button>
+                                            <button type="button" class="btn btn-danger  " @click="deleteEmp(index)">删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-3">
+                                <button type="button" @click.prevent="deleteEmps" class="btn btn-danger">批量删除员工</button>
+                            </div>
+                            <div class="col-6 ">
+                                <nav aria-label="Page navigation example ">
+                                    <ul class="pagination">
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" @click.prevent="addEmp" class="btn btn-primary float-right">添加员工</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="../static/js/vue.js"></script>
+        <script src="../static/js/jquery-3.3.1.min.js"></script>
+        <script src="../static/js/bootstrap.js"></script>
+        <!-- vue操作数据 -->
+        <script>
+            // 相关操作
+        </script>
+
+</body>
+
+</html>
