@@ -6,7 +6,11 @@ var dept_vm = new Vue({
             dept_id: 0,
             dept_name: '教练部',
             dept_numOfMembers: 100,
-        }, ],
+        }, {
+            dept_id: 1,
+            dept_name: '市场部',
+            dept_numOfMembers: 100,
+        }],
         addingDept: {
             dept_name: '教练部'
         },
@@ -14,6 +18,9 @@ var dept_vm = new Vue({
             dept_id: 0,
             dept_name: '',
             dept_numOfMembers: 100,
+        },
+        deletingDept: {
+            index: -1
         }
     },
     methods: {
@@ -35,7 +42,7 @@ var dept_vm = new Vue({
                 }
             })
         },
-        modifyDept: function(index) {
+        modifyDept: function() {
             $.ajax({
                 type: "post",
                 url: "modifyDept.do",
@@ -92,21 +99,21 @@ var emp_vm = new Vue({
     el: '#empManagement',
     data: {
         empList: [{
-            emp_id: 0,
+            emp_id: 1,
             emp_name: '张三',
             job_name: '瑜伽教练',
             emp_hiredate: '',
             dept_name: '教练部',
             emp_phone: '131-0020-2000'
         }, {
-            emp_id: 0,
+            emp_id: 2,
             emp_name: '李四',
             job_name: '推销员',
             emp_hiredate: '',
             dept_name: '市场部',
             emp_phone: '13100202000'
         }, {
-            emp_id: 0,
+            emp_id: 3,
             emp_name: '王五',
             job_name: '前台文员',
             emp_hiredate: '',
@@ -123,6 +130,9 @@ var emp_vm = new Vue({
         modifingEmp: {
             emp_id: -1,
             new_emp_name: '',
+        },
+        deletingDept: {
+            index: -1
         }
     },
     methods: {
@@ -144,7 +154,7 @@ var emp_vm = new Vue({
                 }
             })
         },
-        modifyEmp: function(index) {
+        modifyEmp: function() {
             $.ajax({
                 type: "post",
                 url: "modifyEmp.do",
