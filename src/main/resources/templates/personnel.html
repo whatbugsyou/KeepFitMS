@@ -58,8 +58,8 @@
                                         <td>{{dept.dept_numOfMembers}}</td>
                                         <td style="width: 176px;">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-primary  " onclike="javascript:modifingDept=deptList[index]" data-toggle="modal" data-target="#modifyDeptModal"> <i class="fa fa-pencil"></i>&nbsp;修改</button>
-                                                <button type="button" class="btn btn-danger  " @click="deleteDept(index)"> <i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                                <button type="button" class="btn btn-primary  " @click="modifingDept=JSON.parse(JSON.stringify(deptList[index]))" data-toggle="modal" data-target="#modifyDeptModal"> <i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                                <button type="button" class="btn btn-danger  " @click="deletingDept.index=index;" data-toggle="modal" data-target="#deleteDeptModal"> <i class="fa fa-trash-o"></i>&nbsp;删除</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -86,7 +86,7 @@
                                     </nav>
                                 </div>
                                 <div class="col">
-                                    <button type="button" @click.prevent="addDept" class="btn btn-primary float-right"> <i class="fa fa-plus-square"></i>&nbsp;添加部门</button>
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addDeptModal"> <i class="fa fa-plus-square"></i>&nbsp;添加部门</button>
                                 </div>
                             </div>
                             <!-- modifyDeptModal -->
@@ -102,13 +102,55 @@
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <label for="">部门名</label>
-                                                <input type="text" class="form-control" name="" id="" aria-describedby="helpId" :placeholder="modifingDept.dept_id">
+                                                <input type="text" class="form-control" name="new_dept_name" id="new_dept_name" v-model="modifingDept.dept_name" aria-describedby="helpId">
                                                 <small id="helpId" class="form-text text-muted">提示信息</small>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" @click="modifyDept(index)">Save changes</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="modifyDept()">保存修改</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- addDeptModal -->
+                            <div class="modal fade" id="addDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">添加部门</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                 <span aria-hidden="true">&times;</span>
+                                             </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="">部门名</label>
+                                                <input type="text" class="form-control" name="new_dept_name" id="new_dept_name" v-model="addDept.dept_name" aria-describedby="helpId">
+                                                <small id="helpId" class="form-text text-muted">提示信息</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="addDept()">添加</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- deleteDeptModal -->
+                            <div class="modal fade" id="deleteDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                <div class="alert alert-danger" role="alert">
+                                                    删除部门为敏感操作，请确认是否删除。
+                                                </div>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-danger" @click="deleteDept(deletingDept.index)">确认删除</button>
                                         </div>
                                     </div>
                                 </div>
@@ -145,8 +187,8 @@
                                         <td>{{emp.emp_phone}}</td>
                                         <td style="width: 176px;">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-primary  " @click="modifyEmp(index)"><i class="fa fa-pencil"></i>&nbsp;修改</button>
-                                                <button type="button" class="btn btn-danger  " @click="deleteEmp(index)"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                                <button type="button" class="btn btn-primary  " @click="modifyEmp(index)" data-toggle="modal" data-target="#modifyEmpModal"><i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                                <button type="button" class="btn btn-danger  " @click="deleteEmp(index)" data-toggle="modal" data-target="#deleteEmpModal"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -174,10 +216,75 @@
                                     </nav>
                                 </div>
                                 <div class="col">
-                                    <button type="button" @click.prevent="addEmp()" class="btn btn-primary float-right"><i class="fa fa-plus-square"></i>&nbsp;添加员工</button>
+                                    <button type="button" @click.prevent="addEmp()" class="btn btn-primary float-right" data-toggle="modal" data-target="#addEmpModal"><i class="fa fa-plus-square"></i>&nbsp;添加员工</button>
                                 </div>
                             </div>
-
+                            <!-- modifyEmpModal -->
+                            <div class="modal fade" id="modifyEmpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">修改员工信息</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                 <span aria-hidden="true">&times;</span>
+                                             </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="">员工名</label>
+                                                <input type="text" class="form-control" name="new_emp_name" id="new_dept_name" v-model="modifingEmp.emp_name" aria-describedby="helpId">
+                                                <small id="helpId" class="form-text text-muted">提示信息</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="modifyEmp()">保存修改</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- addEmpModal -->
+                            <div class="modal fade" id="addEmpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">添加员工</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                     <span aria-hidden="true">&times;</span>
+                                                 </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="">员工名</label>
+                                                <input type="text" class="form-control" name="new_emp_name" id="new_emp_name" v-model="addingEmp.emp_name" aria-describedby="helpId">
+                                                <small id="helpId" class="form-text text-muted">提示信息</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="addEmp()">添加</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- deleteEmpModal -->
+                            <div class="modal fade" id="deleteEmpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                <div class="alert alert-danger" role="alert">
+                                                    删除员工为敏感操作，请确认是否删除。
+                                                </div>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-danger" @click="deleteEmp(deletingEmp.index)">确认删除</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
