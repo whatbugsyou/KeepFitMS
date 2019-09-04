@@ -12,7 +12,7 @@ public class PersonnelController {
 	@Autowired
 	private EmpService empService;
 	
-	@GetMapping("testP.do")
+	@GetMapping("/personnel.html")
 	public String testP() {
 		return "personnel.html";
 	}

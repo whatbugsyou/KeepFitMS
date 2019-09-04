@@ -20,13 +20,13 @@ spring:
       exclude: src/test/java
       
   #百里香页配置
-#  thymeleaf:
-#    enabled: true
-#    #可用范围HTML JAVASCRIPT
-#    mode: JAVASCRIPT
-#    #开发时一般关缓存,上线时开缓存,提高解析效率
-#    cache: false
-#    encoding: UTF-8
+  thymeleaf:
+    enabled: true
+    #可用范围HTML JAVASCRIPT
+    mode: JAVASCRIPT
+    #开发时一般关缓存,上线时开缓存,提高解析效率
+    cache: false
+    encoding: UTF-8
   
   #数据库连接池配置
   datasource:
