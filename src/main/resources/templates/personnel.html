@@ -3,12 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
+    <title>人事管理</title>
     <link rel="stylesheet" href="../static/css/bootstrap.css">
     <link rel="stylesheet" href="../static/css/font-awesome.css">
 </head>
 
 <body>
+    <!-- 大标题 -->
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <h1 class="display-4">人事管理!</h1>
@@ -22,135 +23,269 @@
             </dl>
         </div>
     </div>
+
     <div class="container">
         <div class="row">
-            <div class="col-3 border-right">
+            <!-- 左侧边栏 -->
+            <div class="col-2 border-right">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">部门管理</a>
-                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">员工管理</a>
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" onclick="dept_vm.getAllDept()" aria-controls="v-pills-home" aria-selected="true">部门管理</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" onclick="emp_vm.getAllEmp()" aria-controls="v-pills-profile" aria-selected="false">员工管理</a>
                 </div>
             </div>
-            <div id="deptManagement" class="col-9">
+            <!-- 右侧展示区  -->
+            <div class="col-10">
                 <div class="tab-content" id="v-pills-tabContent">
+                    <!-- 部门 -->
+
                     <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                        <legend>部门列表</legend>
-                        <hr class="my-4">
-                        <table class="table table-bordered table-striped table-hover ">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>部门编号</th>
-                                    <th>部门名字</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(dept,index) in deptList " :key="dept.dept_id">
-                                    <td> <input class="checkBox" type="checkbox" name="dept_id_list" v-model="checked" :value="dept.dept_id"></td>
-                                    <td>{{dept.dept_id}}</td>
-                                    <td>{{dept.dept_name}}</td>
-                                    <td>
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-primary  " @click="modifyDept(index)">修改</button>
-                                            <button type="button" class="btn btn-danger  " @click="deleteDept(index)">删除</button>
+                        <div id="deptManagement">
+                            <legend>部门列表</legend>
+                            <hr class="my-4">
+                            <table class="table table-bordered table-striped table-hover ">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>部门名字</th>
+                                        <th>总人数</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(dept,index) in deptList " :key="dept.dept_id">
+                                        <td>{{index+1}}</td>
+                                        <td>{{dept.dept_name}}</td>
+                                        <td>{{dept.dept_numOfMembers}}</td>
+                                        <td style="width: 176px;">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button type="button" class="btn btn-primary  " @click="modifingDept=JSON.parse(JSON.stringify(deptList[index]))" data-toggle="modal" data-target="#modifyDeptModal"> <i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                                <button type="button" class="btn btn-danger  " @click="deletingDept.index=index;" data-toggle="modal" data-target="#deleteDeptModal"> <i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-6 ">
+                                    <nav aria-label="Page navigation example ">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addDeptModal"> <i class="fa fa-plus-square"></i>&nbsp;添加部门</button>
+                                </div>
+                            </div>
+                            <!-- modifyDeptModal -->
+                            <div class="modal fade" id="modifyDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">修改部门信息</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                             <span aria-hidden="true">&times;</span>
+                                         </button>
                                         </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="row">
-                            <div class="col-3">
-                                <button type="button" @click.prevent="deleteDepts" class="btn btn-danger">批量删除部门</button>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="">部门名</label>
+                                                <input type="text" class="form-control" name="new_dept_name" id="new_dept_name" v-model="modifingDept.dept_name" aria-describedby="helpId">
+                                                <small id="helpId" class="form-text text-muted">提示信息</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="modifyDept()">保存修改</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-6 ">
-                                <nav aria-label="Page navigation example ">
-                                    <ul class="pagination">
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                            <!-- addDeptModal -->
+                            <div class="modal fade" id="addDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">添加部门</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                 <span aria-hidden="true">&times;</span>
+                                             </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="">部门名</label>
+                                                <input type="text" class="form-control" name="new_dept_name" id="new_dept_name" v-model="addDept.dept_name" aria-describedby="helpId">
+                                                <small id="helpId" class="form-text text-muted">提示信息</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="addDept()">添加</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-3">
-                                <button type="button" @click.prevent="addDept" class="btn btn-primary float-right">添加部门</button>
+                            <!-- deleteDeptModal -->
+                            <div class="modal fade" id="deleteDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                <div class="alert alert-danger" role="alert">
+                                                    删除部门为敏感操作，请确认是否删除。
+                                                </div>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-danger" @click="deleteDept(deletingDept.index)">确认删除</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     </div>
+
+
+                    <!-- 员工 -->
+
                     <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                        <legend>员工列表</legend>
-                        <hr class="my-4">
-                        <table class="table table-bordered table-striped table-hover ">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>编号</th>
-                                    <th>姓名</th>
-                                    <th>职位</th>
-                                    <th>受雇日期</th>
-                                    <th>月工资</th>
-                                    <th>所属部门</th>
-                                    <th>电话号码</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(emp,index) in empList " :key="emp.emp_id">
-                                    <td> <input class="checkBox" type="checkbox" name="emp_id_list" v-model="checked" :value="emp.emp_id"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-primary  " @click="modifyEmp(index)">修改</button>
-                                            <button type="button" class="btn btn-danger  " @click="deleteEmp(index)">删除</button>
+                        <div id="empManagement">
+                            <legend>员工列表</legend>
+                            <hr class="my-4">
+                            <table class="table table-bordered table-striped table-hover ">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>姓名</th>
+                                        <th>职位</th>
+                                        <th>所属部门</th>
+                                        <th onclick="javascript:alert('按照受雇日期排序（等待实现）')">受雇日期</th>
+                                        <th>电话号码</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(emp,index) in empList " :key="emp.emp_id">
+                                        <td>{{index+1}}</td>
+                                        <td>{{emp.emp_name}}</td>
+                                        <td>{{emp.job_name}}</td>
+                                        <td>{{emp.dept_name}}</td>
+                                        <td>{{emp.emp_hiredate}}</td>
+                                        <td>{{emp.emp_phone}}</td>
+                                        <td style="width: 176px;">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button type="button" class="btn btn-primary  " @click="modifyEmp(index)" data-toggle="modal" data-target="#modifyEmpModal"><i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                                <button type="button" class="btn btn-danger  " @click="deleteEmp(index)" data-toggle="modal" data-target="#deleteEmpModal"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col ">
+                                    <!-- 分页条 -->
+                                    <nav aria-label="Page navigation example ">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="col">
+                                    <button type="button" @click.prevent="addEmp()" class="btn btn-primary float-right" data-toggle="modal" data-target="#addEmpModal"><i class="fa fa-plus-square"></i>&nbsp;添加员工</button>
+                                </div>
+                            </div>
+                            <!-- modifyEmpModal -->
+                            <div class="modal fade" id="modifyEmpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">修改员工信息</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                 <span aria-hidden="true">&times;</span>
+                                             </button>
                                         </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="row">
-                            <div class="col-3">
-                                <button type="button" @click.prevent="deleteEmps" class="btn btn-danger">批量删除员工</button>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="">员工名</label>
+                                                <input type="text" class="form-control" name="new_emp_name" id="new_dept_name" v-model="modifingEmp.emp_name" aria-describedby="helpId">
+                                                <small id="helpId" class="form-text text-muted">提示信息</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="modifyEmp()">保存修改</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-6 ">
-                                <nav aria-label="Page navigation example ">
-                                    <ul class="pagination">
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                            <!-- addEmpModal -->
+                            <div class="modal fade" id="addEmpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">添加员工</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                     <span aria-hidden="true">&times;</span>
+                                                 </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="">员工名</label>
+                                                <input type="text" class="form-control" name="new_emp_name" id="new_emp_name" v-model="addingEmp.emp_name" aria-describedby="helpId">
+                                                <small id="helpId" class="form-text text-muted">提示信息</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" @click="addEmp()">添加</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-3">
-                                <button type="button" @click.prevent="addEmp" class="btn btn-primary float-right">添加员工</button>
+                            <!-- deleteEmpModal -->
+                            <div class="modal fade" id="deleteEmpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                <div class="alert alert-danger" role="alert">
+                                                    删除员工为敏感操作，请确认是否删除。
+                                                </div>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-danger" @click="deleteEmp(deletingEmp.index)">确认删除</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -160,10 +295,7 @@
         <script src="../static/js/vue.js"></script>
         <script src="../static/js/jquery-3.3.1.min.js"></script>
         <script src="../static/js/bootstrap.js"></script>
-        <!-- vue操作数据 -->
-        <script>
-            // 相关操作
-        </script>
+        <script src="../static/js/personnel.js"></script>
 
 </body>
 
