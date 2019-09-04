@@ -12,10 +12,6 @@ public class PersonnelController {
 	@Autowired
 	private EmpService empService;
 	
-	@GetMapping("/personnel.html")
-	public String testP() {
-		return "personnel.html";
-	}
 	@GetMapping("/addDept.do")
 	@ResponseBody
 	public  String addDept() {
