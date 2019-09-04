@@ -1,7 +1,9 @@
 package com.KeepFitMS.serviceImpl;
 
-import com.KeepFitMS.service.EmpService;
+import org.springframework.stereotype.Service;
 
+import com.KeepFitMS.service.EmpService;
+@Service
 public class EmpServiceImpl implements EmpService {
 
 }

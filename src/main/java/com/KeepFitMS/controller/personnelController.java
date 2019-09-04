@@ -8,10 +8,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.KeepFitMS.service.EmpService;
 
 @Controller
-public class personnelController {
+public class PersonnelController {
 	@Autowired
 	private EmpService empService;
 	
+	@GetMapping("testP.do")
+	public String testP() {
+		return "personnel.html";
+	}
 	@GetMapping("/addDept.do")
 	@ResponseBody
 	public  String addDept() {
