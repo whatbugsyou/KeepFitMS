@@ -32,6 +32,7 @@ var dept_vm = new Vue({
                     'dept_id': dept_id
                 },
                 type: "POST",
+                dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
                         alert('删除成功');
@@ -47,7 +48,7 @@ var dept_vm = new Vue({
                 type: "post",
                 url: "modifyDept.do",
                 data: this.modifingDept,
-                dataType: "dataType",
+                dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
                         alert('添加成功');
@@ -63,7 +64,7 @@ var dept_vm = new Vue({
                 type: "post",
                 url: "addDept.do",
                 data: this.addingDept,
-                dataType: "dataType",
+                dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
                         alert('添加成功');
@@ -79,11 +80,11 @@ var dept_vm = new Vue({
                 type: "post",
                 url: "getAllDept.do",
                 data: '',
-                dataType: "dataType",
+                dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
                         alert('获取部门数据成功');
-                        this.deptList = response[allDeptData];
+                        this.deptList = response["allDeptData"];
                     } else {
                         alert('获取失败');
                     }
@@ -99,27 +100,57 @@ var emp_vm = new Vue({
     el: '#empManagement',
     data: {
         empList: [{
-            emp_id: 1,
-            emp_name: '张三',
-            job_name: '瑜伽教练',
-            emp_hiredate: '',
-            dept_name: '教练部',
-            emp_phone: '131-0020-2000'
-        }, {
-            emp_id: 2,
-            emp_name: '李四',
-            job_name: '推销员',
-            emp_hiredate: '',
-            dept_name: '市场部',
-            emp_phone: '13100202000'
-        }, {
-            emp_id: 3,
-            emp_name: '王五',
-            job_name: '前台文员',
-            emp_hiredate: '',
-            dept_name: '人事部',
-            emp_phone: '13100202000'
-        }],
+                "emp_id": 1,
+                "emp_name": "张三",
+                "job": {
+                    "job_id": 1,
+                    "job_name": "普通教练",
+                    "job_sal": 4000,
+                    "dept": {}
+                },
+                "emp_hiredate": "2019-09-01",
+                "emp_phone": "131-1234-1234",
+                "dept": {
+                    "dept_id": 1,
+                    "dept_name": "教练部",
+                    "dept_memberNum": 2
+                }
+            },
+            {
+                "emp_id": 2,
+                "emp_name": "张女",
+                "job": {
+                    "job_id": 2,
+                    "job_name": "瑜伽教练",
+                    "job_sal": 4000,
+                    "dept": {}
+                },
+                "emp_hiredate": "2019-09-01",
+                "emp_phone": "131-1234-4567",
+                "dept": {
+                    "dept_id": 1,
+                    "dept_name": "教练部",
+                    "dept_memberNum": 2
+                }
+            },
+            {
+                "emp_id": 3,
+                "emp_name": "李四",
+                "job": {
+                    "job_id": 3,
+                    "job_name": "前台文员",
+                    "job_sal": 4000,
+                    "dept": {}
+                },
+                "emp_hiredate": "2019-09-02",
+                "emp_phone": "131-9987-4567",
+                "dept": {
+                    "dept_id": 2,
+                    "dept_name": "人事部",
+                    "dept_memberNum": 2
+                }
+            }
+        ],
         addingEmp: {
             emp_name: '李四',
             job_name: '前台',
@@ -144,6 +175,7 @@ var emp_vm = new Vue({
                     'emp_id': emp_id
                 },
                 type: "POST",
+                dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
                         alert('删除成功');
@@ -159,7 +191,7 @@ var emp_vm = new Vue({
                 type: "post",
                 url: "modifyEmp.do",
                 data: this.modifingEmp,
-                dataType: "dataType",
+                dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
                         alert('添加成功');
@@ -175,7 +207,7 @@ var emp_vm = new Vue({
                 type: "post",
                 url: "addEmp.do",
                 data: this.addingEmp,
-                dataType: "dataType",
+                dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
                         alert('添加成功');
@@ -188,17 +220,20 @@ var emp_vm = new Vue({
         },
         getAllEmp: function() {
             $.ajax({
-                type: "post",
+                type: "get",
                 url: "getAllEmp.do",
                 data: '',
-                dataType: "dataType",
+                dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
-                        alert('获取部门数据成功');
-                        this.EmpList = response[allEmpData];
+                        console.log('获取员工数据成功');
+                        this.empList = response["allEmpData"];
                     } else {
-                        alert('获取失败');
+                        alert('获取员工数据失败');
                     }
+                },
+                error: (response) => {
+                    alert('网络请求失败');
                 }
             });
         }

@@ -181,8 +181,8 @@
                                     <tr v-for="(emp,index) in empList " :key="emp.emp_id">
                                         <td>{{index+1}}</td>
                                         <td>{{emp.emp_name}}</td>
-                                        <td>{{emp.job_name}}</td>
-                                        <td>{{emp.dept_name}}</td>
+                                        <td>{{emp.job.job_name}}</td>
+                                        <td>{{emp.dept.dept_name}}</td>
                                         <td>{{emp.emp_hiredate}}</td>
                                         <td>{{emp.emp_phone}}</td>
                                         <td style="width: 176px;">
