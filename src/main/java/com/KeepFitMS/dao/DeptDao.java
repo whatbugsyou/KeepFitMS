@@ -42,6 +42,14 @@ public interface DeptDao {
 
 	@Select("select * from dept where dept_id=#{dept_id}")
 	Dept selectDeptByDeptId(int dept_id);
+	/**
+	 * 根据dept_name查询部门
+	 * @param dept_name 部门名
+	 * @return
+	 */
+
+	@Select("select * from dept where dept_name=#{dept_name}")
+	Dept selectDeptByDeptName(String dept_name);
 	
 	/**
 	 * 	添加部门
@@ -50,7 +58,7 @@ public interface DeptDao {
 	 */
 	@Options(useGeneratedKeys=true,keyProperty="dept_id",keyColumn="dept_id")
 	@Insert("insert into dept(dept_name,dept_memberNum) values(#{dept_name},0)")
-	int addDept(Dept Dept);
+	int insertDept(Dept Dept);
 	
 	/**
 	 * 	更新部门信息
@@ -67,4 +75,5 @@ public interface DeptDao {
 	 */
 	@Delete("delete from dept where dept_id=#{dept_id}")
 	int deleteDept(int dept_id);
+
 }

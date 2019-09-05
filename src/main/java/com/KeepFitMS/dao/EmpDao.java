@@ -82,7 +82,7 @@ public interface EmpDao {
 	 */
 	@Options(useGeneratedKeys=true,keyProperty="emp_id",keyColumn="emp_id")
 	@Insert("insert into emp(emp_name,emp_hiredate,job_id,dept_id) values(#{emp_name},#{emp_hiredate},#{job.job_id},#{dept.dept_id})")
-	int addEmp(Emp Emp);
+	int insertEmp(Emp Emp);
 
 	/**
 	 * 更新员工信息

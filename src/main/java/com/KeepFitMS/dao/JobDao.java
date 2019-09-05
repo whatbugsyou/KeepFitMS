@@ -71,7 +71,7 @@ public interface JobDao {
 	 */
 	@Options(useGeneratedKeys=true,keyProperty="job_id",keyColumn="job_id")
 	@Insert("insert into job(job_name,job_hiredate,job_id,dept_id) values(#{job_name},#{job_hiredate},#{job.job_id},#{dept.dept_id})")
-	int addJob(Job Job);
+	int insertJob(Job Job);
 	
 	/**
 	 * 	更新职位信息

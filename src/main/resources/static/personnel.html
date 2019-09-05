@@ -55,7 +55,7 @@
                                     <tr v-for="(dept,index) in deptList " :key="dept.dept_id">
                                         <td>{{index+1}}</td>
                                         <td>{{dept.dept_name}}</td>
-                                        <td>{{dept.dept_numOfMembers}}</td>
+                                        <td>{{dept.dept_memberNum}}</td>
                                         <td style="width: 176px;">
                                             <div class="btn-group" role="group" aria-label="Basic example">
                                                 <button type="button" class="btn btn-primary  " @click="modifingDept=JSON.parse(JSON.stringify(deptList[index]))" data-toggle="modal" data-target="#modifyDeptModal"> <i class="fa fa-pencil"></i>&nbsp;修改</button>
@@ -126,7 +126,7 @@
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <label for="">部门名</label>
-                                                <input type="text" class="form-control" name="new_dept_name" id="new_dept_name" v-model="addDept.dept_name" aria-describedby="helpId">
+                                                <input type="text" class="form-control" name="new_dept_name" id="new_dept_name" v-model="addingDept.dept_name" aria-describedby="helpId">
                                                 <small id="helpId" class="form-text text-muted">提示信息</small>
                                             </div>
                                         </div>
@@ -216,7 +216,7 @@
                                     </nav>
                                 </div>
                                 <div class="col">
-                                    <button type="button" @click.prevent="addEmp()" class="btn btn-primary float-right" data-toggle="modal" data-target="#addEmpModal"><i class="fa fa-plus-square"></i>&nbsp;添加员工</button>
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addEmpModal"><i class="fa fa-plus-square"></i>&nbsp;添加员工</button>
                                 </div>
                             </div>
                             <!-- modifyEmpModal -->

@@ -5,19 +5,21 @@ var dept_vm = new Vue({
         deptList: [{
             dept_id: 0,
             dept_name: '教练部',
-            dept_numOfMembers: 100,
+            dept_memberNum: 100,
         }, {
             dept_id: 1,
             dept_name: '市场部',
-            dept_numOfMembers: 100,
+            dept_memberNum: 100,
         }],
         addingDept: {
-            dept_name: '教练部'
+            dept_id: 0,
+            dept_name: '',
+            dept_memberNum: 0,
         },
         modifingDept: {
             dept_id: 0,
             dept_name: '',
-            dept_numOfMembers: 100,
+            dept_memberNum: 100,
         },
         deletingDept: {
             index: -1
@@ -70,27 +72,33 @@ var dept_vm = new Vue({
                         alert('添加成功');
                         this.deptList.push(response["newDept"]);
                     } else {
-                        alert('添加失败');
+                        alert(response["msg"]);
                     }
                 }
             });
         },
         getAllDept: function() {
             $.ajax({
-                type: "post",
+                type: "get",
                 url: "getAllDept.do",
                 data: '',
                 dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
-                        alert('获取部门数据成功');
+                        console.log('获取部门数据成功');
                         this.deptList = response["allDeptData"];
                     } else {
                         alert('获取失败');
                     }
+                },
+                error: (response) => {
+                    alert('网络请求失败');
                 }
             });
         }
+    },
+    created() {
+        this.getAllDept();
     },
 
 })
