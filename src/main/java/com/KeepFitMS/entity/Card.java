@@ -1,6 +1,6 @@
 package com.KeepFitMS.entity;
 
-
+import java.util.Date;
 
 /*
  * 会员卡实体
@@ -17,8 +17,8 @@ public class Card {
 	private int cmoney;
 	private int cpoints;
 	private int mid;
-	private String sdate;
-	private String edate;
+	private Date sdate;
+	private Date edate;
 	public int getCid() {
 		return cid;
 	}
@@ -55,16 +55,16 @@ public class Card {
 	public void setMid(int mid) {
 		this.mid = mid;
 	}
-	public String getSdate() {
+	public Date getSdate() {
 		return sdate;
 	}
-	public void setSdate(String sdate) {
+	public void setSdate(Date sdate) {
 		this.sdate = sdate;
 	}
-	public String getEdate() {
+	public Date getEdate() {
 		return edate;
 	}
-	public void setEdate(String edate) {
+	public void setEdate(Date edate) {
 		this.edate = edate;
 	}
 }

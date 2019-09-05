@@ -22,5 +22,10 @@ public class MemberServiceImpl implements MemberService {
 		// TODO Auto-generated method stub
 		return md.addMember(member);
 	}
+	@Override
+	public Member getMemberByMid(int mid) {
+		// TODO Auto-generated method stub
+		return md.getMemberByMid(mid);
+	}
 
 }

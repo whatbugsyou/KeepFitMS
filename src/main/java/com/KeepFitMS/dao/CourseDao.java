@@ -3,6 +3,7 @@ package com.KeepFitMS.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.KeepFitMS.entity.Course;
@@ -12,7 +13,7 @@ import com.KeepFitMS.entity.Course;
  * @author zsz
  *
  */
-@Repository
+@Mapper
 public interface CourseDao {
 	
 	/**

@@ -26,4 +26,12 @@ public class M_recordController {
 		}
 		return "test";
 	}
+	
+	
+	@RequestMapping("addM_record.do")
+	public String addM_record(M_record mr) {
+		mrs.addRecord(mr);
+		return "test.html";
+	}
+	
 }

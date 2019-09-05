@@ -6,7 +6,7 @@ public class Member {
 	private int mid;
 	private String mname;
 	private String mtelephone;
-	private String mdate;
+	private Date mdate;
 	private String msfz;
 	private String maddress;
 	private String msex;
@@ -41,10 +41,10 @@ public class Member {
 	public void setMtelephone(String mtelephone) {
 		this.mtelephone = mtelephone;
 	}
-	public String getMdate() {
+	public Date getMdate() {
 		return mdate;
 	}
-	public void setMdate(String mdate) {
+	public void setMdate(Date mdate) {
 		this.mdate = mdate;
 	}
 	public String getMsfz() {

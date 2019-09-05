@@ -6,6 +6,7 @@
     <result column="mname" property="mname" jdbcType="VARCHAR" />
     <result column="mdate" property="mdate"  />
     <result column="msfz" property="msfz"  />
+    <result column="mtelephone" property="mtelephone"></result>
     <result column="maddress" property="maddress"  />
   	<result column="msex" property="msex"  />
   	<result column="coach_id" property="coach_id"  />
@@ -29,6 +30,9 @@
 
   <select id="getAllMember" resultMap="MemberMap" >
     select * from member m,card c where m.mid=c.mid
+  </select>
+  <select id="getMemberByMid" resultMap="MemberMap">
+  select *from member m,card c where m.mid=#{mid} and c.mid=m.mid
   </select>
  
 </mapper>

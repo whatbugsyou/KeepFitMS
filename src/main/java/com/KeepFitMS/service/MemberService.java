@@ -9,4 +9,6 @@ public interface MemberService {
 		List<Member> getAllMember();
 		//添加用户,录入会员基本信息
 		int addMember(Member member);
+		//根据ID查询会员
+		Member getMemberByMid(int mid);
 }
