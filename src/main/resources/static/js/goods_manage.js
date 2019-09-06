@@ -1,32 +1,91 @@
+
  $(function(){
-    //进入页面直接展示所有商品
-    $.get("http://localhost:8080/KeepFitMS/selectAllGoods.do",
-        function (res) {
-            $("#showAll").html("");
-            $.each(res, function (index, value) { 
-                var content = null;
-                $("#showAll").append(content);//获取状态，并判断             
-                content+="<tr><td>"+value.goods_name+"</td>";
-                content+="<td><img src="+value.goods_img+" width='20' height='20' onmouseenter='imgBig(this)' onmouseleave='imgSmall(this)'/></td>"
-                content+="<td>"+value.goods_price+"</td>"
-                content+="<td>"+value.ptype_name+"</td>"
-                content+="<td>"+value.pctype.name+"</td>"
-                if(value.goods_status==true){
-                    //获取状态，并判断
-                    content+="<td class='goods_status'id='status"+value.goods_id+"' onclick='changeStatus("+value.goods_id,value.goods_status+")' style='color:green'>上架</td>"
-                }else{
-                    content+="<td class='goods_status' id='status"+value.goods_id+"'  onclick='changeStatus("+value.goods_id,value.goods_status+")' style='color:red'>下架</td>"
-                }                       
-                    content+="<td> <button class='layui-btn layui-btn-xs' onclick='updateBut()'>使用</button> </td>"
+	    //进入页面直接展示所有商品
+		 findGoods()
+		
+	    //进入页面获取一级分类
+	   $.get("http://localhost:8080/selectAllType.do",
+	        function (res) {
+	            var content = "";
+	            content+="<option value='0' selected>全部</option>"
+	            $.each(res, function (index, ptype) {    
+	                content+="<option value='"+ptype.ptype_id+"'>"+ptype.ptype_name+"</option>"
+	            });
+	            $("#provId").html(content);     
+	        }
+	    ); 
+	}); 
 
-            });
-        }
-    );
-   
+	function findGoods(){
+		//分页
+		layui.use('laypage', function() {
+		 var laypage = layui.laypage;
+		 $.get("http://localhost:8080/selectGoods.do",{"curr":1,"limit":10},
+			        function(res) {
+			 			console.log(res);
+			    		showGoods(res);
+			    		//总页数大于页码总数
+			    		laypage.render({
+						    elem: 'pages'
+						    ,count: res.count
+						    ,limit:5
+						    ,limits:[5,10,15,20]
+						    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+						    ,jump: function(obj){
+						      console.log(obj)
+						      $.get("http://localhost:8080/selectGoods.do",{"curr":obj.curr,"limit":obj.limit},
+			    						 function (res) {
+			    							showGoods(res);
+			    						})
+			    						
+						    }
+						});
+	/*		    		laypage.render({
+			    			elem: 'pages'
+			    			,count: 100
+			    			,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']             
+			    			,jump: function(obj){
+			    				console.log(obj)
+			    			    //分页切换的回掉
+			    				$.get("http://localhost:8080/selectGoods.do",{"curr":data.curr,"limit":data.limit},
+			    						 function (res) {
+			    							showGoods(res);
+			    						});
+			    			}
+			    		});*/
+			        }
+			    );
+		});
+	}
 
 
 
-}); 
+	//展示商品并渲染到页面
+	function showGoods(res){
+	    var content = "";    
+	    $.each(res.goods, function (index, goods) { 
+	        content+="<tr><td>"+goods.goods_name+"</td>";
+	        content+="<td><img src="+goods.goods_img+" width='20' height='20' onmouseenter='imgBig(this)' onmouseleave='imgSmall(this)'/></td>"
+	        content+="<td>"+goods.goods_price+"</td>"
+	        content+="<td>"+goods.ptype.ptype_name+"</td>"
+	        content+="<td>"+goods.pctype.pctype_name+"</td>"                   
+           
+                	 if(goods.goods_status==true){
+                         //获取状态，并判断
+                         content+="<td><button type='button' class='layui-btn'><i class='layui-icon'>&#xe605;</i> </button></td>"
+ 
+
+                     }else{
+                    	   content+="<td><button type='button' class='layui-btn layui-btn-primary'><i class='layui-icon'>&#x1006;</i> </button></td>"
+                     }        
+                         content+="<td> <button class='layui-btn layui-btn-xs' onclick='updateBut()'>使用</button> </td>"
+                
+	    });
+	    $("#showAll").html(content);//获取状态，并判断       
+	}
+
+
+
 
 
 

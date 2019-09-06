@@ -1,6 +1,8 @@
 package com.KeepFitMS.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,12 +24,7 @@ public class GoodsController {
 	@Autowired
 	private GoodsService goodsService;
 	
-	//查询所有商品以及它的父类型子类型属性
-	@RequestMapping("/selectAllGoods.do")
-	 @ResponseBody 
-	public List<Goods> getAllGoods(){	  
-		 return goodsService.selectAllGoods();
-	}
+	
 	
 	//查询父类型
 	@RequestMapping("/selectAllType.do")
@@ -43,10 +40,17 @@ public class GoodsController {
 		return goodsService.selectPctypeByPtypeId(ptype_id);
 	}
 	
-	//根据key值查子类
-	@RequestMapping("/selectGoodsByKeys.do")
+	
+	@RequestMapping("/selectGoods.do")
 	@ResponseBody
-	public List<Goods> getGoodsByKeys(String name,Integer provid,Integer cityid){
-		return goodsService.selectGoodsByKeys(name,provid,cityid);	
+	//查询商品集合
+	public HashMap<String,Object> getGoodsListPage(String name,Integer provid,Integer cityid,Integer curr,Integer limit){
+		HashMap<String, Object> map = new HashMap<>();	
+		List<Goods> list = goodsService.selectGoods(name,provid,cityid,(curr-1)*limit,limit);		
+		Integer count = goodsService.selectAllCount(name,provid,cityid);
+		map.put("goods", list);
+		map.put("count", count);
+		return map;
+		
 	}
 }

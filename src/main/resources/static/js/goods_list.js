@@ -1,30 +1,7 @@
 $(function(){
     //进入页面直接展示所有商品
-    $.get("http://localhost:8080/selectAllGoods.do",
-        function (res) {
-            var content = "";    
-            $.each(res, function (index, goods) { 
-                content+="<tr><td>"+goods.goods_name+"</td>";
-                content+="<td><img src="+goods.goods_img+" width='20' height='20' onmouseenter='imgBig(this)' onmouseleave='imgSmall(this)'/></td>"
-                content+="<td>"+goods.goods_price+"</td>"
-                content+="<td>"+goods.ptype.ptype_name+"</td>"
-                content+="<td>"+goods.pctype.pctype_name+"</td>"
-                if(goods.goods_status==true){
-                    //获取状态，并判断
-                    content+="<td class='goods_status' style='color:green'>上架</td>"
-                }else{
-                    content+="<td class='goods_status' style='color:red'>下架</td>"
-                }        
-                if(goods.ptype.ptype_name=1){
-                    content+="<td> <button class='layui-btn layui-btn-xs' onclick='use1But()'>使用</button> </td>"
-                }else{
-                    content+="<td> <button class='layui-btn layui-btn-xs' onclick='useBut()'>使用</button> </td>"
-                }
-            });
-            $("#showAll").html(content);//获取状态，并判断       
-        }
-    );
-   
+	 findGoods()
+	
     //进入页面获取一级分类
    $.get("http://localhost:8080/selectAllType.do",
         function (res) {
@@ -38,6 +15,73 @@ $(function(){
     ); 
 }); 
 
+function findGoods(){
+	//分页
+	layui.use('laypage', function() {
+	 var laypage = layui.laypage;
+	 $.get("http://localhost:8080/selectGoods.do",{"curr":1,"limit":10},
+		        function(res) {
+		 			console.log(res);
+		    		showGoods(res);
+		    		//总页数大于页码总数
+		    		laypage.render({
+					    elem: 'pages'
+					    ,count: res.count
+					    ,limit:5
+					    ,limits:[5,10,15,20]
+					    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+					    ,jump: function(obj){
+					      console.log(obj)
+					      $.get("http://localhost:8080/selectGoods.do",{"curr":obj.curr,"limit":obj.limit},
+		    						 function (res) {
+		    							showGoods(res);
+		    						})
+		    						
+					    }
+					});
+/*		    		laypage.render({
+		    			elem: 'pages'
+		    			,count: 100
+		    			,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']             
+		    			,jump: function(obj){
+		    				console.log(obj)
+		    			    //分页切换的回掉
+		    				$.get("http://localhost:8080/selectGoods.do",{"curr":data.curr,"limit":data.limit},
+		    						 function (res) {
+		    							showGoods(res);
+		    						});
+		    			}
+		    		});*/
+		        }
+		    );
+	});
+}
+
+
+
+//展示商品并渲染到页面
+function showGoods(res){
+    var content = "";    
+    $.each(res.goods, function (index, goods) { 
+        content+="<tr><td>"+goods.goods_name+"</td>";
+        content+="<td><img src="+goods.goods_img+" width='20' height='20' onmouseenter='imgBig(this)' onmouseleave='imgSmall(this)'/></td>"
+        content+="<td>"+goods.goods_price+"</td>"
+        content+="<td>"+goods.ptype.ptype_name+"</td>"
+        content+="<td>"+goods.pctype.pctype_name+"</td>"
+        if(goods.goods_status==true){
+            //获取状态，并判断
+            content+="<td class='goods_status' style='color:green'>上架</td>"
+        }else{
+            content+="<td class='goods_status' style='color:red'>下架</td>"
+        }        
+        if(goods.ptype.ptype_id==1){
+            content+="<td> <button class='layui-btn layui-btn-xs' onclick='use1But()'>使用</button> </td>"
+        }else{
+            content+="<td> <button class='layui-btn layui-btn-xs' onclick='useBut()'>使用</button> </td>"
+        }
+    });
+    $("#showAll").html(content);//获取状态，并判断       
+}
 
 
 
