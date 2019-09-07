@@ -16,7 +16,7 @@
 		<link rel="stylesheet" type="text/css" href="css/iconfont.css">
 		<script type="text/javascript" src="framework/jquery-1.11.3.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
-		<script type="text/javascript" src="js/goods_list.js"></script>
+		<script type="text/javascript" src="js/goods_manage.js"></script>
 		<script type="text/javascript" src="layui/layui.js"></script>
 		<!-- 滚动条插件 -->
 		<link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.css">
@@ -58,12 +58,6 @@
 					<!-- 	<a class="layui-btn">导入商品</a> -->
 					</div>
 				</form>
-				<!-- <form class="layui-form" action="">
-						 <div class="layui-form-item"> 
-							<button class="layui-btn" lay-submit lay-filter="formDemo">检索</button>
-							<a class="layui-btn">导入商品</a>
-						</div>
-					</form> -->
 			</div>
 			<script>
 				//表单提交
@@ -112,19 +106,6 @@
 							    						
 										    }
 										});
-					/*		    		laypage.render({
-							    			elem: 'pages'
-							    			,count: 100
-							    			,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']             
-							    			,jump: function(obj){
-							    				console.log(obj)
-							    			    //分页切换的回掉
-							    				$.get("http://localhost:8080/selectGoods.do",{"curr":data.curr,"limit":data.limit},
-							    						 function (res) {
-							    							showGoods(res);
-							    						});
-							    			}
-							    		});*/
 							        }
 							    );
 						});
@@ -139,7 +120,7 @@
 						<th>商品名称</th>
 						<th>商品图片</th>
 						<th>参考价格</th>
-						<th>数量参</th>
+						<th>数量</th>	
 						<th>分类</th>
 						<th>二级分类</th>
 						<th>状态</th>
@@ -147,14 +128,36 @@
 					</tr>
 				</thead>
 				<tbody id="showAll">
-					<!-- ajax动态获取数据 -->
+				<!-- 	<tr>
+						<td>冬瓜</td>
+						<td><img src="http://images.yixinorth.com/sp/2017/201712051125530096.jpg" width="20" height="20" onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/></td>
+						<td>10</td>
+						<td>商品</td>
+						<td>茄果类</td>
+						<td class="goods_status" style="color:green">上架</td>
+						<td>
+							<button class="layui-btn layui-btn-xs" onclick="use1But()">使用</button>
+						</td>
+					</tr>
+					<tr>
+						<td>冬瓜</td>
+						<td><img src="http://images.yixinorth.com/sp/2017/201712051252040212.jpg" width="20" height="20" onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/></td>
+						<td>10</td>
+						<td>器材场地</td>
+						<td>茄果类</td>
+						<td class="goods_status" style="color:red">下架</td>
+						<td>
+							<button class="layui-btn layui-btn-xs" onclick="useBut()">使用</button>
+						</td>
+					</tr>
+ -->
 				</tbody>
 			</table>
 			
 			<!-- layUI 分页模块 -->
 			<div id="pages"></div>
-	<!-- 		<script>
-				//分页
+			<script>
+			/* 	//分页
 				layui.use('laypage', function() {
 					var laypage = layui.laypage;
 
@@ -167,8 +170,8 @@
 						console.log(obj)
 						}
 					});
-				});
-			</script> -->
+				}); */
+			</script>
 		</div>
 	</body>
 

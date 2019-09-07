@@ -1,10 +1,14 @@
 package com.KeepFitMS.entity;
+
+import java.io.Serializable;
+
 /**
  * 商品父类型
  * @author suyin
  *
  */
-public class Ptype {
+public class Ptype implements Serializable{
+	private static final long serialVersionUID = 3625758683745220023L;
 	private Integer ptype_id;//父类型id
 	private String ptype_name;//父类型名
 	public Integer getPtype_id() {
