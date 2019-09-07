@@ -2,7 +2,7 @@ package com.KeepFitMS.entity;
 
 import java.io.Serializable;
 
-public class Emp implements Serializable{
+public class Emp implements Serializable,Cloneable{
 	/**
 	 * 
 	 */
@@ -13,7 +13,7 @@ public class Emp implements Serializable{
 	private Job job;//表中为job_id
 	private String emp_hiredate;
 	private String emp_phone;
-	private Dept  dept;//表中为dept_id
+	private Dept dept;//表中为dept_id
 	
 	public String getEmp_phone() {
 		return emp_phone;

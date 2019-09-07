@@ -78,7 +78,7 @@ public interface JobDao {
 	 * @param Job
 	 * @return
 	 */
-	@Update("update job set job_name=#{job_name},job_hiredate=#{job_hiredate},job_id=#{job.job_id},dept_id={dept.dept_id}")
+	@Update("update job set job_name=#{job_name},job_hiredate=#{job_hiredate},job_id=#{job.job_id},dept_id={dept.dept_id} where job_id=#{job_id}")
 	int updateJob(Job Job);
 	
 	/**

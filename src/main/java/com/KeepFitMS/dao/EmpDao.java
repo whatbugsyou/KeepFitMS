@@ -73,7 +73,16 @@ public interface EmpDao {
 	@ResultMap("empMap")
 	@Select("select * from emp where emp_id=#{emp_id}")
 	Emp selectEmpByEmpId(int emp_id);
-
+	
+	/**
+	 * 根据员工名查询员工
+	 * 
+	 * @param emp_name 员工名
+	 * @return
+	 */
+	@ResultMap("empMap")
+	@Select("select * from emp where emp_name=#{emp_name}")
+	Emp selectEmpByEmpName(String emp_name);
 	/**
 	 * 添加员工
 	 * 
@@ -81,7 +90,7 @@ public interface EmpDao {
 	 * @return
 	 */
 	@Options(useGeneratedKeys=true,keyProperty="emp_id",keyColumn="emp_id")
-	@Insert("insert into emp(emp_name,emp_hiredate,job_id,dept_id) values(#{emp_name},#{emp_hiredate},#{job.job_id},#{dept.dept_id})")
+	@Insert("insert into emp(emp_name,emp_hiredate,job_id,dept_id,emp_phone) values(#{emp_name},#{emp_hiredate},#{job.job_id},#{dept.dept_id},#{emp_phone})")
 	int insertEmp(Emp Emp);
 
 	/**
@@ -90,7 +99,7 @@ public interface EmpDao {
 	 * @param Emp
 	 * @return
 	 */
-	@Update("update emp set emp_name=#{emp_name},emp_hiredate=#{emp_hiredate},job_id=#{job.job_id},dept_id={dept.dept_id}")
+	@Update("update emp set emp_name=#{emp_name},emp_hiredate=#{emp_hiredate},job_id=#{job.job_id},dept_id=#{dept.dept_id} where emp_id=#{emp_id}")
 	int updateEmp(Emp Emp);
 
 	/**
@@ -101,5 +110,12 @@ public interface EmpDao {
 	 */
 	@Delete("delete from emp where emp_id=#{emp_id}")
 	int deleteEmp(int emp_id);
+	/**
+	 * 根据emp_id查dept_id
+	 * @param emp_id
+	 * @return
+	 */
+	@Select("select dept_id from emp where emp_id=#{emp_id}")
+	Integer selectDeptIdByEmpId(int emp_id);
 
 }

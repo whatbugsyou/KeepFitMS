@@ -108,7 +108,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                            <button type="button" class="btn btn-primary" @click="modifyDept()">保存修改</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="modifyDept()">保存修改</button>
                                         </div>
                                     </div>
                                 </div>
@@ -132,7 +132,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                            <button type="button" class="btn btn-primary" @click="addDept()">添加</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="addDept()">添加</button>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                            <button type="button" class="btn btn-danger" @click="deleteDept(deletingDept.index)">确认删除</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" @click="deleteDept(deletingDept.index)">确认删除</button>
                                         </div>
                                     </div>
                                 </div>
@@ -187,8 +187,8 @@
                                         <td>{{emp.emp_phone}}</td>
                                         <td style="width: 176px;">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-primary  " @click="modifyEmp(index)" data-toggle="modal" data-target="#modifyEmpModal"><i class="fa fa-pencil"></i>&nbsp;修改</button>
-                                                <button type="button" class="btn btn-danger  " @click="deleteEmp(index)" data-toggle="modal" data-target="#deleteEmpModal"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                                <button type="button" class="btn btn-primary  " @click="modifingEmp=JSON.parse(JSON.stringify(empList[index]))" data-toggle="modal" data-target="#modifyEmpModal"><i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                                <button type="button" class="btn btn-danger  " @click="deletingEmp.index=index;" data-toggle="modal" data-target="#deleteEmpModal"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -231,14 +231,35 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <label for="">员工名</label>
-                                                <input type="text" class="form-control" name="new_emp_name" id="new_dept_name" v-model="modifingEmp.emp_name" aria-describedby="helpId">
+                                                <label for="">员工姓名</label>
+                                                <input type="text" class="form-control" name="emp_name" id="modify_emp_name" v-model="modifingEmp.emp_name" aria-describedby="helpId">
                                                 <small id="helpId" class="form-text text-muted">提示信息</small>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="">所属部门</label>
+                                                <select class="form-control" v-model="modifingEmp.dept.dept_id" name="dept_id" id="modify_dept_id">
+                                                    <option v-for="dept in getDeptListRef()" :key="dept.dept_id" :value="dept.dept_id">{{dept.dept_name}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">职位</label>
+                                                <select class="form-control" v-model="modifingEmp.job.job_id" name="job_id" id="modify_job_id">
+                                                     <option v-for="job in getJobListRef()" :key="job.job_id" :value="job.job_id">{{job.job_name}}</option>
+                                                 </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">入职日期</label>
+                                                <input type="date" class="form-control" name="emp_hiredate" id="modify_emp_hiredate" v-model="modifingEmp.emp_hiredate" aria-describedby="helpId">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">电话号码</label>
+                                                <input type="text" class="form-control" name="emp_phone" id="modify_emp_phone" v-model="modifingEmp.emp_phone" aria-describedby="helpId">
+                                            </div>
+
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                            <button type="button" class="btn btn-primary" @click="modifyEmp()">保存修改</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="modifyEmp()">保存修改</button>
                                         </div>
                                     </div>
                                 </div>
@@ -255,14 +276,35 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <label for="">员工名</label>
-                                                <input type="text" class="form-control" name="new_emp_name" id="new_emp_name" v-model="addingEmp.emp_name" aria-describedby="helpId">
+                                                <label for="">员工姓名</label>
+                                                <input type="text" class="form-control" name="emp_name" id="add_emp_name" v-model="addingEmp.emp_name" aria-describedby="helpId">
                                                 <small id="helpId" class="form-text text-muted">提示信息</small>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="">所属部门</label>
+                                                <select class="form-control" v-model="addingEmp.dept.dept_id" name="dept_id" id="add_dept_id">
+                                                    <option v-for="dept in getDeptListRef()" :key="dept.dept_id" :value="dept.dept_id">{{dept.dept_name}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">职位</label>
+                                                <select class="form-control" v-model="addingEmp.job.job_id" name="job_id" id="add_job_id">
+                                                     <option v-for="job in getJobListRef()" :key="job.job_id" :value="job.job_id">{{job.job_name}}</option>
+                                                 </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">入职日期</label>
+                                                <input type="date" class="form-control" name="emp_hiredate" id="add_emp_hiredate" v-model="addingEmp.emp_hiredate" aria-describedby="helpId">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">电话号码</label>
+                                                <input type="text" class="form-control" name="emp_phone" id="add_emp_phone" v-model="addingEmp.emp_phone" aria-describedby="helpId">
+                                            </div>
+
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                            <button type="button" class="btn btn-primary" @click="addEmp()">添加</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="addEmp()">添加</button>
                                         </div>
                                     </div>
                                 </div>
@@ -280,7 +322,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                            <button type="button" class="btn btn-danger" @click="deleteEmp(deletingEmp.index)">确认删除</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" @click="deleteEmp(deletingEmp.index)">确认删除</button>
                                         </div>
                                     </div>
                                 </div>

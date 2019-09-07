@@ -65,7 +65,7 @@ public interface DeptDao {
 	 * @param Dept
 	 * @return
 	 */
-	@Update("update dept set dept_name=#{dept_name},dept_memberNum=#{dept.dept_memberNum}")
+	@Update("update dept set dept_name=#{dept_name},dept_memberNum=#{dept_memberNum} where dept_id=#{dept_id}")
 	int updateDept(Dept Dept);
 	
 	/**
@@ -75,5 +75,19 @@ public interface DeptDao {
 	 */
 	@Delete("delete from dept where dept_id=#{dept_id}")
 	int deleteDept(int dept_id);
+	/**
+	 * 部门人数添加1
+	 * @param dept_id
+	 * @return
+	 */
+	@Update("update dept set dept_memberNum=dept_memberNum+1 where dept_id=#{dept_id}")
+	int increaseDeptMemberNumByDetpId(int dept_id);
+	/**
+	 * 部门人数减少1
+	 * @param dept_id
+	 * @return
+	 */
+	@Update("update dept set dept_memberNum=dept_memberNum-1 where dept_id=#{dept_id}")
+	int decreaseDeptMemberNumByDetpId(int dept_id);
 
 }
