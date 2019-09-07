@@ -50,7 +50,6 @@ public class GoodsServiceImpl implements GoodsService {
 	//修改状态
 	@Override
 	public void updateGoodsStatus(Integer id, Boolean status) {
-		System.out.println(id+":状态1："+status);
 		if(status==true){
 			status=false;
 			goodsDao.updateGoodsStatus(id,status);
@@ -58,6 +57,24 @@ public class GoodsServiceImpl implements GoodsService {
 			status=true;
 			goodsDao.updateGoodsStatus(id,status);
 		}
+	}
+
+	//修改商品信息
+	@Override
+	public boolean updateGoods(Goods goods) {
+		return goodsDao.updateGoods(goods);
+	}
+	//添加商品
+	@Override
+	public boolean insertGoods(Goods goods) {
+		//首先判断商品是否存在，存在则增加加数量
+		boolean flag = goodsDao.selecGoodsByName(goods.getGoods_name());
+		if(flag) {
+			return goodsDao.updateGodosNum(goods);
+		}else {
+		    return goodsDao.addGoods(goods);
+		}
+		
 	}
 
 }

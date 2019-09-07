@@ -59,6 +59,46 @@ public class GoodsController {
 		 goodsService.updateGoodsStatus(id,status);
 	}
 	
+	//修改商品信息
+	@RequestMapping("/changeGoods.do")
+	@ResponseBody
+	public boolean changeGoods(Integer goods_id,String goods_name,String goods_img,Integer goods_num,Integer goods_price,String goods_desc,Integer ptype_id,Integer pctype_id,Boolean goods_status) {		
+		Goods goods = new Goods();
+		Ptype ptype = new Ptype();
+		ptype.setPtype_id(ptype_id);
+		Pctype pctype = new Pctype();
+		pctype.setPctype_id(pctype_id);
+		goods.setGoods_id(goods_id);
+		goods.setGoods_name(goods_name);
+		goods.setGoods_img(goods_img);
+		goods.setGoods_num(goods_num);
+		goods.setGoods_price(goods_price);
+		goods.setGoods_desc(goods_desc);
+		goods.setGoods_status(goods_status);
+		goods.setPtype(ptype);
+		goods.setPctype(pctype);
+		return goodsService.updateGoods(goods);
+	}
 	
+	//修改商品信息
+		@RequestMapping("/addGoods.do")
+		@ResponseBody
+		public boolean addGoods(Integer goods_id,String goods_name,String goods_img,Integer goods_num,Integer goods_price,String goods_desc,Integer ptype_id,Integer pctype_id,Boolean goods_status) {		
+			Goods goods = new Goods();
+			Ptype ptype = new Ptype();
+			ptype.setPtype_id(ptype_id);
+			Pctype pctype = new Pctype();
+			pctype.setPctype_id(pctype_id);
+			goods.setGoods_id(goods_id);
+			goods.setGoods_name(goods_name);
+			goods.setGoods_img(goods_img);
+			goods.setGoods_num(goods_num);
+			goods.setGoods_price(goods_price);
+			goods.setGoods_desc(goods_desc);
+			goods.setGoods_status(goods_status);
+			goods.setPtype(ptype);
+			goods.setPctype(pctype);
+			return goodsService.insertGoods(goods);
+		}
 
 }

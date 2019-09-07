@@ -139,6 +139,7 @@
 						<th>商品名称</th>
 						<th>商品图片</th>
 						<th>参考价格</th>
+						<th>数量参</th>
 						<th>分类</th>
 						<th>二级分类</th>
 						<th>状态</th>
@@ -146,35 +147,13 @@
 					</tr>
 				</thead>
 				<tbody id="showAll">
-				<!-- 	<tr>
-						<td>冬瓜</td>
-						<td><img src="http://images.yixinorth.com/sp/2017/201712051125530096.jpg" width="20" height="20" onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/></td>
-						<td>10</td>
-						<td>商品</td>
-						<td>茄果类</td>
-						<td class="goods_status" style="color:green">上架</td>
-						<td>
-							<button class="layui-btn layui-btn-xs" onclick="use1But()">使用</button>
-						</td>
-					</tr>
-					<tr>
-						<td>冬瓜</td>
-						<td><img src="http://images.yixinorth.com/sp/2017/201712051252040212.jpg" width="20" height="20" onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/></td>
-						<td>10</td>
-						<td>器材场地</td>
-						<td>茄果类</td>
-						<td class="goods_status" style="color:red">下架</td>
-						<td>
-							<button class="layui-btn layui-btn-xs" onclick="useBut()">使用</button>
-						</td>
-					</tr>
- -->
+					<!-- ajax动态获取数据 -->
 				</tbody>
 			</table>
 			
 			<!-- layUI 分页模块 -->
 			<div id="pages"></div>
-			<script>
+	<!-- 		<script>
 				//分页
 				layui.use('laypage', function() {
 					var laypage = layui.laypage;
@@ -189,7 +168,7 @@
 						}
 					});
 				});
-			</script>
+			</script> -->
 		</div>
 	</body>
 

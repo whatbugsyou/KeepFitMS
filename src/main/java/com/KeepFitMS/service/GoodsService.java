@@ -21,4 +21,8 @@ public interface GoodsService {
 
 	void updateGoodsStatus(Integer id, Boolean status);
 
+	boolean updateGoods(Goods goods);
+
+	boolean insertGoods(Goods goods);
+
 }

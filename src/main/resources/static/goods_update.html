@@ -48,7 +48,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">商品名称</label>
 					<div class="layui-input-block">
-						<input type="text" name="goodsName"  autocomplete="off" class="layui-input">
+						<input type="text" name="goods_name"  id="goods_name" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -64,31 +64,31 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">数量</label>
 					<div class="layui-input-block">
-						<input type="text" name="company" required lay-verify="number" autocomplete="off" class="layui-input">
+						<input type="text" name="goods_num" id="goods_num" required lay-verify="number" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">参考价格</label>
 					<div class="layui-input-block">
-						<input type="text" name="price" required lay-verify="number" autocomplete="off" class="layui-input">
+						<input type="text" name="goods_price" id="goods_price" required lay-verify="number" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 			
 				<div class="layui-form-item">
 					<label class="layui-form-label">描述</label>
 					<div class="layui-input-block">
-						<textarea name="desc" class="layui-textarea"></textarea>
+						<textarea name="goods_desc" id="goods_desc" class="layui-textarea"></textarea>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">分类</label>
 	                <div class="layui-input-inline">
-	                    <select name="provid" id="provid" lay-filter="provid">
+	                    <select name="provid" id="provId" lay-filter="provid">
 	                        <option value="">一级分类</option>
 	                    </select>
 	                </div>
 	                <div class="layui-input-inline">
-	                    <select name="cityid" id="cityid" lay-filter="cityid">
+	                    <select name="cityid" id="cityId" lay-filter="cityid">
 	                        <option value="">二级分类</option>
 	                    </select>
 	                </div>
@@ -96,21 +96,34 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">状态</label>
 					<div class="layui-input-block">
-						<input type="radio" name="sex" value="true" title="上架">
-						<input type="radio" name="sex" value="false" title="下架" checked>
+						<input type="radio" name="goods_status" value="true" title="上架" >
+						<input type="radio" name="goods_status" value="false" title="下架" checked="checked">
 					</div>
 				</div>
 				
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-						<button class="layui-btn" lay-submit lay-filter="submitBut">立即提交</button>
+						<button class="layui-btn" lay-submit lay-filter="submitAddBut">添加</button>
+						<button class="layui-btn" lay-submit lay-filter="submitUpdateBut"> 修改</button>
 						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 					</div>
 				</div>
 			</form>
 			
-			
+
 			<script>
+			function updateFunction(goods){
+			  $.get("http://localhost:8080/selectAllType.do",
+				        function (res) {
+				            var content = "";
+				            content+="<option value='0' selected>全部</option>"
+				            $.each(res, function (index, ptype) {    
+				                content+="<option value='"+ptype.ptype_id+"'>"+ptype.ptype_name+"</option>"
+				            });
+				            $("#provId").html(content);     
+				        }
+				    ); 
+			
 				layui.use(['upload','form'], function() {
 					var form = layui.form;
 					var upload = layui.upload;
@@ -140,9 +153,54 @@
 					      });
 					    }
 					  });
+					//
+					form.on('select(provid)', function(data){		
+						console.log(data.value); //得到被选中的值
+						$.get("http://localhost:8080/selectPctypeByPtypeId.do", {"ptype_id":data.value},
+							function (res) {
+								var content = "";
+								content+="<option value='0' selected></option>"
+								$.each(res, function (index, pctype) { 
+									content+="<option value='"+pctype.pctype_id+"'>"+pctype.pctype_name+"</option>";
+								});
+								console.log(content);
+								$("#cityId").html(content);
+								  form.render('select');
+							}
+						);
+					});  
 					//监听提交
-					form.on('submit(submitBut)', function(data) {
+					form.on('submit(submitAddBut)', function(data) {
 						layer.msg(JSON.stringify(data.field));
+						console.log("添加"+data.field)
+						 $.get("http://localhost:8080/addGoods.do",
+								 {"goods_id":goods.goods_id,"goods_name":data.field.goods_name,"goods_img":data.field.file,
+							 "goods_num":data.field.goods_num,"goods_price":data.field.goods_price,"goods_desc":data.field.goods_desc,"ptype_id":data.field.provid,
+							 "pctype_id":data.field.cityid,"goods_status":data.field.goods_status},
+		    						 function (res) {
+									    var index = parent.layer.getFrameIndex(window.name);  
+		    							parent.layer.close(index);
+		    							window.parent.findGoods();
+		    				}) 
+						
+						return false;
+					});
+					//监听按钮：添加提交
+					form.on('submit(submitUpdateBut)', function(data) {
+						console.log("+++"+goods);
+						/* ayer.msg(JSON.stringify(data.field)); */
+						console.log(JSON.stringify(data.field));
+					
+						 $.get("http://localhost:8080/changeGoods.do",
+								 {"goods_id":goods.goods_id,"goods_name":data.field.goods_name,"goods_img":data.field.file,
+							 "goods_num":data.field.goods_num,"goods_price":data.field.goods_price,"goods_desc":data.field.goods_desc,"ptype_id":data.field.provid,
+							 "pctype_id":data.field.cityid,"goods_status":data.field.goods_status},
+		    						 function (res) {
+									    var index = parent.layer.getFrameIndex(window.name);  
+		    							parent.layer.close(index);
+		    							window.parent.findGoods();
+		    				}) 
+						
 						return false;
 					});
 					form.verify({
@@ -154,6 +212,7 @@
 					});
 					
 				});
+			}
 			</script>
 
 		</div>

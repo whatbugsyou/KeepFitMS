@@ -15,6 +15,7 @@ $(function(){
     ); 
 }); 
 
+//查询所有商品信息
 function findGoods(){
 	//分页
 	layui.use('laypage', function() {
@@ -35,23 +36,9 @@ function findGoods(){
 					      $.get("http://localhost:8080/selectGoods.do",{"curr":obj.curr,"limit":obj.limit},
 		    						 function (res) {
 		    							showGoods(res);
-		    						})
-		    						
+		    				})		    						
 					    }
 					});
-/*		    		laypage.render({
-		    			elem: 'pages'
-		    			,count: 100
-		    			,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']             
-		    			,jump: function(obj){
-		    				console.log(obj)
-		    			    //分页切换的回掉
-		    				$.get("http://localhost:8080/selectGoods.do",{"curr":data.curr,"limit":data.limit},
-		    						 function (res) {
-		    							showGoods(res);
-		    						});
-		    			}
-		    		});*/
 		        }
 		    );
 	});
@@ -66,19 +53,26 @@ function showGoods(res){
         content+="<tr><td>"+goods.goods_name+"</td>";
         content+="<td><img src="+goods.goods_img+" width='20' height='20' onmouseenter='imgBig(this)' onmouseleave='imgSmall(this)'/></td>"
         content+="<td>"+goods.goods_price+"</td>"
+        content+="<td>"+goods.goods_num+"</td>"
         content+="<td>"+goods.ptype.ptype_name+"</td>"
         content+="<td>"+goods.pctype.pctype_name+"</td>"
         if(goods.goods_status==true){
             //获取状态，并判断
             content+="<td class='goods_status' style='color:green'><i class='layui-icon'>&#xe605;</i></td>"
+            if(goods.ptype.ptype_id==1){
+                content+="<td> <button class='layui-btn layui-btn-xs' onclick='use1But()'>使用</button> </td>"
+            }else{
+                content+="<td> <button class='layui-btn layui-btn-xs' onclick='useBut()'>使用</button> </td>"
+            }
         }else{
        	   content+="<td class='goods_status' style='color:red'><i class='layui-icon'>&#x1006;</i></td>"
+       	   if(goods.ptype.ptype_id==1){
+               content+="<td> <button class='layui-btn layui-btn-xs layui-btn-disabled' >使用</button> </td>"
+           }else{
+               content+="<td> <button class='layui-btn layui-btn-xs layui-btn-disabled'>使用</button> </td>"
+           }
         }      
-        if(goods.ptype.ptype_id==1){
-            content+="<td> <button class='layui-btn layui-btn-xs' onclick='use1But()'>使用</button> </td>"
-        }else{
-            content+="<td> <button class='layui-btn layui-btn-xs' onclick='useBut()'>使用</button> </td>"
-        }
+  
     });
     $("#showAll").html(content);//获取状态，并判断       
 }

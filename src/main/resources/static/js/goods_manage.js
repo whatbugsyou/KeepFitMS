@@ -22,7 +22,6 @@
 		 var laypage = layui.laypage;
 		 $.get("http://localhost:8080/selectGoods.do",{"curr":1,"limit":10},
 			        function(res) {
-			 			console.log(res);
 			    		showGoods(res);
 			    		//总页数大于页码总数
 			    		laypage.render({
@@ -32,7 +31,6 @@
 						    ,limits:[5,10,15,20]
 						    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
 						    ,jump: function(obj){
-						      console.log(obj)
 						      $.get("http://localhost:8080/selectGoods.do",{"curr":obj.curr,"limit":obj.limit},
 			    						 function (res) {
 			    							showGoods(res);
@@ -40,19 +38,6 @@
 			    						
 						    }
 						});
-	/*		    		laypage.render({
-			    			elem: 'pages'
-			    			,count: 100
-			    			,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']             
-			    			,jump: function(obj){
-			    				console.log(obj)
-			    			    //分页切换的回掉
-			    				$.get("http://localhost:8080/selectGoods.do",{"curr":data.curr,"limit":data.limit},
-			    						 function (res) {
-			    							showGoods(res);
-			    						});
-			    			}
-			    		});*/
 			        }
 			    );
 		});
@@ -67,6 +52,7 @@
 	        content+="<tr><td>"+goods.goods_name+"</td>";
 	        content+="<td><img src="+goods.goods_img+" width='20' height='20' onmouseenter='imgBig(this)' onmouseleave='imgSmall(this)'/></td>"
 	        content+="<td>"+goods.goods_price+"</td>"
+	        content+="<td>"+goods.goods_num+"</td>"
 	        content+="<td>"+goods.ptype.ptype_name+"</td>"
 	        content+="<td>"+goods.pctype.pctype_name+"</td>"                   
            
@@ -74,12 +60,12 @@
                          //获取状态，并判断
                          content+="<td class='goods_status' style='width:40px;'> <i class='layui-icon' id='goodsStatus' style='font-size: 22px; color: green;'>&#x1005;</i></td>"
                      }else{
-                    	   content+="<td class='goods_status' style='width:40px;'> <i class='layui-icon' id='goodsStatus' style='font-size: 22px; color: red;'>&#x1007;</i></td>"
+                    	 content+="<td class='goods_status' style='width:40px;'> <i class='layui-icon' id='goodsStatus' style='font-size: 22px; color: red;'>&#x1007;</i></td>"
                      }        
                          content+="<td ><i class='layui-icon layui-btn layui-btn-primary layui-btn-sm' style='font-size: 22px;' onclick='changeStatus("+goods.goods_id+","+goods.goods_status+")'>&#xe642;</i>  " +
-                         		"<i class='layui-icon layui-btn layui-btn-primary layui-btn-sm' style='font-size: 22px;' onclick='updateBut()'>&#xe716;</i>  </td>"
-                
-	    });
+                         		"<i class='layui-icon layui-btn layui-btn-primary layui-btn-sm' style='font-size: 22px;' onclick='updateBut("+JSON.stringify(goods)+")'>&#xe716;</i>  </td>"
+                       
+	    	});
 	    $("#showAll").html(content);//获取状态，并判断       
 	}
 
@@ -91,17 +77,26 @@
 
 
 //修改按钮
-function updateBut(){
+function updateBut(goods){
     layui.use('layer', function() {
         var layer = layui.layer;
-            
+           console.log(goods)
         //iframe层-父子操作
         layer.open({
             type: 2,
             area: ['70%', '70%'],
             fixed: false, //不固定
             maxmin: true,
-            content: 'goods_update.html'
+            content: 'goods_update.html',
+            success:function (layero,index) {     
+            	  var body = layer.getChildFrame('body', index);
+                  var iframeWin = window[layero.find('iframe')[0]['name']]; 
+                  body.find('#goods_name').val(goods.goods_name)
+                  body.find('#goods_num').val(goods.goods_num)
+                  body.find('#goods_price').val(goods.goods_price)
+                  body.find('#goods_desc').val(goods.goods_desc)
+                  iframeWin.updateFunction(goods);
+        }
         });
     });
     
