@@ -19,4 +19,6 @@ public interface GoodsService {
 
 	Integer selectAllCount(String name, Integer provid, Integer cityid);
 
+	void updateGoodsStatus(Integer id, Boolean status);
+
 }

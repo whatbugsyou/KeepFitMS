@@ -72,13 +72,12 @@
            
                 	 if(goods.goods_status==true){
                          //获取状态，并判断
-                         content+="<td><button type='button' class='layui-btn'><i class='layui-icon'>&#xe605;</i> </button></td>"
- 
-
+                         content+="<td class='goods_status' style='width:40px;'> <i class='layui-icon' id='goodsStatus' style='font-size: 22px; color: green;'>&#x1005;</i></td>"
                      }else{
-                    	   content+="<td><button type='button' class='layui-btn layui-btn-primary'><i class='layui-icon'>&#x1006;</i> </button></td>"
+                    	   content+="<td class='goods_status' style='width:40px;'> <i class='layui-icon' id='goodsStatus' style='font-size: 22px; color: red;'>&#x1007;</i></td>"
                      }        
-                         content+="<td> <button class='layui-btn layui-btn-xs' onclick='updateBut()'>使用</button> </td>"
+                         content+="<td ><i class='layui-icon layui-btn layui-btn-primary layui-btn-sm' style='font-size: 22px;' onclick='changeStatus("+goods.goods_id+","+goods.goods_status+")'>&#xe642;</i>  " +
+                         		"<i class='layui-icon layui-btn layui-btn-primary layui-btn-sm' style='font-size: 22px;' onclick='updateBut()'>&#xe716;</i>  </td>"
                 
 	    });
 	    $("#showAll").html(content);//获取状态，并判断       
@@ -109,17 +108,19 @@ function updateBut(){
 }
 //改变状态
 function changeStatus(id,status){
-    if(status==true){
-        $("#status"+id).css("color","red");
-        $("#status"+id).html("下架");
-        var status=false;
-      
-    }else{
-        $("#status"+id).css("color","green");
-        $("#status"+id).html("上架");
-        var status=true;
+	 $.get("http://localhost:8080/changeStatus.do",{"id":id,"status":status});   
+	if(status){
+	    $("#goodsStatus").css("color","red");
+	    $("#goodsStatus").html("&#x1007;");
+	    status=false;
+	    findGoods();
+	}else{
+		$("#goodsStatus").css("color","green");
+	    $("#goodsStatus").html("&#x1005;");
+	    status=true;
+	    findGoods();
     }
-        $.get("http://localhost:8080/KeepFitMS/selectAllGoods.do",{"id":id,"status":status});   
+       
 }
 //解决框架的问题"overflow","hidden"
 var setCBodyOverflowINDEX = 0; 

@@ -24,7 +24,18 @@ public class GoodsController {
 	@Autowired
 	private GoodsService goodsService;
 	
-	
+	@RequestMapping("/selectGoods.do")
+	@ResponseBody
+	//查询商品集合
+	public HashMap<String,Object> getGoodsListPage(String name,Integer provid,Integer cityid,Integer curr,Integer limit){
+		HashMap<String, Object> map = new HashMap<>();	
+		List<Goods> list = goodsService.selectGoods(name,provid,cityid,(curr-1)*limit,limit);		
+		Integer count = goodsService.selectAllCount(name,provid,cityid);
+		map.put("goods", list);
+		map.put("count", count);
+		return map;
+		
+	}
 	
 	//查询父类型
 	@RequestMapping("/selectAllType.do")
@@ -40,17 +51,14 @@ public class GoodsController {
 		return goodsService.selectPctypeByPtypeId(ptype_id);
 	}
 	
-	
-	@RequestMapping("/selectGoods.do")
+	//修改状态
+	@RequestMapping("/changeStatus.do")
 	@ResponseBody
-	//查询商品集合
-	public HashMap<String,Object> getGoodsListPage(String name,Integer provid,Integer cityid,Integer curr,Integer limit){
-		HashMap<String, Object> map = new HashMap<>();	
-		List<Goods> list = goodsService.selectGoods(name,provid,cityid,(curr-1)*limit,limit);		
-		Integer count = goodsService.selectAllCount(name,provid,cityid);
-		map.put("goods", list);
-		map.put("count", count);
-		return map;
-		
+	public void changestatus(Integer id,Boolean status) {
+		System.out.println(id+":状态："+status);
+		 goodsService.updateGoodsStatus(id,status);
 	}
+	
+	
+
 }

@@ -47,4 +47,17 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsDao.selectAllCount(name,provid,cityid);
 	}
 
+	//修改状态
+	@Override
+	public void updateGoodsStatus(Integer id, Boolean status) {
+		System.out.println(id+":状态1："+status);
+		if(status==true){
+			status=false;
+			goodsDao.updateGoodsStatus(id,status);
+		}else {
+			status=true;
+			goodsDao.updateGoodsStatus(id,status);
+		}
+	}
+
 }

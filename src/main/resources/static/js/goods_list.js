@@ -70,10 +70,10 @@ function showGoods(res){
         content+="<td>"+goods.pctype.pctype_name+"</td>"
         if(goods.goods_status==true){
             //获取状态，并判断
-            content+="<td class='goods_status' style='color:green'>上架</td>"
+            content+="<td class='goods_status' style='color:green'><i class='layui-icon'>&#xe605;</i></td>"
         }else{
-            content+="<td class='goods_status' style='color:red'>下架</td>"
-        }        
+       	   content+="<td class='goods_status' style='color:red'><i class='layui-icon'>&#x1006;</i></td>"
+        }      
         if(goods.ptype.ptype_id==1){
             content+="<td> <button class='layui-btn layui-btn-xs' onclick='use1But()'>使用</button> </td>"
         }else{

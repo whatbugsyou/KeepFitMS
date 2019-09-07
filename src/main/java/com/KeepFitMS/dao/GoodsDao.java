@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 
 import com.KeepFitMS.entity.Goods;
 import com.KeepFitMS.entity.Pctype;
@@ -115,6 +116,15 @@ public interface GoodsDao {
 	 */
 	@Select("select pctype_id,pctype_name from pctype where ptype_id =#{ptype_id} ")
 	List<Pctype> selectPctypeByPtypeId(Integer ptype_id);
+
+	/**
+	 * 修改商品状态
+	 * @param goods_id
+	 * @param status
+	 * @return
+	 */
+	@Update("update goods set goods_status = #{goods_status} where goods_id=#{goods_id}")
+	void updateGoodsStatus(Integer goods_id, Boolean goods_status);
 	
 
 	

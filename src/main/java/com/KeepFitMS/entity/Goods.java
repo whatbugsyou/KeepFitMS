@@ -1,10 +1,14 @@
 package com.KeepFitMS.entity;
+
+import java.io.Serializable;
+
 /**
  * 商品信息
  * @author suyin
  *
  */
-public class Goods {
+public class Goods implements Serializable{
+	private static final long serialVersionUID = 3625758683745220023L;
 		private Integer goods_id; //商品id
 		private String goods_name;//商品名称
 		private String goods_desc;//商品描述

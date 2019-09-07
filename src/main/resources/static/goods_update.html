@@ -53,10 +53,13 @@
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">商品图片</label>
-					<div class="layui-upload-drag" id="goodsPic">
-					  <i class="layui-icon"></i>
-					  <p>点击上传，或将文件拖拽到此处</p>
-					</div>
+						<div class="layui-upload">
+						  		<button type="button" class="layui-btn" id="goodsPic">上传图片</button>
+						  <div class="layui-upload-list">
+							    <img class="layui-upload-img" id="demo1">
+							    <p id="demoText"></p>
+						  </div>
+					</div> 
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">数量</label>
@@ -111,6 +114,32 @@
 				layui.use(['upload','form'], function() {
 					var form = layui.form;
 					var upload = layui.upload;
+					
+					var uploadInst = upload.render({
+					    elem: '#goodsPic'
+					    ,url: '/upload/'
+					    ,before: function(obj){
+					      //预读本地文件示例，不支持ie8
+					      obj.preview(function(index, file, result){
+					        $('#demo1').attr('src', result); //图片链接（base64）
+					      });
+					    }
+					    ,done: function(res){
+					      //如果上传失败
+					      if(res.code > 0){
+					        return layer.msg('上传失败');
+					      }
+					      //上传成功
+					    }
+					    ,error: function(){
+					      //演示失败状态，并实现重传
+					      var demoText = $('#demoText');
+					      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+					      demoText.find('.demo-reload').on('click', function(){
+					        uploadInst.upload();
+					      });
+					    }
+					  });
 					//监听提交
 					form.on('submit(submitBut)', function(data) {
 						layer.msg(JSON.stringify(data.field));
@@ -123,14 +152,7 @@
 						    ,'只允许输入中文'
 					  	] 
 					});
-					//拖拽上传
-					upload.render({
-						elem: '#goodsPic',
-						url: '/upload/',
-						done: function(res) {
-						  	console.log(res)
-						}
-					});
+					
 				});
 			</script>
 
