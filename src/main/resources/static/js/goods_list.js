@@ -48,8 +48,12 @@ function findGoods(){
 
 //展示商品并渲染到页面
 function showGoods(res){
-    var content = "";    
+    var content = "";  
+	if(res.count==0){
+		 layer.msg("没有查到结果")
+	}
     $.each(res.goods, function (index, goods) { 
+	
         content+="<tr><td>"+goods.goods_name+"</td>";
         content+="<td><img src="+goods.goods_img+" width='20' height='20' onmouseenter='imgBig(this)' onmouseleave='imgSmall(this)'/></td>"
         content+="<td>"+goods.goods_price+"</td>"
