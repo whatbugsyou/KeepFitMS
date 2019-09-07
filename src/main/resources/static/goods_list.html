@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>商品库检索</title>
+
+		<!-- 公共样式 开始 -->
+		<link rel="stylesheet" type="text/css" href="css/base.css">
+		<link rel="stylesheet" type="text/css" href="css/iconfont.css">
+		<script type="text/javascript" src="framework/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+		<script type="text/javascript" src="js/goods_list.js"></script>
+		<script type="text/javascript" src="layui/layui.js"></script>
+		<!-- 滚动条插件 -->
+		<link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.css">
+		<script src="framework/jquery-ui-1.10.4.min.js"></script>
+		<script src="framework/jquery.mousewheel.min.js"></script>
+		<script src="framework/jquery.mCustomScrollbar.min.js"></script>
+		<script src="framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+		<!-- 公共样式 结束 -->
+		
+		<style>
+			.layui-table img {
+			    max-width: none;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div class="cBody">
+			<div class="console">
+				<form class="layui-form" action="">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input type="text" name="name" required placeholder="输入商品名称" autocomplete="off" class="layui-input">
+						</div>
+					
+							<div class="layui-input-inline">
+								<select name="provid" id="provId" lay-filter="provid" ">
+										<!-- ajax获取数据 -->
+								</select>
+							</div>
+						
+							<div class="layui-input-inline">
+								<select name="cityid" id="cityId">
+									<!-- ajax获取数据 -->
+								</select>
+							</div>
+						<button class="layui-btn" lay-submit lay-filter="formDemo">检索</button>
+					<!-- 	<a class="layui-btn">导入商品</a> -->
+					</div>
+				</form>
+				<!-- <form class="layui-form" action="">
+						 <div class="layui-form-item"> 
+							<button class="layui-btn" lay-submit lay-filter="formDemo">检索</button>
+							<a class="layui-btn">导入商品</a>
+						</div>
+					</form> -->
+			</div>
+			<script>
+				//表单提交
+				layui.use('form', function() {
+					var form = layui.form;
+					//监听下拉框
+					form.on('select(provid)', function(data){		
+						console.log(data.value); //得到被选中的值
+						$.get("http://localhost:8080/selectPctypeByPtypeId.do", {"ptype_id":data.value},
+							function (res) {
+								var content = "";
+								content+="<option value='0' selected></option>"
+								$.each(res, function (index, pctype) { 
+									content+="<option value='"+pctype.pctype_id+"'>"+pctype.pctype_name+"</option>";
+								});
+								console.log(content);
+								$("#cityId").html(content);
+								  form.render('select');
+							}
+						);
+					});  
+
+					//监听提交
+					form.on('submit(formDemo)', function(data) {		
+						layer.msg(JSON.stringify(data.field));
+						//分页
+						layui.use('laypage', function() {
+						 var laypage = layui.laypage;
+						 $.get("http://localhost:8080/selectGoods.do",{"name":data.field.name,"provid":data.field.provid,"cityid":data.field.cityid,"curr":1,"limit":10},
+							        function(res) {
+							 			console.log(res);
+							    		showGoods(res);
+							    		//总页数大于页码总数
+							    		laypage.render({
+										    elem: 'pages'
+										    ,count: res.count
+										    ,limit:5
+										    ,limits:[5,10,15,20]
+										    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+										    ,jump: function(obj){
+										      console.log(obj)
+										      $.get("http://localhost:8080/selectGoods.do",{"name":data.field.name,"provid":data.field.provid,"cityid":data.field.cityid,"curr":obj.curr,"limit":obj.limit},
+							    						 function (res) {
+							    							showGoods(res);
+							    						})
+							    						
+										    }
+										});
+					/*		    		laypage.render({
+							    			elem: 'pages'
+							    			,count: 100
+							    			,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']             
+							    			,jump: function(obj){
+							    				console.log(obj)
+							    			    //分页切换的回掉
+							    				$.get("http://localhost:8080/selectGoods.do",{"curr":data.curr,"limit":data.limit},
+							    						 function (res) {
+							    							showGoods(res);
+							    						});
+							    			}
+							    		});*/
+							        }
+							    );
+						});
+						
+						return false;
+					});
+				});
+			</script>
+			<table class="layui-table">
+				<thead>
+					<tr>
+						<th>商品名称</th>
+						<th>商品图片</th>
+						<th>参考价格</th>
+						<th>数量参</th>
+						<th>分类</th>
+						<th>二级分类</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody id="showAll">
+					<!-- ajax动态获取数据 -->
+				</tbody>
+			</table>
+			
+			<!-- layUI 分页模块 -->
+			<div id="pages"></div>
+	<!-- 		<script>
+				//分页
+				layui.use('laypage', function() {
+					var laypage = layui.laypage;
+
+					//总页数大于页码总数
+					laypage.render({
+						elem: 'pages'
+						,count: 100
+						,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+						,jump: function(obj){
+						console.log(obj)
+						}
+					});
+				});
+			</script> -->
+		</div>
+	</body>
+
+</html>
