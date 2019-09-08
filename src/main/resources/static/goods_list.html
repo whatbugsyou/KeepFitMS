@@ -88,10 +88,14 @@
 
 					//监听提交
 					form.on('submit(formDemo)', function(data) {		
-						layer.msg(JSON.stringify(data.field));
 						//分页
 						layui.use('laypage', function() {
 						 var laypage = layui.laypage;
+						 if(data.field.name!=null&&data.field.provid!=null&&data.field.provid!=0){
+							 data.field.provid=""
+							 data.field.cityid=""
+							 layer.msg("不好意思，只能按名称搜，或者按类型搜哦")
+						 }
 						 $.get("http://localhost:8080/selectGoods.do",{"name":data.field.name,"provid":data.field.provid,"cityid":data.field.cityid,"curr":1,"limit":10},
 							        function(res) {
 							 			console.log(res);
@@ -107,24 +111,13 @@
 										      console.log(obj)
 										      $.get("http://localhost:8080/selectGoods.do",{"name":data.field.name,"provid":data.field.provid,"cityid":data.field.cityid,"curr":obj.curr,"limit":obj.limit},
 							    						 function (res) {
+
 							    							showGoods(res);
 							    						})
 							    						
 										    }
 										});
-					/*		    		laypage.render({
-							    			elem: 'pages'
-							    			,count: 100
-							    			,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']             
-							    			,jump: function(obj){
-							    				console.log(obj)
-							    			    //分页切换的回掉
-							    				$.get("http://localhost:8080/selectGoods.do",{"curr":data.curr,"limit":data.limit},
-							    						 function (res) {
-							    							showGoods(res);
-							    						});
-							    			}
-							    		});*/
+					
 							        }
 							    );
 						});

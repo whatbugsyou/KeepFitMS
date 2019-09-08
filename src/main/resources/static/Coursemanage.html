@@ -1,0 +1,502 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>课程管理</title>
+    <link rel="stylesheet" href="css/ic.css">
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="jquery-easyui-1.3.3/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" href="jquery-easyui-1.3.3/themes/icon.css">
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="imApp" class="container" >
+        <div class="row">
+            <div class="panel panel-default">
+
+                <div class="panel-body">
+
+                    <!--弹框啊！-->
+                    <a class="btn btn-danger" data-toggle="modal" href='#modal-id'>添加课程</a>
+                    <div class="modal fade" id="modal-id">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">添加课程</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="courseid" class="col-md-4 control-label">课程名:</label>
+                                                <div class="col-sm-8">
+                                                    <input v-model="addc_name" type="text" class="form-control" id="courseid" placeholder="课程名">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="coachid" class="col-sm-4 control-label">课程教练:</label>
+                                                <div class="col-sm-8">
+                                                    <input v-model="addc_coach" type="text" class="form-control" id="coachid" placeholder="课程教练">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="moneyid" class="col-md-4 control-label">价格:</label>
+                                                <div class="col-sm-8">
+                                                    <input v-model="addc_price" type="text" class="form-control" id="moneyid" placeholder="价格">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="ictype" class="col-sm-4 control-label">课程类型:</label>
+                                                <div class="col-sm-8">
+                                                    <select v-model="addc_type" id="sel" name="" id="input" class="form-control" required="required">
+                                                        <option>类型..</option>
+                                                        <option v-for="types in CourseTypes" :key="types.ct_id" :value="types.ct_name" v-text="types.ct_name"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="coursenum" class="col-md-4 control-label">课程节数:</label>
+                                                <div class="col-sm-8">
+                                                    <input v-model="addc_num" type="text" class="form-control" id="coursenum" placeholder="课程节数">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button @click="addCourse" type="button" class="btn btn-default btn-primary" data-dismiss="modal" >添加</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 修改框-->
+                    <div class="modal fade" id="modifyCourse">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">添加课程</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="mcourseid" class="col-md-4 control-label">课程名:</label>
+                                                <div class="col-sm-8">
+                                                    <input v-model="mc_name" type="text" class="form-control" id="mcourseid"
+                                                        placeholder="课程名">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="mcoachid" class="col-sm-4 control-label">课程教练:</label>
+                                                <div class="col-sm-8">
+                                                    <input v-model="mc_coach" type="text" class="form-control" id="mcoachid"
+                                                        placeholder="课程教练">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="mmoneyid" class="col-md-4 control-label">价格:</label>
+                                                <div class="col-sm-8">
+                                                    <input v-model="mc_price" type="text" class="form-control" id="mmoneyid"
+                                                        placeholder="价格">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="mictype" class="col-sm-4 control-label">课程类型:</label>
+                                                <div class="col-sm-8">
+                                                    <select v-model="mc_type" id="mictype" name="" id="input" class="form-control"
+                                                        required="required">
+                                                        <option value="">类型..</option>
+                                                        <option v-for="types in CourseTypes" :key="types.ct_id" :value="types.ct_name"
+                                                            v-text="types.ct_name"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="mcoursenum" class="col-md-4 control-label">课程节数:</label>
+                                                <div class="col-sm-8">
+                                                    <input v-model="mc_num" type="text" class="form-control" id="mcoursenum"
+                                                        placeholder="课程节数">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button @click="modifyC" type="button" class="btn btn-default btn-primary"
+                                        data-dismiss="modal">修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 提示框-->
+
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" style="color:palevioletred">提醒您:</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6 style="color: cornflowerblue">{{msg}}</h6>
+                                </div>
+                                <div class="modal-footer">
+                                    <button  type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                    <button id="sure" type="button" class="btn btn-secondary" data-dismiss="modal">确定</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--按需求查找-->
+                    <div class="col-md-12 row" style="margin-top: 0px;">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="courseN">课程名：</label>
+                                <input v-model="c_name" type="text" class="form-control input-sm" id="courseN" placeholder="课程名">
+                            </div>
+                            <div class="form-group ml-1">
+                                <label for="coachN">课程教练：</label>
+                                <input v-model="c_coach" type="text" class="form-control" id="coachN" placeholder="课程教练">
+                            </div>
+                            <div class="form-group">
+                                <label for="sel">课程类型：</label>
+                                <select v-model="c_type" id="sel" name="" id="input" class="form-control" required="required">
+                                    <option>类型..</option>
+                                    <option v-for="types in CourseTypes" :key="types.ct_id" :value="types.ct_name" v-text="types.ct_name"></option>
+                                </select>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="da">起止时间：</label>
+                                <input v-model="starttime" type="date" name="" id="da" class="form-control" value="" required="required" title="">
+                            </div>
+                            <div class="form-group">
+                                <label for="dat">~</label>
+                                <input v-model="endtime" type="date" name="" id="dat" class="form-control" value="" required="required" title="">
+                            </div> -->
+                            <button  @click="searcheCourse" type="button" class="sub btn btn-success">搜索</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!--表格展示-->
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <th>序号</th>
+                        <th>课程名</th>
+                        <th>课程类别</th>
+                        <th>课程教练</th>
+                        <th>课程节数</th>
+                        <th>课程价格</th>
+                        <th>操作</th>
+                    </thead>
+                    <tbody v-if="flag">
+                         <tr v-for="(course,index) in courses" :key="course.c_id">
+                            <td v-text="index+1"></td>
+                            <td v-text="course.c_name"></td>
+                            <td v-text="course.c_type"></td>
+                            <td v-text="course.c_coach"></td>
+                            <td v-text="course.c_num"></td>
+                            <td v-text="course.c_price"></td>
+                            <td>
+                                <a href="javascript:void(0);" @click="showModifyModal(index)">修改</a>
+                                <a href="javascript:void(0);" @click="deleteCourse(index,course.c_id)">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <!-- 修改课程信息-->
+
+        <!-- 分页-->
+        <div class="fenye_bottom">
+            <div class="datagrid-pager pagination">
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select class="pagination-page-list" v-model:value="rows">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div class="pagination-btn-separator"></div>
+                            </td>
+                            <td><a href="javascript:void(0)" class="l-btn l-btn-plain l-btn-disabled l-btn-plain-disabled"
+                                    group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span
+                                                class="l-btn-empty pagination-first">&nbsp;</span></span></span></a></td>
+                            <td @click="pagePre"><a href="javascript:void(0)"
+                                    class="l-btn l-btn-plain l-btn-disabled l-btn-plain-disabled" group="" id=""><span
+                                        class="l-btn-left"><span class="l-btn-text"><span
+                                                class="l-btn-empty pagination-prev">&nbsp;</span></span></span></a></td>
+                            <td>
+                                <div class="pagination-btn-separator"></div>
+                            </td>
+                            <td><span style="padding-left:6px;">第</span></td>
+                            <td><input class="pagination-num" type="text" v-model:value="currentPage" size="2"></td>
+                            <td><span style="padding-right:6px;">共{{totalPage}}页</span></td>
+                            <td>
+                                <div class="pagination-btn-separator"></div>
+                            </td>
+                            <td @click="pagenext"><a href="javascript:void(0)"
+                                    class="l-btn l-btn-plain l-btn-disabled l-btn-plain-disabled" group="" id=""><span
+                                        class="l-btn-left"><span class="l-btn-text"><span
+                                                class="l-btn-empty pagination-next">&nbsp;</span></span></span></a></td>
+                            <td><a href="javascript:void(0)" class="l-btn l-btn-plain l-btn-disabled l-btn-plain-disabled"
+                                    group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span
+                                                class="l-btn-empty pagination-last">&nbsp;</span></span></span></a></td>
+                            <td>
+                                <div class="pagination-btn-separator"></div>
+                            </td>
+                            <td><a href="javascript:void(0)" class="l-btn l-btn-plain" group="" id="">
+                                    <span class="l-btn-left">
+                                        <span class="l-btn-text"><span
+                                                class="l-btn-empty pagination-load">&nbsp;</span></span></span></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination-info">共{{totalsize}}记录</div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var imVue = new Vue({
+            el: '#imApp',
+            data: {
+                //是否显示表格
+                flag:false,
+                //当前页数
+                currentPage:1,
+                //总页数
+                totalPage: 0,
+                //总的记录数目
+                totalsize:0,
+
+                userid: -1,
+                roleid: -1,
+                // 每页的记录条数
+                rows:10,
+                //课程类型
+                CourseTypes:[{},],
+                icType:[{ "id": 0, "datadicname": "", "datadicvalue": "" },],
+                //incomes:[{ "id": "", "userid": "", "roleid": "", "incomer": "", "source": "", "money": "", "dataid": "", "content": "", "incometime": "", "createtime": "", "updatetime": "", "datadicname": "", "datadicvalue": "", "username": "", "starttime": "", "endtime": "" },],
+                //课程集合
+                courses:[{ "c_id": "", "c_name": "", "c_type": "", "c_coach": "", "c_num": "", "c_price": "" },],
+                //用来显示数据
+                msg:'',
+                
+                //按要求查询
+                c_name:"",
+                c_coach:"",
+                c_type:"",
+
+                mc_id:null,
+                mc_name: null,
+                mc_type: null,
+                mc_coach: null,
+                mc_num: null,
+                mc_price: null,
+
+                addc_name:null,
+                addc_type:null,
+                addc_coach:null,
+                addc_num:null,
+                addc_price:null,
+            },
+            methods: {
+                pagenext:function(){
+                    if(this.currentPage<this.totalPage){
+                        this.currentPage = this.currentPage + 1;
+                        //点击 查看下一页的数据
+                        $.ajax({
+                            url: "getCourseList.do",
+                            type: "POST",
+                            data: {
+                                "page": this.currentPage,
+                                "rows": this.rows,
+                            },
+                            success: (courseList) => {
+                                this.courses = courseList.courses;
+                            }
+                        })
+                    }
+                },
+                pagePre:function(){
+                    if(this.currentPage>1){
+                        this.currentPage =this.currentPage-1;
+                        $.ajax({
+                            url: "getCourseList.do",
+                            type: "POST",
+                            data: {
+                                "page": this.currentPage,
+                                "rows": this.rows,
+                            },
+                            success: (courseList) => {
+                                this.courses = courseList.courses;
+                            }
+                        })
+                    }
+                },
+                //按需求查询的 课程信息
+                searcheCourse:function(){
+                    $.ajax({
+                        url:"getCourseList.do",
+                        type:"POST",
+                        data:{
+                            "page": this.currentPage,
+                            "rows": this.rows,
+                            "c_name":this.c_name,
+                            "c_type":this.c_type,
+                            "c_coach":this.c_coach
+                        },
+                        success:(CourseList)=>{
+                            //返回值是 Course集合 以及 total总条数
+                            this.courses = [,];
+                            this.courses = CourseList.courses;
+                            //更新分页内容
+                            if (CourseList.total > 0) {
+                                this.flag = true;
+                            }
+                            this.totalsize = CourseList.total;
+                            if ((CourseList.total % this.rows) != 0) {
+                                this.totalPage = Math.ceil(CourseList.total / this.rows);
+                            } else {
+                                this.totalPage = (CourseList.total / this.rows);
+                            }
+                        }
+
+                    })
+                },
+                addCourse:function(){
+                    //添加和修改信息
+                    $.ajax({
+                        url:"addCourse.do",
+                        type:"POST",
+                        data:{
+                            "c_name":this.addc_name,
+                            "c_type":this.addc_type,
+                            "c_coach":this.addc_coach,
+                            "c_price":this.addc_price,
+                            "c_num":this.c_num
+                        },
+                        success:(remap)=>{
+                            alert(remap.msg);
+                            window.location.reload();
+                        }
+                    })
+                },
+                deleteCourse: function(index,id){
+                    this.msg = "是否确定删除！";
+                    $('#myModal').modal('show');
+                    $("#sure").click(()=>{
+                        this.courses.splice(index, 1);
+                        $.ajax({
+                            url: "deleteCourse.do",
+                            type: "POST",
+                            data: {
+                                "c_id": id
+                            },
+                            success: (res) => {
+                                alert(res.msg);
+                                window.location.reload();
+                            }
+                        })
+                    })
+                    
+                },
+                showModifyModal:function(index){
+                    $("#modifyCourse").modal('show');
+                    //先赋值
+                    var course = this.courses[index];
+                    this.mc_id = course.c_id;
+                    this.mc_name = course.c_name;
+                    this.mc_type = course.c_type;
+                    this.mc_num = course.c_num;
+                    this.mc_price = course.c_price;
+                    this.mc_coach = course.c_coach;
+                },
+                modifyC:function(){
+                    //发送修改之后的值
+                    $.ajax({
+                        url: "updateCourse.do",
+                        type: "POST",
+                        data: {
+                            "c_id": this.mc_id,
+                            "c_name": this.mc_name,
+                            "c_type": this.mc_type,
+                            "c_num": this.mc_num,
+                            "c_price": this.mc_price,
+                            "c_coach": this.mc_coach
+                        },
+                        success: (remap) => {
+                            alert(remap.msg);
+                            window.location.reload();
+                        }
+                    })
+                }
+            },
+            mounted() {
+                //在发送一起请求获取获取所有的数据
+                $.ajax({
+                    url: "getCourseList.do",
+                    type: "POST",
+                    data: {
+                        "page":this.currentPage,
+                        "rows": this.rows,
+                    },
+                    success: (courseList)=>{
+                        //集合数据数据
+                        this.courses=courseList.courses;
+                        if(courseList.total>0){
+                            this.flag=true;
+                        }
+                        this.totalsize = courseList.total;
+                        if((courseList.total% this.rows)!=0){
+                            this.totalPage = Math.ceil(courseList.total / this.rows);
+                        }else{
+                            this.totalPage = (courseList.total / this.rows);
+                        }
+                    }
+                });
+                //获得所有的课程类别
+                $.ajax({
+                    url: "getCourseType.do",
+                    type: "POST",
+                    success: (CourseTypes) => {
+                        //获取人物 和支出的类型
+                        this.CourseTypes = CourseTypes;
+                    },
+                    error: function () {
+                        alert("加载异常");
+                    }
+                });
+            },
+        })
+    </script>
+</body>
+</html>
