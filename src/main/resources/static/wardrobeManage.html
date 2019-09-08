@@ -69,7 +69,7 @@
                             <div class="col-md-2 pl-1">
                                 <select class="form-control" id="selectWCategory">
                                     <option value="1">所有</option>
-                                    <option value="0">--请选择-----</option>
+                                    <option value="0" id="searchHide1">--请选择-----</option>
                                     <option value="2">空闲中</option>
                                     <option value="3">租用中</option>
                                     <option value="4">故障维修</option>
@@ -79,12 +79,12 @@
                             <div class="col-md-4 text-right pr-1">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">衣柜编号:</span>
+                                        <span class="input-group-text">搜索衣柜编号:</span>
                                     </div>
                                     <input type="text" id="wstext" class="form-control" placeholder="search"
                                         v-model="selectedWardrobeL" />
-                                    <button class="btn btn-outline-primary my-2 my-sm-0 mr-3"
-                                        @click="searchSingleW">搜索</button>
+                                    <!-- <button class="btn btn-outline-primary my-2 my-sm-0 mr-3"
+                                        @click="searchSingleW">搜索</button> -->
                                 </div>
                             </div><!-- 搜索衣柜输入框 end-->
                             <!-- 信息提示框 -->
@@ -144,7 +144,7 @@
                                             <div class="mt-2">
                                                 备注记录：<input id="deposit" type="text" v-model="operaMInfo.defaultDesc">
                                             </div>
-                                            <p class="text-muted mt-3">该柜已损坏？<a href="javascript:void(0)">去设置为故障状态</a>
+                                            <p class="text-muted mt-3">该柜已损坏？<a href="javascript:void(0)" @click="setFault(2)">去设置为故障状态</a>
                                             </p>
                                             <!-- 底部按钮 -->
                                             <div class="modal-footer">
@@ -157,7 +157,6 @@
                                         <!-- 租借中的衣柜，模态框信息如下 -->
                                         <div v-if="operaMInfo.status == 1">
                                             该衣柜正在被会员卡号为“{{operaMInfo.rentedCid}}”的“{{operaMInfo.rentedMname}}”租借~~~
-                                            <p class="text-muted mt-3">该柜已损坏？<a href="javascript:void(0)">去设置为故障状态</a>
                                             </p>
                                             <!-- 底部按钮 -->
                                             <div class="modal-footer">
@@ -169,7 +168,7 @@
                                         </div><!-- 租借中的衣柜，模态框信息如下 end-->
                                         <!-- 故障的衣柜，模态框信息如下 -->
                                         <div v-if="operaMInfo.status == 2">
-                                            <p class="text-muted mt-3">该柜出现了故障，<a href="javascript:void(0)">已维修好？</a>
+                                            <p class="text-muted mt-3">该柜出现了故障，<a href="javascript:void(0)" @click="setFault(0)">已维修好？</a>
                                             </p>
                                             <!-- 底部按钮 -->
                                             <div class="modal-footer">
@@ -193,26 +192,25 @@
                             <div class="col-md-2 pl-1">
                                 <select class="form-control" id="selectWRCategory">
                                     <option value="1">所有</option>
-                                    <option value="0">--请选择-----</option>
+                                    <option value="0" id="searchHide2">--请选择-----</option>
                                     <option value="2">租用中</option>
                                     <option value="3">已完成</option>
                                 </select>
                             </div><!-- 选择出租记录状态 end-->
                             <div class="col-md-5 pr-1 mt-1">
-                                登记日期：<input type="date" /> 至：<input type="date" />
+                                登记日期：<input type="date" id="wRDateStart" v-model="wrRegTime.start" /> 至：<input
+                                    type="date" id="wRDateEnd" v-model="wrRegTime.end" />
                             </div>
                             <div class="col-md-4 pr-1">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">衣柜编号:</span>
+                                        <span class="input-group-text">搜索衣柜编号:</span>
                                     </div>
                                     <input id="wrstext" class="form-control" type="text" list="wnameList"
                                         v-model="selectedWardrobeR">
                                     <datalist id="wnameList">
                                         <option v-for="(wr) in wardrobeList_all">{{wr.wardrobe_name}}</option>
                                     </datalist>
-                                    <button class="btn btn-outline-primary my-2 my-sm-0 mr-3"
-                                        @click="searchWR">搜索</button>
                                 </div>
                             </div>
                         </div><!-- 衣柜状态操作栏 end-->
@@ -243,7 +241,8 @@
                                     <td>{{WR.wr_endtime}}</td>
                                     <td>{{WR.wr_deposit}}</td>
                                     <td>{{WR.wr_desc}}</td>
-                                    <td><button type="button" class="btn btn-info" v-if="WR.wr_status == '租用中'">退柜</button></td>
+                                    <td><button type="button" class="btn btn-info" v-if="WR.wr_status == '租用中'"
+                                            @click="cancelWardrobe2(WR.wr_id)">退柜</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -259,4 +258,5 @@
     <script src="js/wardrobeHtml.js"></script>
 
 </body>
+
 </html>

@@ -2,7 +2,7 @@ package com.KeepFitMS.entity;
 
 import java.io.Serializable;
 
-public class Emp implements Serializable{
+public class Emp implements Serializable,Cloneable{
 	/**
 	 * 
 	 */
@@ -10,24 +10,17 @@ public class Emp implements Serializable{
 	
 	private int emp_id;
 	private String emp_name;
-	private int job_id;
-	private String job_name;//表中没有此字段
+	private Job job;//表中为job_id
 	private String emp_hiredate;
-	private int dept_id;
-	private String  dept_name;//表中没有此字段
-	public int getJob_id() {
-		return job_id;
-	}
-	public void setJob_id(int job_id) {
-		this.job_id = job_id;
-	}
-	public int getDept_id() {
-		return dept_id;
-	}
-	public void setDept_id(int dept_id) {
-		this.dept_id = dept_id;
-	}
 	private String emp_phone;
+	private Dept dept;//表中为dept_id
+	
+	public String getEmp_phone() {
+		return emp_phone;
+	}
+	public void setEmp_phone(String emp_phone) {
+		this.emp_phone = emp_phone;
+	}
 	public int getEmp_id() {
 		return emp_id;
 	}
@@ -40,11 +33,11 @@ public class Emp implements Serializable{
 	public void setEmp_name(String emp_name) {
 		this.emp_name = emp_name;
 	}
-	public String getJob_name() {
-		return job_name;
+	public Job getJob() {
+		return job;
 	}
-	public void setJob_name(String job_name) {
-		this.job_name = job_name;
+	public void setJob(Job job) {
+		this.job = job;
 	}
 	public String getEmp_hiredate() {
 		return emp_hiredate;
@@ -52,24 +45,17 @@ public class Emp implements Serializable{
 	public void setEmp_hiredate(String emp_hiredate) {
 		this.emp_hiredate = emp_hiredate;
 	}
-	public String getDept_name() {
-		return dept_name;
-	}
-	public void setDept_name(String dept_name) {
-		this.dept_name = dept_name;
-	}
-	public String getEmp_phone() {
-		return emp_phone;
-	}
-	public void setEmp_phone(String emp_phone) {
-		this.emp_phone = emp_phone;
+	public Dept getDept() {
+		return dept;
 	}
 	@Override
 	public String toString() {
-		return "Emp [emp_id=" + emp_id + ", emp_name=" + emp_name + ", job_id=" + job_id + ", job_name=" + job_name
-				+ ", emp_hiredate=" + emp_hiredate + ", dept_id=" + dept_id + ", dept_name=" + dept_name
-				+ ", emp_phone=" + emp_phone + "]";
+		return "Emp [emp_id=" + emp_id + ", emp_name=" + emp_name + ", job=" + job + ", emp_hiredate=" + emp_hiredate
+				+ ", dept=" + dept + "]";
 	}
-
+	public void setDept(Dept dept) {
+		this.dept = dept;
+	}
+	
 
 }
