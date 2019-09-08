@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.KeepFitMS.entity.Wardrobe;
 import com.KeepFitMS.entity.Wardroberecord;
+import com.KeepFitMS.exception.WardrobeServiceException;
 /**
  * @衣柜service接口
  * @author 国国
@@ -29,8 +30,9 @@ public interface WardrobeService {
 	 * @apiNote 租柜
 	 * @param 会员卡号，会员姓名，衣柜名称，衣柜押金，租柜备注
 	 * @return boolean
+	 * @throws WardrobeServiceException 
 	 */
-	boolean rentW(String cid,String mname,String wardrobe_name,String wr_deposit,String wr_desc);
+	boolean rentW(String cid,String mname,String wardrobe_name,String wr_deposit,String wr_desc) throws WardrobeServiceException;
 
 	/**
 	 * @apiNote 退柜

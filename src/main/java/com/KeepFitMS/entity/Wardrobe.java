@@ -1,6 +1,8 @@
 package com.KeepFitMS.entity;
 
-public class Wardrobe {
+import java.io.Serializable;
+
+public class Wardrobe implements Serializable{
 	
 	private Integer wardrobe_id;
 	private String wardrobe_name;

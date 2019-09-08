@@ -1,6 +1,8 @@
 package com.KeepFitMS.entity;
 
-public class Wardroberecord {
+import java.io.Serializable;
+
+public class Wardroberecord implements Serializable{
 
 	private Integer wr_id;
 	private Integer cid;
