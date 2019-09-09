@@ -168,6 +168,8 @@ var vue = new Vue({
                 if(response.data == "success"){
                     alert('租用成功');
                     window.location.reload();
+                } else {
+                	alert(response.data);
                 }
             }).catch(function (err) {
                 console.log(err);

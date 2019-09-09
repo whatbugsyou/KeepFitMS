@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.KeepFitMS.entity.Member;
 import com.KeepFitMS.entity.Wardrobe;
 import com.KeepFitMS.entity.Wardroberecord;
+import com.KeepFitMS.exception.WardrobeServiceException;
 import com.KeepFitMS.service.MemberService;
 import com.KeepFitMS.service.WardrobeService;
 
@@ -41,11 +42,17 @@ public class WardrobeController {
 	
 	@RequestMapping("/rentW.do")
 	public  String rentW(String cid,String mname,String wardrobe_name,String wr_deposit,String wr_desc) {
-		boolean flag = wardrobeService.rentW(cid,mname,wardrobe_name,wr_deposit,wr_desc);
+		boolean flag = false;
+		String exceptionInfo = null;
+		try {
+			flag = wardrobeService.rentW(cid,mname,wardrobe_name,wr_deposit,wr_desc);
+		} catch (WardrobeServiceException e) {
+			exceptionInfo = e.getMessage();
+		}
 		if(flag) {
 			return "success";
 		} else {
-			return "error";
+			return exceptionInfo;
 		}
 	}
 	
