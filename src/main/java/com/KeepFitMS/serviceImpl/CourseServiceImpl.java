@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.KeepFitMS.dao.CourseDao;
 import com.KeepFitMS.entity.Course;
+import com.KeepFitMS.entity.Course_type;
 import com.KeepFitMS.service.CourseService;
 
 @Service
@@ -45,6 +46,18 @@ public class CourseServiceImpl implements CourseService{
 	public int updateCourse(Course course) {
 		// TODO Auto-generated method stub
 		return courseDao.updateCourse(course);
+	}
+
+	@Override
+	public List<Course_type> getAllCourse_type() {
+		// TODO Auto-generated method stub
+		return courseDao.getAllCourse_type();
+	}
+
+	@Override
+	public List<Course> findAllCourse() {
+		// TODO Auto-generated method stub
+		return courseDao.findAllCourse();
 	}
 
 	

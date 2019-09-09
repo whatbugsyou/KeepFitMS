@@ -20,11 +20,7 @@ public class GoodsServiceImpl implements GoodsService {
 	@Autowired
 	private GoodsDao goodsDao;
 	
-	//查询所有商品
-	@Override
-	public List<Goods> selectAllGoods() {
-		return goodsDao.selectAllGoods();
-	}
+
 
 	//查询所有父类型
 	@Override
@@ -35,31 +31,48 @@ public class GoodsServiceImpl implements GoodsService {
 	//根据父类id查子类
 	@Override
 	public List<Pctype> selectPctypeByPtypeId(Integer ptype_id) {
-	
 		return goodsDao.selectPctypeByPtypeId(ptype_id);
 	}
 	
-	//根据关键字传值
+	
+	//查询商品集合
 	@Override
-	public List<Goods> selectGoodsByKeys(String name, Integer provid, Integer cityid) {
-		//先判断name是否为空
-		if(name==""||name==null) {
-			//如果商品名称是空
-			if(provid==0) {
-				//再判断父类型名是不是0，查询全部商品信息集合
-				return goodsDao.selectAllGoods();
-			}else{
-				if(cityid==0) {
-					//如果子类型也是0，name得到商品名称为空，子类型为0所以按照父类型id查询商品信息
-					return goodsDao.selectAllGoodsByPtypeId(provid);
-				}else{
-					//如果子类不是0,得到子类型id和父类型id,则按照父类型和子类型查询
-					return goodsDao.selectAllGoodsByPtypeIdAndPctype(provid,cityid);
-				}	
-			}
+	public List<Goods> selectGoods(String name, Integer provid, Integer cityid, Integer curr, Integer limit) {
+		return goodsDao.selectGoods(name,provid,cityid,curr,limit);
+	}
+
+	//查询总条数
+	@Override
+	public Integer selectAllCount(String name, Integer provid, Integer cityid) {
+		return goodsDao.selectAllCount(name,provid,cityid);
+	}
+
+	//修改状态
+	@Override
+	public void updateGoodsStatus(Integer id, Boolean status) {
+		if(status==true){
+			status=false;
+			goodsDao.updateGoodsStatus(id,status);
 		}else {
-			//如果商品名称不是空，默认按照商品名称查询
-			return goodsDao.selectAllGoodsByName(name);
+			status=true;
+			goodsDao.updateGoodsStatus(id,status);
+		}
+	}
+
+	//修改商品信息
+	@Override
+	public boolean updateGoods(Goods goods) {
+		return goodsDao.updateGoods(goods);
+	}
+	//添加商品
+	@Override
+	public boolean insertGoods(Goods goods) {
+		//首先判断商品是否存在，存在则增加加数量
+		boolean flag = goodsDao.selecGoodsByName(goods.getGoods_name());
+		if(flag) {
+			return goodsDao.updateGodosNum(goods);
+		}else {
+		    return goodsDao.addGoods(goods);
 		}
 		
 	}

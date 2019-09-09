@@ -10,14 +10,8 @@ public class Job implements Serializable{
 	private int job_id;
 	private String job_name;
 	private int job_sal;
-	private int dept_id;
-	private String dept_name;//表中没有此字段
-	public int getDept_id() {
-		return dept_id;
-	}
-	public void setDept_id(int dept_id) {
-		this.dept_id = dept_id;
-	}
+	private Dept dept;//表中dept_id
+	
 	public int getJob_id() {
 		return job_id;
 	}
@@ -36,16 +30,16 @@ public class Job implements Serializable{
 	public void setJob_sal(int job_sal) {
 		this.job_sal = job_sal;
 	}
-	public String getDept_name() {
-		return dept_name;
-	}
-	public void setDept_name(String dept_name) {
-		this.dept_name = dept_name;
+	public Dept getDept() {
+		return dept;
 	}
 	@Override
 	public String toString() {
-		return "Job [job_id=" + job_id + ", job_name=" + job_name + ", job_sal=" + job_sal + ", dept_id=" + dept_id
-				+ ", dept_name=" + dept_name + "]";
+		return "Job [job_id=" + job_id + ", job_name=" + job_name + ", job_sal=" + job_sal + ", dept=" + dept + "]";
 	}
+	public void setDept(Dept dept) {
+		this.dept = dept;
+	}
+	
 	
 }

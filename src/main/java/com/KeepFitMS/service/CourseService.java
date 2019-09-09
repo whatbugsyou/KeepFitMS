@@ -4,9 +4,9 @@ package com.KeepFitMS.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
 
 import com.KeepFitMS.entity.Course;
+import com.KeepFitMS.entity.Course_type;
 
 /**
  * 	课程服务层
@@ -29,6 +29,11 @@ public interface CourseService {
 	 */
 	long getTotalCourse(Map<String,Object> map);
 	
+	/**
+	 * 查询所有的课程数目
+	 * @return
+	 */
+	List<Course> findAllCourse();
 	
 	/**
 	 * 	添加一条课程
@@ -50,4 +55,10 @@ public interface CourseService {
 	 * @return
 	 */
 	int updateCourse(Course course);
+	
+	/**
+	 * 查询所有的课程分类
+	 * @return
+	 */
+	List<Course_type> getAllCourse_type();
 }

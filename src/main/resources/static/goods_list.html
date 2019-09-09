@@ -66,9 +66,6 @@
 					</form> -->
 			</div>
 			<script>
-				
-				
-			
 				//表单提交
 				layui.use('form', function() {
 					var form = layui.form;
@@ -90,36 +87,41 @@
 					});  
 
 					//监听提交
-					form.on('submit(formDemo)', function(data) {				
-						$.ajax({
-							type: "get",
-							url: "http://localhost:8080/selectGoodsByKeys.do",
-							data: {"name":data.field.name,"provid":data.field.provid,"cityid":data.field.cityid},
-							dataType: "json",
-							success: function (res) {
-								 var content = "";    
-						            $.each(res, function (index, goods) { 
-						                content+="<tr><td>"+goods.goods_name+"</td>";
-						                content+="<td><img src="+goods.goods_img+" width='20' height='20' onmouseenter='imgBig(this)' onmouseleave='imgSmall(this)'/></td>"
-						                content+="<td>"+goods.goods_price+"</td>"
-						                content+="<td>"+goods.ptype.ptype_name+"</td>"
-						                content+="<td>"+goods.pctype.pctype_name+"</td>"
-						                if(goods.goods_status==true){
-						                    //获取状态，并判断
-						                    content+="<td class='goods_status' style='color:green'>上架</td>"
-						                }else{
-						                    content+="<td class='goods_status' style='color:red'>下架</td>"
-						                }        
-						                if(goods.ptype.ptype_name=1){
-						                    content+="<td> <button class='layui-btn layui-btn-xs' onclick='use1But()'>使用</button> </td>"
-						                }else{
-						                    content+="<td> <button class='layui-btn layui-btn-xs' onclick='useBut()'>使用</button> </td>"
-						                }
-						            });
-						            $("#showAll").html(content);
-								
-							}
+					form.on('submit(formDemo)', function(data) {		
+						//分页
+						layui.use('laypage', function() {
+						 var laypage = layui.laypage;
+						 if(data.field.name!=null&&data.field.provid!=null&&data.field.provid!=0){
+							 data.field.provid=""
+							 data.field.cityid=""
+							 layer.msg("不好意思，只能按名称搜，或者按类型搜哦")
+						 }
+						 $.get("http://localhost:8080/selectGoods.do",{"name":data.field.name,"provid":data.field.provid,"cityid":data.field.cityid,"curr":1,"limit":10},
+							        function(res) {
+							 			console.log(res);
+							    		showGoods(res);
+							    		//总页数大于页码总数
+							    		laypage.render({
+										    elem: 'pages'
+										    ,count: res.count
+										    ,limit:5
+										    ,limits:[5,10,15,20]
+										    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+										    ,jump: function(obj){
+										      console.log(obj)
+										      $.get("http://localhost:8080/selectGoods.do",{"name":data.field.name,"provid":data.field.provid,"cityid":data.field.cityid,"curr":obj.curr,"limit":obj.limit},
+							    						 function (res) {
+
+							    							showGoods(res);
+							    						})
+							    						
+										    }
+										});
+					
+							        }
+							    );
 						});
+						
 						return false;
 					});
 				});
@@ -130,6 +132,7 @@
 						<th>商品名称</th>
 						<th>商品图片</th>
 						<th>参考价格</th>
+						<th>数量参</th>
 						<th>分类</th>
 						<th>二级分类</th>
 						<th>状态</th>
@@ -137,35 +140,13 @@
 					</tr>
 				</thead>
 				<tbody id="showAll">
-				<!-- 	<tr>
-						<td>冬瓜</td>
-						<td><img src="http://images.yixinorth.com/sp/2017/201712051125530096.jpg" width="20" height="20" onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/></td>
-						<td>10</td>
-						<td>商品</td>
-						<td>茄果类</td>
-						<td class="goods_status" style="color:green">上架</td>
-						<td>
-							<button class="layui-btn layui-btn-xs" onclick="use1But()">使用</button>
-						</td>
-					</tr>
-					<tr>
-						<td>冬瓜</td>
-						<td><img src="http://images.yixinorth.com/sp/2017/201712051252040212.jpg" width="20" height="20" onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)"/></td>
-						<td>10</td>
-						<td>器材场地</td>
-						<td>茄果类</td>
-						<td class="goods_status" style="color:red">下架</td>
-						<td>
-							<button class="layui-btn layui-btn-xs" onclick="useBut()">使用</button>
-						</td>
-					</tr>
- -->
+					<!-- ajax动态获取数据 -->
 				</tbody>
 			</table>
 			
 			<!-- layUI 分页模块 -->
 			<div id="pages"></div>
-			<script>
+	<!-- 		<script>
 				//分页
 				layui.use('laypage', function() {
 					var laypage = layui.laypage;
@@ -180,7 +161,7 @@
 						}
 					});
 				});
-			</script>
+			</script> -->
 		</div>
 	</body>
 

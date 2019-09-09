@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import com.KeepFitMS.entity.Course;
+import com.KeepFitMS.entity.Course_type;
 
 /**
  * 	课程管理持久层
@@ -30,6 +30,11 @@ public interface CourseDao {
 	 */
 	long getTotalCourse(Map<String,Object> map);
 	
+	/**
+	 * 查询所有的课程
+	 * @return
+	 */
+	List<Course> findAllCourse();
 	
 	/**
 	 * 	添加一条课程
@@ -52,5 +57,10 @@ public interface CourseDao {
 	 */
 	int updateCourse(Course course);
 	
+	/**
+	 * 查询所有的课程分类
+	 * @return
+	 */
+	List<Course_type> getAllCourse_type();
 	
 }
