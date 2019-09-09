@@ -47,13 +47,6 @@
                             <div class="form-group">
                                 <input type="password" class="form-control" id="password" name="password" v-model:value="password" placeholder="密码">
                             </div>
-                            <div class="form-group">
-                              <select class="form-control" name="roleid" id="roleid" v-model:value="roleid">
-                                <option>请选择用户类型..</option>
-                                <option value="2">普通用户</option>
-                                <option value="1">管理员</option>
-                              </select>
-                            </div>
                         </form>
                         <button type="button" class="btn btn-primary btn-block btn-md " style="font-size: 25px" @click="login">
                             登录</button>
@@ -93,7 +86,6 @@
             data:{
                 username: '',
                 password:'',
-                roleid:'',
                 msg:''
             },
             methods: {
@@ -114,14 +106,6 @@
                                 $('#password').focus();
                             });
                         return false;
-                    }else if(this.roleid==null || this.roleid==""){
-                        this.msg = "请选择用户类型！";
-                        $('#myModal').modal('show');
-                        $('#myModal').on('hide.bs.modal',
-                            function () {
-                                $('#roleid').focus();
-                            });
-                        return false;
                     }else{
                         $.ajax({
                             url: "login.do",
@@ -129,13 +113,10 @@
                             data: {
                                 username: this.username,
                                 password: this.password,
-                                roleid: this.roleid
                             },
                             success: (results) => {
                                  var jsonobj = $.parseJSON(results);
-                                 alert(jsonobj.erroes);
                                  var status = jsonobj.erroes;
-                                 alert(jsonobj.errmsg);
                                  var remsg = jsonobj.errmsg;
                                  if(status==200){
                                      window.location.href = 'main.html';
