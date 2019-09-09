@@ -37,6 +37,12 @@
 			</if>
 		</where>
 	</select>
+	
+	<select id="findAllCourse" resultType="course">
+		select * from course;
+	</select>
+	
+	
 	<delete id="deleteCourse" parameterType="int">
 		delete from course where c_id = #{c_id}
 	</delete>

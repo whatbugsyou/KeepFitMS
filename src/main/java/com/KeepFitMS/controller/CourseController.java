@@ -105,10 +105,10 @@ public class CourseController {
 		
 		return map;
 	}
+	
 	@RequestMapping("/updateCourse.do")
 	@ResponseBody
 	public Map<String,Object> updateCourse(Course course){
-		System.out.println(course);
 		int resultrows = courseService.updateCourse(course);
 		Map<String,Object> map = new HashMap<String, Object>();
 		if(resultrows>0) {
@@ -118,4 +118,43 @@ public class CourseController {
 		}
 		return map;
 	}
+	
+	@RequestMapping("/showCoursepie.do")
+	@ResponseBody
+	public Object[] showCoursepie(){
+		
+		//	查询所有的课程
+		List<Course> courses = courseService.findAllCourse();
+		//	查询所有的课程类型
+		List<Course_type> ct = courseService.getAllCourse_type();
+		//	遍历 放到数组中
+		int totoalct = ct.size();
+		int totoalc = courses.size();
+		System.out.println("课程总数："+totoalc);
+		System.out.println("类型总数："+totoalct);
+		Object [] arr = new Object[totoalct];
+		for (int i = 0; i < ct.size(); i++) {
+			int tempCount = 0;
+			for(int j = 0; j< courses.size();j++) {
+				//	如果课程相同那么 加一
+				if(ct.get(i).getCt_name().equals(courses.get(j).getC_type())) {
+					tempCount++;
+				}
+			}
+			//	将类型名称和 锁站所站比例放入数组中
+			Object [] temparr = new Object[2];
+			//	类型名称
+			temparr[0] = ct.get(i).getCt_name();
+			System.out.println(tempCount);
+			System.out.println(temparr[0]);
+			//	所占比例
+			temparr[1] = (double) Math.round((tempCount*100)/totoalc);
+			System.out.println(temparr[1]);
+			//	放入数组中
+			arr[i] = temparr;
+		}
+		return arr;
+	}
+	
+	
 }
