@@ -10,8 +10,6 @@
     <result column="maddress" property="maddress"  />
   	<result column="msex" property="msex"  />
   	<result column="coach_id" property="coach_id"  />
-  	<result column="wardrobe_id" property="wardrobe_id"  />
-  	<result column="consultant_id" property="consultant_id"  />
   	<result column="needs" property="needs"  />
   	<result column="icon" property="icon"  />
   	<association property="card" javaType="com.KeepFitMS.entity.Card" >
@@ -29,10 +27,51 @@
   </resultMap>
 
   <select id="getAllMember" resultMap="MemberMap" >
-    select * from member m,card c where m.mid=c.mid
+    select * from member m,card c where m.mid=c.mid order by m.mid 
   </select>
   <select id="getMemberByMid" resultMap="MemberMap">
   select *from member m,card c where m.mid=#{mid} and c.mid=m.mid
   </select>
- 
+  
+  <select id="shaixuanMember" resultMap="MemberMap">
+		 select *from (select *from member  where 1=1 
+		  <if test="mid !=-1">
+		
+		 and mid=#{mid} 
+		  </if>
+		  <if test="mname !=null and mname!='' ">
+		
+		  	and mname like concat(#{mname},'%') 
+		  </if>
+		  <if test="mtelephone!=null and mtelephone !='' ">
+		
+		  and mtelephone=#{mtelephone}
+		  </if>
+		  <if test="msex !=null and msex!=''">
+		  
+		  and msex=#{msex}
+		  </if>
+		  ) m ,card c where m.mid=c.mid 
+		  <if test="card.cid !=-1">
+		 and c.cid=#{card.cid}
+		  </if>
+		  order by m.mid
+  </select>
+ <update id="updateMemberByMid" >
+ 		update  member 
+	<trim prefix="set" suffixOverrides=",">
+	<if test="mtelephone!=''">
+ 		mtelephone=#{mtelephone},
+ 	</if>
+ 	
+	<if test="maddress!=''">
+		maddress=#{maddress},
+	</if>
+	<if test="needs !=''">
+		needs=#{needs}
+	</if>
+	</trim>
+
+ where mid=#{mid}
+ </update>
 </mapper>

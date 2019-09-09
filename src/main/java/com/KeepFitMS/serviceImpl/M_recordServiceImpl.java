@@ -30,4 +30,16 @@ public class M_recordServiceImpl implements M_recordService {
 		return mrd.addRecord(mr);
 	}
 
+	@Override
+	public int deleteRecordByMrid(int mrid) {
+		// TODO Auto-generated method stub
+		return mrd.deleteRecordByMrid(mrid);
+	}
+
+	@Override
+	public List<M_record> shaixuanM_records(M_record mr) {
+		// TODO Auto-generated method stub
+		return mrd.shaixuanM_records(mr);
+	}
+
 }

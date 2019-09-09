@@ -5,11 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +23,7 @@ import com.KeepFitMS.service.CardService;
 import com.KeepFitMS.service.MemberService;
 
 /*
- * 会员管理控制层
+ * 会员控制层
  * */
 @Controller
 public class MemberController {
@@ -31,39 +31,27 @@ public class MemberController {
 	private MemberService ms;
 	@Autowired
 	private CardService cs;
-	
-	//获取所有用户
-	@ResponseBody
-	@RequestMapping("getAllMember.do")
-	public ModelAndView test() {
-		ModelAndView mv=new ModelAndView("members.html");
-		
-		List<Member> lm=ms.getAllMember();
-		mv.addObject("members", lm);
-		return mv;
-	}
+	//进入主页
 	@RequestMapping("index")
 	public ModelAndView index() {
 		return new ModelAndView("test.html");
 	}
+	//进入添加会员界面
 	@RequestMapping("addMember")
 	public ModelAndView add() {
 		
 		return new ModelAndView("addMember.html");
 	}
+	//进入会员记录登记界面
 	@RequestMapping("m_record")
 	public ModelAndView m_record() {
 		
 		return new ModelAndView("m_record.html");
 	}
-	@RequestMapping("unmember")
-public ModelAndView unmember() {
-		
-		return new ModelAndView("unmember.html");
-	}
+	
 	//会员信息录入
 	@RequestMapping("addMember.do")
-	public String addMember(MultipartFile image,Member m,String ctype,String sdate) throws IOException, ParseException {
+	public ModelAndView addMember(MultipartFile image,Member m,String ctype,String sdate) throws IOException, ParseException {
 		//新创建一个随机的文件名
 		String ext = image.getOriginalFilename();
 		String fileName = UUID.randomUUID().toString().replace("-", "")+ext.substring(ext.indexOf("."));
@@ -71,7 +59,7 @@ public ModelAndView unmember() {
 		String icon="image/"+fileName;
 		System.out.println(m.getCoach_id());
 		m.setIcon(icon);
-		ms.addMember(m);
+		
 		
 		image.transferTo(new File("D:/image/"+fileName));
 		//会员卡绑定
@@ -99,8 +87,17 @@ public ModelAndView unmember() {
 		}
 		Date edate=cl.getTime();//获取结束时间Date类型
 		c.setEdate(edate);
-		cs.addCard(c);
-		return "index";
+		
+		//添加会员同时绑定会员卡
+		ModelAndView mv=new ModelAndView("addMember.html");
+		if(ms.addMember(m, c)==1) {
+			mv.addObject("msg", "ok");
+		}else {
+			mv.addObject("msg", "no");
+		}
+		
+
+		return mv;
 		
 	}
 	//会员注册检测
@@ -133,4 +130,6 @@ public ModelAndView unmember() {
 			}
 		}
 	}
+	
+	
 }

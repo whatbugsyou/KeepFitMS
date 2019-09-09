@@ -8,10 +8,13 @@ public class M_record {
 	private String sdate;
 	private String edate;
 	private String remarks;
+	private Member member;
+	
+	
 	@Override
 	public String toString() {
 		return "M_record [mrid=" + mrid + ", mid=" + mid + ", sdate=" + sdate + ", edate=" + edate + ", remarks="
-				+ remarks + "]";
+				+ remarks + ", member=" + member + "]";
 	}
 	public int getMrid() {
 		return mrid;
@@ -42,5 +45,11 @@ public class M_record {
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	public Member getMember() {
+		return member;
+	}
+	public void setMember(Member member) {
+		this.member = member;
 	}
 }

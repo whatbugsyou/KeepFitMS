@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Title</title>
@@ -35,6 +35,7 @@
         </div>
         <div class="col-6 form-group">
             <button type="submit" class=" btn btn-primary">登记</button>
+            <span style="display: none" id="msg" th:text="${msg}"></span>
         </div>
     </form>
     <div class="jumbotron jumbotron-fluid mb-0 fixed-bottom p-3">
@@ -46,57 +47,18 @@
     <script src="js/bootstrap.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script>
-        function checkMember() {
-            var mid = $("#mid").val();
-
-            $.get("checkMember2.do?mid=" + mid, function(result) {
-                if (result == "no exsit") {
-                    $("#helptext").html("会员编号不存在!")
-
-                } else if (result == "guoqi") {
-                    $("#helptext").html("会员卡已过期")
-
-                } else {
-                    $("#helptext").html("会员卡可用!")
-                }
-            });
-        }
-
-        function check() {
-            var sdate = $("#sdate").val();
-            var edate = $("#edate").val();
-            if ($("#helptext").html() == "会员卡可用!") {
-                if (edate == "" || sdate == "") {
-
-                    alert("日期未填")
-                    return false;
-
-                } else {
-                    if (edate < sdate) {
-                        alert("结束时间早于开始时间!")
-                        return false;
-                    }
-                    return true;
-                }
-            } else {
-                alert($("#helptext").html());
-                return false;
-            }
-        }　
-        function checknumber(String) {　　　　
-            var Letters = "1234567890";　　　　
-            var i;　　　　
-            var c;　　　　
-            for (i = 0; i < Letters.length; i++) { //Letters.length() ->>>>取字符长度
-                　　　　　　
-                c = Letters.charAt(i);　　　　　　
-                if (Letters.indexOf(c) == -1) { //在"Letters"中找不到"c"   见下面的此函数的返回值
-                    　　　　　　　　
-                    return true;　　　　　
-                }　　　　
-            }　　　　
-            return false;　　
-        }
+    
+    	$(function(){
+    		var msg=$("#msg").html()
+    		if(msg!=""){
+    			alert(msg);
+    			window.location.href="index";
+    		}
+    		
+    	})
+    	
+		
+        
     </script>
 </body>
 

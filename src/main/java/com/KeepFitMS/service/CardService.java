@@ -1,6 +1,8 @@
 package com.KeepFitMS.service;
 
+import java.util.Date;
 import java.util.List;
+
 
 
 import com.KeepFitMS.entity.Card;
@@ -16,4 +18,10 @@ public interface CardService {
 	int deposit(int money,int cid);
 	//删除卡
 	int delCard(int cid);
+	//根据卡号查询卡
+	
+	Card selectCardByCid(int cid);
+	
+	//根据会员ID修改会员卡信息
+	int updateCardByCid(Card c);
 }

@@ -45,6 +45,7 @@
         </div>
         <div class="col-6 form-group">
             <button type="submit" class=" btn btn-primary">提交</button>
+                 <span id="msg" style="display:none" th:text="${msg}"></span>
         </div>
     </form>
     <div class="jumbotron jumbotron-fluid mb-0 fixed-bottom p-3">
@@ -93,20 +94,23 @@
                 return false;
             }
         }　
-        function checknumber(String) {　　　　
-            var Letters = "1234567890";　　　　
-            var i;　　　　
-            var c;　　　　
-            for (i = 0; i < Letters.length; i++) { //Letters.length() ->>>>取字符长度
-                　　　　　　
-                c = Letters.charAt(i);　　　　　　
-                if (Letters.indexOf(c) == -1) { //在"Letters"中找不到"c"   见下面的此函数的返回值
-                    　　　　　　　　
-                    return true;　　　　　
-                }　　　　
-            }　　　　
-            return false;　　
-        }
+        $(function() {
+        	var msg=$("#msg").html()
+    		if(msg!=""){
+    			if(msg=="ok"){
+    				var a=confirm("添加成功，是否返回主页?")
+    				if(a){
+    					window.location.href="index";
+    				}else{
+    					msg="";
+    				}
+    			}else{
+    				alert("添加失败，请检查后重新输入!")
+    				msg="";
+    			}
+    			
+    		}
+        })
     </script>
 
 </body>

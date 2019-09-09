@@ -15,4 +15,8 @@ public interface M_recordService {
 		
 		//用户每次到店记录
 		int addRecord(M_record mr);
+		//删除一条记录
+		int deleteRecordByMrid(int mrid);
+		//筛选记录
+		List<M_record> shaixuanM_records(M_record mr);
 }

@@ -1,5 +1,6 @@
 package com.KeepFitMS.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /*
@@ -56,13 +57,25 @@ public class Card {
 		this.mid = mid;
 	}
 	public Date getSdate() {
-		return sdate;
+		if(sdate==null) {
+			return null;
+		}
+	        Timestamp sqlDate = new Timestamp(sdate.getTime());//uilt date转sql date
+	     
+
+		return sqlDate;
 	}
 	public void setSdate(Date sdate) {
 		this.sdate = sdate;
 	}
 	public Date getEdate() {
-		return edate;
+		if(edate==null) {
+			return null;
+		}
+		   Timestamp sqlDate = new Timestamp(edate.getTime());//uilt date转sql date
+		     
+
+			return sqlDate;
 	}
 	public void setEdate(Date edate) {
 		this.edate = edate;

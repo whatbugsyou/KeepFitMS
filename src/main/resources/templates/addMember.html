@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
 </head>
 
 <body>
-    <!doctype html>
-    <html lang="en">
+
 
     <head>
         <title>Title</title>
@@ -79,18 +78,9 @@
             <div class="col-6 form-group">
                 <label for="">教练编号</label>
                 <input type="text" class="form-control" name="coach_id" id="coach_id" aria-describedby="helpId" placeholder="">
-                <small id="helpId" class="form-text text-muted">若无教练可填0</small>
+                <small id="helpId" class="form-text text-muted">若无教练填0</small>
             </div>
-            <div class="col-6 form-group">
-                <label for="">衣柜编号</label>
-                <input type="text" class="form-control" name="wardrobe_id" id="wardrobe_id" aria-describedby="helpId" placeholder="">
-
-            </div>
-            <div class="col-6 form-group">
-                <label for="">顾问编号</label>
-                <input type="text" class="form-control" name="consultant_id" id="consultant_id" aria-describedby="helpId" placeholder="">
-
-            </div>
+          
             <div class="col-6 form-group">
                 <label for="">健身需求</label>
                 <select class="form-control" name="needs" id="">
@@ -128,6 +118,7 @@
             </div>
             <div class="col-6 form-group">
                 <button type="submit" class=" btn btn-primary">提交</button>
+                <span style="display: none" id="msg" th:text="${msg}"></span>
             </div>
 
         </form>
@@ -144,6 +135,25 @@
         <script src="js/bootstrap.js"></script>
 
         <script>
+        $(function(){
+        	
+    		var msg=$("#msg").html()
+    		if(msg!=""){
+    			if(msg=="ok"){
+    				var a=confirm("添加成功，是否返回主页?")
+    				if(a){
+    					window.location.href="index";
+    				}else{
+    					msg="";
+    				}
+    			}else{
+    				alert("添加失败，请检查后重新输入!")
+    				msg="";
+    			}
+    			
+    		}
+    		
+    	})
             function change() {
                 var type = $("#ctype").val();
                 var shoujia = $("#shoujia");
@@ -166,8 +176,14 @@
 
                 var date = $("#mdate").val();
                 var sdate = $("#sdate").val();
-
-                if (msfz.length != 15 && msfz.length != 18) {
+                if(! /^[0-9]+$/.test($("#mid").val())){
+            		alert("会员编号格式有误，请重新输入")
+            		return false;
+            	}else if($("#mid").val().length>4){
+            		alert("会员编号不能超过4位，请重新输入")
+            		return false;
+            	}
+               	 else if (msfz.length != 15 && msfz.length != 18) {
                     alert("请输入正确的身份证号")
                     return false
                 } else if (mtelephone.length != 11) {
@@ -181,6 +197,9 @@
                     alert("日期未填")
                     return false;
 
+                }else if($("#helptext").html()=="会员编号已被占用"){
+                	alert("会员编号已被占用");
+                	return false
                 }
 
                 return true;
@@ -207,10 +226,16 @@
 
             function checkMember() {
                 var mid = $("#mid").val();
-
+                if(! /^[0-9]+$/.test(mid)){
+                	 $("#helptext").html("会员编号格式有误，请重新输入")
+            		return false;
+            	}else if(mid.length>4){
+            		$("#helptext").html("会员编号不能超过4位，请重新输入")
+            		return false;
+            	}
                 $.get("checkMember.do?mid=" + mid, function(result) {
                     if (result == "ok") {
-                        $("#helptext").html("会员编号可使用")
+                        $("#helptext").html("会员编号可以使用")
 
                     } else if (result == "exist") {
                         $("#helptext").html("会员编号已被占用")
@@ -223,6 +248,4 @@
 
     </html>
 
-</body>
 
-</html>

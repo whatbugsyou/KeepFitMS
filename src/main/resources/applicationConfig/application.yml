@@ -31,7 +31,7 @@ spring:
   #数据库连接池配置
   datasource:
 #    type: 
-    url: jdbc:mysql://localhost:3306/KeepFitMS?useSSL=false&serverTimezone=GMT
+    url: jdbc:mysql://localhost:3306/KeepFitMS?useSSL=false&serverTimezone=GMT&characterEncoding=UTF-8&useUnicode=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     data-username: root
     data-password: 123
@@ -47,7 +47,7 @@ spring:
 mybatis:
   type-aliases-package: com.KeepFitMS
   mapper-locations:
-    classpath:com/KeepFitMS/dao/*.xml
+    classpath:mapper/*.xml
   
 logging:
   #存放目录
