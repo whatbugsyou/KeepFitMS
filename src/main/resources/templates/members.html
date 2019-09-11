@@ -1,0 +1,321 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style type="text/css">
+        #shaixuan input {
+            margin-left: 10px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+
+        <div class="card-body">
+            <h4 class="card-title">会员管理</h4>
+
+        </div>
+        <div class="card-footer text-muted">
+            健身管理系统
+        </div>
+    </div>
+    <br>
+
+    <form action="shaixuanMember.do" onsubmit="return checkshaixuan();" method="post" class="form-inline my-2 my-lg-0" style="position: relative;left:20px" id="shaixuan">
+        会员编号:
+        <input class="form-control mr-sm-2" id="smid" type="text" name="mid" placeholder="Search"> 
+        会员卡编号:
+        <input class="form-control mr-sm-2" id="scid" type="text" name="cid" placeholder="Search"> 
+        姓名:
+        <input class="form-control mr-sm-2" type="text" name="mname" placeholder="Search"> 
+        手机号:
+        <input class="form-control mr-sm-2" id="stelephone" type="text" name="mtelephone" placeholder="Search"> 
+        性别:
+        <select class="form-control" name="msex">
+    			<option></option>
+         		 		<option>男</option>
+         		 		<option>女</option>
+         
+       				 </select>
+
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">筛选</button>
+    </form>
+    <br>
+    <div class="col-lg-11">
+        <!-- 显示数据的表格 -->
+        <table class="table table-bordered table-hover mb-5">
+            <!-- 表头 -->
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">会员编号</th>
+                    <th scope="col">姓名</th>
+                    <th scope="col">手机号码</th>
+                    <th scope="col">身份证</th>
+                    <th scope="col">地址</th>
+                    <th scope="col">性别</th>
+                    <th scope="col">教练ID</th>
+                    <th scope="col">健身需求</th>
+                    <th scope="col">照片</th>
+                    <th scope="col" class="w-25">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="m:${members}">
+                    <!-- <td th:text="${teacher.tid}"/>
+					<td th:text="${teacher.tid}"/>
+					<td th:text="${teacher.tname}"/>
+					<td th:text="${teacher.subject}"/>
+					
+					<td> -->
+                    <td>[[${m.mid}]]</td>
+                    <td>[[${m.mname}]]</td>
+                    <td>[[${m.mtelephone}]]</td>
+                    <td>[[${m.msfz}]]</td>
+                    <td>[[${m.maddress}]]</td>
+                    <td>[[${m.msex}]]</td>
+                    <td>[[${m.coach_id}]]</td>
+                    <td>[[${m.needs}]]</td>
+                    <td><img th:src="@{${m.icon}}" style="width: 100px;height: 100px"></td>
+                    <td><a href="#"  onclick="getCard(this)">查看/修改会员卡</a>&nbsp;&nbsp;
+                    	<form onsubmit="return checkform1();" style="display:none;" class="center-block"  action="updateCardBycid.do" method="post"  role="form">
+            			<div class="col-6 form-group">
+					                <label for="name" >会员卡编号:<font th:text="${m.card.cid}"></font></label>
+					                
+					                <input type="hidden" name="cid" th:value="${m.card.cid}">
+					            </div>
+					               <div class="col-6 form-group">
+					                <label for="name" >会员卡类型:<font th:text="${m.card.ctype}"></font></label>
+					               
+					            </div>
+					
+					
+					              <div class="col-6 form-group">
+					                <label for="name" >会员卡售价:<font th:text="${m.card.cprice}"></font></label>
+					                
+					            </div>
+					              <div class="col-6 form-group">
+					                <label for="name" >会员卡余额:<font th:text="${m.card.cmoney}"></font></label>
+					               
+					                
+					            </div>
+					              <div class="col-10 form-group">
+					                <label for="name" >会员卡积分:<font th:text="${m.card.cpoints}"></font></label>
+					                <input type="text"  id="cpoint"  name="cpoint" class="form-control"  placeholder="请输入修改后的积分">
+					                
+					            </div>
+					              <div class="col-10 form-group">
+					                <label for="name" >会员卡有效期:<font th:text="${m.card.sdate}+'至'+${m.card.edate}"></font></label>
+					                <input type="date" id="edate"  name="edate" class="form-control"  placeholder="请输入修改后的结束日期">
+					                <span style="display: none" id="sdate" th:text="${m.card.sdate}"></span>
+					            </div>
+					              <div class="col-6 form-group">
+					                <button type="submit" class=" btn btn-primary">提交</button>
+					            </div>
+				        </form>
+                        <a href="" th:id="${m.mid}" onclick="delconfirm(this)">删除会员</a>&nbsp;&nbsp;
+                        <span id="msg" style="display:none" th:text="${msg}"></span>
+                        <a href="#" onclick="getMember(this)">修改信息</a>
+		                        <form onsubmit="return checkform2();" style="display:none;" class="center-block"  action="updateMemberBymid.do" method="post"  role="form">
+		            			
+							              <div class="col-10 form-group">
+							                <label for="name" >原手机号:<font th:text="${m.mtelephone}"></font></label>
+							                <input type="text"  id="fmtelephone"  name="mtelephone" class="form-control"  placeholder="请输入修改后的手机号">
+							                <input type="hidden" name="mid" th:value="${m.mid}">
+							            </div>
+							              <div class="col-10 form-group">
+							                <label for="name" >原地址:<font th:text="${m.maddress}"></font></label>
+							                <input type="text" id="maddress"  name="maddress" class="form-control"  placeholder="请输入修改后的地址">
+							                
+							            </div>
+							              <div class="col-10 form-group">
+							                <label for="name" >原健身需求:<font th:text="${m.needs}"></font></label>
+							                请选择新的健身需求:
+						  						<select class="form-control" name="needs" id="needs">
+						  						<option></option>
+						                            <option>减肥</option>
+						                            <option>增肌</option>
+						                            <option>塑形</option>
+						                            <option>其他</option>
+						                          </select>							                
+							            </div>
+							              <div class="col-6 form-group">
+							                <button type="submit" class=" btn btn-primary">提交</button>
+							            </div>
+						        </form>
+                    </td>
+
+
+
+
+                </tr>
+
+            </tbody>
+
+        </table>
+        <nav class="col-6" aria-label="Page navigation">
+
+            <ul class="pagination" id="pageList">
+
+                <li id="pre" class="page-item disabled">
+                    <a class="page-link" id="previous" th:href="@{'getMemberByPage.do?page='+${lastpage}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li class="page-item " th:each="i:${#numbers.sequence(1,pages)}"><a class="page-link" th:href="@{'getMemberByPage.do?page='+${i}}">[[${i}]]</a></li>
+                <li id="nex" class="page-item">
+                    <a class="page-link" id="next" th:href="@{'getMemberByPage.do?page='+${nextpage}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script>
+    function checkshaixuan(){
+   
+    	if($("#smid").val()!=""&&! /^[0-9]+$/.test($("#smid").val())){
+    		alert("会员编号格式有误，请重新输入")
+    		return false;
+    	}else if($("#stelephone").val()!=""&&(! /^[0-9]+$/.test($("#stelephone").val())||$("#stelephone").val().length!=11)){
+    		alert("手机号格式有误，请重新输入")
+    		return false;
+    	}else if($("#scid").val()!=""&&! /^[0-9]+$/.test($("#scid").val())){
+    		alert("卡号格式有误，请重新输入")
+    		return false;
+    	}
+    	else{
+    		return true;
+    	}
+    }
+    function delconfirm(obj){
+    	var mid=$(obj).attr("id");
+    	var a=confirm("是否删除该会员?");
+    	
+    	if(a){
+    		$(obj).attr("href","deleteMemberByMid.do?mid="+mid);
+    		
+    	}else{
+    		$(obj).attr("href","#");
+    	}
+    }
+    function getCard(obj){
+    	var style=$(obj).next().attr("style")
+ 
+    	if(style=="display:none;"){
+    		$(obj).next().attr("style","center-block")
+    		
+    		$(obj).html("收回");
+    	}else if(style="center-block"){
+    			$(obj).next().attr("style","display:none;")
+    		$(obj).html("查看/修改会员卡");
+    	}
+    }
+    function getMember(obj){
+     	var style=$(obj).next().attr("style")
+     	 
+    	if(style=="display:none;"){
+    		$(obj).next().attr("style","center-block")
+    		
+    		$(obj).html("收回");
+    	}else if(style="center-block"){
+    			$(obj).next().attr("style","display:none;")
+    		$(obj).html("修改信息");
+    	}
+    }
+        $(function() {
+        	var msg=$("#msg").html();
+        	if(msg!=""){
+        	
+        			alert(msg)
+            		$("#msg").html("")
+        		
+        	}
+          
+            var href1 = $("#previous").attr("href")
+            var href2 = $("#next").attr("href")
+
+            if (href1.split("=")[1] == "no page") {
+                $("#pre").attr("class", "page-item disabled")
+            } else {
+                $("#pre").attr("class", "page-item ")
+            }
+            if (href2.split("=")[1] == "no page") {
+                $("#nex").attr("class", "page-item disabled")
+            } else {
+                $("#nex").attr("class", "page-item ")
+            }
+
+        })
+        function checkform1(){
+        	if($("#edate").val()==""&&$("#cpoint").val()==""){
+        		alert("修改内容为空!");
+        		return false;
+        	}
+        	
+        	if(! /^[0-9]+$/.test($("#cpoint").val()) &&  $("#cpoint").val()!=""){
+        		alert("输入的格式有误，请检查!")
+        		return false;
+        	}else{
+        		if($("#cpoint").val()<0){
+        			alert("积分不能小于0，请重新输入")
+        			return false;
+        		}else{
+        			if($("#edate").val()<$("#sdate").html()&&$("#edate").val()!=""){
+        				alert("结束日期不能早于有效期");
+        				return false;
+        			}else{
+        				return true;
+        			}
+        		}
+        	}
+        	
+        }
+        function checkform2(){
+
+        	if( $("#fmtelephone").val()==""&& $("#maddress").val()==""&& $("#needs").val()==""){
+        		alert("修改内容为空!");
+        		return false;
+        	}
+        	if($("#fmtelephone").val()==""){
+        		return true;
+        	}else{
+        		if(! /^[0-9]+$/.test($("#fmtelephone").val()) || $("#fmtelephone").val().length !=11 ){
+            		alert("输入的手机号格式有误，请检查!")
+            		return false;
+            	}
+        		else{
+            		return true;
+            	}
+        	}
+        		
+        	
+        }
+    </script>
+    <script type="text/html"></script>
+    <div class="jumbotron jumbotron-fluid mb-0 fixed-bottom p-3">
+        <p class="text-center">copyright@2019 健身管理系统</p>
+    </div>
+</body>
+
+</html>

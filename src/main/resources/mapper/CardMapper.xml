@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.KeepFitMS.dao.CardDao" >
+
+
+  <update id="updateCardByCid"    >
+	update card 
+	<trim prefix="set" suffixOverrides=",">
+	<if test="cpoints !=-1">
+ 		cpoints =#{cpoints},
+ 	</if>
+ 	
+	<if test="edate !=null">
+		edate=#{edate}
+	</if>
+	</trim>
+
+ where cid=#{cid}
+ 	
+  </update>
+	
+  
+
+ 
+</mapper>

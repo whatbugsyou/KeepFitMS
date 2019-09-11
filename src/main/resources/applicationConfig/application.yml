@@ -31,17 +31,19 @@ spring:
   #数据库连接池配置
   datasource:
 #    type: 
-    url: jdbc:mysql://localhost:3306/KeepFitMS?useSSL=false&serverTimezone=GMT&characterEncoding=UTF-8&useUnicode=true
+    url: jdbc:mysql://localhost:3306/keepfitms?useSSL=false&serverTimezone=GMT&characterEncoding=UTF-8&useUnicode=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     data-username: root
     data-password: 123
     hikari:
       username: root
       password: 123
+
      
   redis:
     host: localhost
     port: 6379
+    password: admin
     
 
 mybatis:

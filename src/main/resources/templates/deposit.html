@@ -1,0 +1,103 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="card">
+
+        <div class="card-body">
+            <h4 class="card-title">充值</h4>
+
+        </div>
+        <div class="card-footer text-muted">
+            健身管理系统
+        </div>
+    </div>
+    <form action="deposit.do" onsubmit="return checkdep();" method="post" role="form">
+        <div class="col-6 form-group">
+            <label for="">请输入要充值的卡号</label>
+            <input type="text" onblur="checkCard(this)" id="cid" class="form-control" name="cid" aria-describedby="helpId" placeholder="">
+			<span id="helptext"></span>
+        </div>
+        <div class="col-6 form-group">
+            <label for="">请输入充值的金额</label>
+            <input type="text" class="form-control" id="money" name="money" aria-describedby="helpId" placeholder="">
+
+        </div>
+        <div class="col-6 form-group">
+            <button type="submit" class=" btn btn-primary">提交</button>
+            <span style="display: none" id="msg" th:text="${msg}"></span>
+        </div>
+    </form>
+    <div class="jumbotron jumbotron-fluid mb-0 fixed-bottom p-3">
+        <p class="text-center">copyright@2019 健身管理系统</p>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script>
+ 
+	$(function(){
+	
+		var msg=$("#msg").html()
+		if(msg!=""){
+			if(msg=="ok"){
+				var a=confirm("充值成功，是否返回主页?")
+				if(a){
+					window.location.href="index";
+				}else{
+					msg="";
+				}
+			}else{
+				alert("充值失败，请检查后重新输入!")
+				msg="";
+			}
+			
+		}
+		
+	})
+    function checkCard(obj) {
+        var cid = $(obj).val();
+	
+        $.get("checkCard.do?cid=" + cid, function(result) {
+        
+            if (result !="") {
+                $("#helptext").html("会员卡类型:"+result.ctype+" 会员卡价格:"+result.cprice+" 会员卡余额:"+result.cmoney+" 会员编号:"+result.mid)
+
+            } else if (result =="") {
+                $("#helptext").html("会员卡不存在，请重新输入")
+
+            }
+        });
+    }
+    function checkdep(){
+    	if(! /^[0-9]+$/.test($("#cid").val())){
+    		alert("卡号格式有误，请重新输入")
+    		return false;
+    	}else if($("#helptext").html()=="会员卡不存在，请重新输入"){
+    		alert("会员卡不存在，请重新输入");
+    		return false;
+    	}else if(! /^[0-9]+$/.test($("#money").val())){
+    		alert("金额输入有误，请重新输入");
+    		return false;
+    	}else{
+    		return true;
+    	}
+    }
+		
+        
+    </script>
+</body>
+
+</html>

@@ -2,6 +2,7 @@ package com.KeepFitMS.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,6 +16,7 @@ import com.KeepFitMS.entity.M_record;
 @Mapper
 public interface m_recordDao {
 	//获取所有记录
+	
 	List<M_record> getAllM_records();
 	//分页查询记录
 	@Select("SELECT *FROM m_record ORDER BY edate DESC limit #{firstParm},#{lastParam}")
@@ -22,4 +24,11 @@ public interface m_recordDao {
 	//用户每次到店记录
 	@Insert("insert into m_record (mid,sdate,edate,remarks) values(#{mid},#{sdate},#{edate},#{remarks})")
 	int addRecord(M_record mr);
+	
+	//删除一条记录
+	@Delete("delete from m_record where mrid=#{mrid}")
+	int deleteRecordByMrid(int mrid);
+	
+	//筛选记录
+	List<M_record> shaixuanM_records(M_record mr);
 }

@@ -1,6 +1,7 @@
 package com.KeepFitMS.entity;
 
-
+import java.sql.Timestamp;
+import java.util.Date;
 
 /*
  * 会员卡实体
@@ -17,8 +18,8 @@ public class Card {
 	private int cmoney;
 	private int cpoints;
 	private int mid;
-	private String sdate;
-	private String edate;
+	private Date sdate;
+	private Date edate;
 	public int getCid() {
 		return cid;
 	}
@@ -55,16 +56,28 @@ public class Card {
 	public void setMid(int mid) {
 		this.mid = mid;
 	}
-	public String getSdate() {
-		return sdate;
+	public Date getSdate() {
+		if(sdate==null) {
+			return null;
+		}
+	        Timestamp sqlDate = new Timestamp(sdate.getTime());//uilt date转sql date
+	     
+
+		return sqlDate;
 	}
-	public void setSdate(String sdate) {
+	public void setSdate(Date sdate) {
 		this.sdate = sdate;
 	}
-	public String getEdate() {
-		return edate;
+	public Date getEdate() {
+		if(edate==null) {
+			return null;
+		}
+		   Timestamp sqlDate = new Timestamp(edate.getTime());//uilt date转sql date
+		     
+
+			return sqlDate;
 	}
-	public void setEdate(String edate) {
+	public void setEdate(Date edate) {
 		this.edate = edate;
 	}
 }

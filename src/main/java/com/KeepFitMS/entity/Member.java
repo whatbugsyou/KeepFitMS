@@ -6,23 +6,16 @@ public class Member {
 	private int mid;
 	private String mname;
 	private String mtelephone;
-	private String mdate;
+	private Date mdate;
 	private String msfz;
 	private String maddress;
 	private String msex;
 	private int coach_id;
-	private int wardrobe_id;
-	private int consultant_id;
+
 	private String needs;
 	private String icon;
 	private Card card;
-	@Override
-	public String toString() {
-		return "Member [mid=" + mid + ", mname=" + mname + ", mtelephone=" + mtelephone + ", mdate=" + mdate + ", msfz="
-				+ msfz + ", maddress=" + maddress + ", msex=" + msex + ", coach_id=" + coach_id + ", wardrobe_id="
-				+ wardrobe_id + ", consultant_id=" + consultant_id + ", needs=" + needs + ", icon=" + icon + ", card="
-				+ card + "]";
-	}
+
 	public int getMid() {
 		return mid;
 	}
@@ -41,10 +34,10 @@ public class Member {
 	public void setMtelephone(String mtelephone) {
 		this.mtelephone = mtelephone;
 	}
-	public String getMdate() {
+	public Date getMdate() {
 		return mdate;
 	}
-	public void setMdate(String mdate) {
+	public void setMdate(Date mdate) {
 		this.mdate = mdate;
 	}
 	public String getMsfz() {
@@ -71,17 +64,12 @@ public class Member {
 	public void setCoach_id(int coach_id) {
 		this.coach_id = coach_id;
 	}
-	public int getWardrobe_id() {
-		return wardrobe_id;
-	}
-	public void setWardrobe_id(int wardrobe_id) {
-		this.wardrobe_id = wardrobe_id;
-	}
-	public int getConsultant_id() {
-		return consultant_id;
-	}
-	public void setConsultant_id(int consultant_id) {
-		this.consultant_id = consultant_id;
+
+	@Override
+	public String toString() {
+		return "Member [mid=" + mid + ", mname=" + mname + ", mtelephone=" + mtelephone + ", mdate=" + mdate + ", msfz="
+				+ msfz + ", maddress=" + maddress + ", msex=" + msex + ", coach_id=" + coach_id + ", needs=" + needs
+				+ ", icon=" + icon + ", card=" + card + "]";
 	}
 	public String getNeeds() {
 		return needs;

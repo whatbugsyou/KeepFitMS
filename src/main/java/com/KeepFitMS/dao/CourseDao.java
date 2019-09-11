@@ -30,6 +30,11 @@ public interface CourseDao {
 	 */
 	long getTotalCourse(Map<String,Object> map);
 	
+	/**
+	 * 查询所有的课程
+	 * @return
+	 */
+	List<Course> findAllCourse();
 	
 	/**
 	 * 	添加一条课程

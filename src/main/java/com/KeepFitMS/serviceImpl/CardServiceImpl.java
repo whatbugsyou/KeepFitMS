@@ -1,5 +1,6 @@
 package com.KeepFitMS.serviceImpl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,18 @@ public class CardServiceImpl implements CardService {
 	public int delCard(int cid) {
 		// TODO Auto-generated method stub
 		return cd.delCard(cid);
+	}
+
+	@Override
+	public Card selectCardByCid(int cid) {
+		// TODO Auto-generated method stub
+		return cd.selectCardByCid(cid);
+	}
+
+	@Override
+	public int updateCardByCid(Card c ) {
+		// TODO Auto-generated method stub
+		return cd.updateCardByCid(c);
 	}
 
 }
