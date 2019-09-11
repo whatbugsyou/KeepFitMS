@@ -191,7 +191,7 @@
 									layer.msg(code+"出现了一个不可预期的错误，请联系程序员");
 									console.log("状态码："+res.code+"---错误信息："+res.msg);
 								}
-							});
+							}).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
 						return false;
 					});
 					//监听按钮：修改提交
@@ -203,17 +203,17 @@
 								"goods_num": data.field.goods_num, "goods_price": data.field.goods_price, "goods_desc": data.field.goods_desc, "ptype_id": data.field.provid,
 								"pctype_id": data.field.cityid
 							},
-							function (res) {
-								var index = parent.layer.getFrameIndex(window.name);
-								parent.layer.close(index);
-								window.parent.findGoods();								
+							function (res) {						
 								if(res.code=="ok"){
 									layer.msg("修改成功");
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);
+									window.parent.findGoods();		
 								}else{
 									layer.msg(code+"出现了一个不可预期的错误，请联系程序员");
 									console.log("状态码："+res.code+"---错误信息："+res.msg);
 								}
-							})
+							}).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
 							
 						return false;
 					});

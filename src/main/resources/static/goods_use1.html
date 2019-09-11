@@ -100,12 +100,17 @@
 							function (res) {
 								if (res.code == "ok") {
 									layer.msg(res.msg);
+									if(res.msg=="添加了一条出售记录"){
+										var index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index);
+										window.parent.findGoods();		
+									}
 								} else {
 									layer.msg(code + "出现了一个不可预期的错误，请联系程序员");
 									console.log("状态码：" + res.code + "---错误信息：" + res.msg);
 								}
 							}
-						).error(function() { layer.msg(error+"网络异常请重试")});
+						).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
 
 						return false;
 					});

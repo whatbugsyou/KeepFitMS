@@ -13,7 +13,7 @@ $(function () {
             $("#provId").html(content);
 
         }
-    );
+    ).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
 });
 
 
@@ -49,7 +49,7 @@ function findGoods() {
                 });
                
             }
-        ).error(function() { layer.msg(error+"网络异常请重试")});
+        ).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
     });
 }
 

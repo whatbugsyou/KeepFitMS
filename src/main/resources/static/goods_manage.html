@@ -102,12 +102,12 @@
 										$.get("http://localhost:8080/selectGoods.do", { "name": data.field.name, "provid": data.field.provid, "cityid": data.field.cityid, "curr": obj.curr, "limit": obj.limit },
 											function (res) {
 												showGoods(res);
-											})
+											}).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
 
 									}
 								});
 							}
-						);
+						).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
 					});
 
 					return false;

@@ -156,7 +156,7 @@ function findRecords() {
 					}
 				});
 			}
-		);
+		).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
 		$.get("http://localhost:8080/findAllRecords.do",
 			function (res) {
 				var content = ""
@@ -201,7 +201,7 @@ function findRecords() {
 				$("#recordsNum").html(content);
 
 			}
-		).error(function() { layer.msg(error+"网络异常请重试")});
+		).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
 	});
 }
 
@@ -259,7 +259,7 @@ function showDataByTime(res) {
 				});
 
 				echartNum(title, data, data1);
-			}).error(function() { layer.msg(error+"网络异常请重试")});
+			}).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
 	}
 }
 
