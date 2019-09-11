@@ -69,7 +69,7 @@ public interface GoodsDao {
 					@Result(property = "goods" ,column = "goods_id",
 							one = @One(select = "com.KeepFitMS.dao.GoodsDao.selectGoodsById"))
 			})
-		List<Records> selectRecords(String startRecords_time, String endRecords_time, Integer curr, Integer limit);
+		List<Records> selectRecords(String start_time, String end_time, Integer curr, Integer limit);
 		 
 		 /**
 		  * 查询出售记录条数
@@ -78,7 +78,7 @@ public interface GoodsDao {
 		  * @return Integer
 		  */
 		 @SelectProvider(type = GoodsDaoProvider.class, method = "findRecordsListCount")  
-		 Integer selectRecordsCount(String startRecords_time, String endRecords_time);
+		 Integer selectRecordsCount(String start_time, String end_time);
 		/**
 		 * 根据商品名称查	
 		 * @param goods_name
@@ -264,25 +264,24 @@ public interface GoodsDao {
 	            return sql;  
 	        }  
 	        //查询出售记录集合
-	        public String findRecordsList(String startRecords_time, String endRecords_time, Integer curr, Integer limit) {
+	        public String findRecordsList(String start_time, String end_time, Integer curr, Integer limit) {
 				return new SQL() {{
 					SELECT("records_uuid,start_time,end_time,records_time,goods_id,cid,records_money");
 					FROM("records");
-					if(startRecords_time!=null&&endRecords_time!=null) {
+					if(start_time!=null&&end_time!=null) {
 						WHERE("records_time between #{start_time} and #{end_time}");
 					}
 					LIMIT("#{curr},#{limit}");
 					ORDER_BY("records_time desc");
 				
-				}}.toString();
-	        	
+				}}.toString();        	
 	        }
 	        //查询出售记录集合条数
-	        public String findRecordsListCount(String startRecords_time, String endRecords_time) {
+	        public String findRecordsListCount(String start_time, String end_time) {
 				return new SQL() {{
 					SELECT("count(*)");
 					FROM("records");
-					if(startRecords_time!=null&&endRecords_time!=null) {
+					if(start_time!=null&&end_time!=null) {
 						WHERE("records_time between #{start_time} and #{end_time}");
 					}
 				
