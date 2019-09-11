@@ -39,8 +39,14 @@ function echartsMoney(id, data, title) {
 		yAxis: {
 			type: 'value',
 			axisLabel: {
-				formatter: function (value) {
-					return value + '元';
+				formatter: function (value) {					
+					if(value>999&&value<10000){
+						return value/1000+ '千元';
+					}else if(value>9999){
+						return value/10000+ '万元';
+					}else{
+						return value+"元";
+					}
 				}
 			}
 		},
