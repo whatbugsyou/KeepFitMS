@@ -240,7 +240,7 @@ public interface GoodsDao {
 	            if(goods_name!=null&&goods_name!=""){  
 	                sql += " where goods_name like '%${goods_name}%'";  
 	            }  
-	            if(ptype_id!=null&&ptype_id!=0&&pctype_id==null&&pctype_id==0) {
+	            if(ptype_id!=null&&ptype_id!=0&&(pctype_id==null||pctype_id==0)) {
 	            	 sql += " where ptype_id = #{ptype_id}";  
 	            }
 	            if(ptype_id!=null&&ptype_id!=0&&pctype_id!=null&&pctype_id!=0) {
@@ -255,7 +255,7 @@ public interface GoodsDao {
 	            if(goods_name!=null&&goods_name!=""){  
 	                sql += " where goods_name like '%${goods_name}%'";  
 	            }  
-	            if(ptype_id!=null&&ptype_id!=0&&pctype_id==null&&pctype_id==0) {
+	            if(ptype_id!=null&&ptype_id!=0&&(pctype_id==null||pctype_id==0)) {
 	            	 sql += " where ptype_id = #{ptype_id}";  
 	            }
 	            if(ptype_id!=null&&ptype_id!=0&&pctype_id!=null&&pctype_id!=0) {
