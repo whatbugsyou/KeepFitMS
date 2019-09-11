@@ -87,15 +87,15 @@ public class GoodsServiceImpl implements GoodsService {
 
 	//查询出售记录
 	@Override
-	public List<Records> selectRecords(String startRecords_time, String endRecords_time, Integer curr, Integer limit) {
+	public List<Records> selectRecords(String start_time, String end_time, Integer curr, Integer limit) {
 		
-		return goodsDao.selectRecords( startRecords_time,  endRecords_time,  curr,  limit);
+		return goodsDao.selectRecords( start_time,  end_time,  curr,  limit);
 	}
 	
 	//查询出售记录条数
 	@Override
-	public Integer selectRecordsCount(String startRecords_time, String endRecords_time) {
-		return goodsDao.selectRecordsCount( startRecords_time,  endRecords_time);
+	public Integer selectRecordsCount(String start_time, String end_time) {
+		return goodsDao.selectRecordsCount( start_time,  end_time);
 	}
 
 	//根据类型id=1查询出售记录条数
