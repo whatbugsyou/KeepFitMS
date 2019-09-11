@@ -12,17 +12,17 @@
 
 <body>
     <!-- 大标题 -->
-    <div class="jumbotron jumbotron-fluid">
+    <div id="jumbotron" class="jumbotron jumbotron-fluid">
         <div class="container">
             <h1 class="display-4">人事管理!</h1>
             <p class="lead">人事管理包含部门管理和员工管理.</p>
-            <hr class="my-4">
-            <dl>
+            <hr class="my-2">
+            <!-- <dl>
                 <dt>部门管理</dt>
                 <dd>以分页的形式展示部门列表，列表页应显示添加、删除、修改按钮，以更改部门信息。数据示例：市场部、教练部、人事部。</dd>
                 <dt>员工管理</dt>
                 <dd>以分页的形式按入职时间由近及远展示员工列表，列表页应显示添加、删除、修改按钮，以更改部门信息。</dd>
-            </dl>
+            </dl> -->
         </div>
     </div>
 
@@ -178,8 +178,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(emp,index) in empList " :key="emp.emp_id">
-                                        <td>{{index+1}}</td>
+                                    <tr v-for="(emp,index) in empList.slice(pageItemStartIndex,pageItemEndIndex) " :key="emp.emp_id">
+                                        <td>{{index+pageItemStartIndex+1}}</td>
                                         <td>{{emp.emp_name}}</td>
                                         <td>{{emp.job.job_name}}</td>
                                         <td>{{emp.dept.dept_name}}</td>
@@ -187,8 +187,8 @@
                                         <td>{{emp.emp_phone}}</td>
                                         <td style="width: 176px;">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-primary  " @click="modifingEmp=JSON.parse(JSON.stringify(empList[index]))" data-toggle="modal" data-target="#modifyEmpModal"><i class="fa fa-pencil"></i>&nbsp;修改</button>
-                                                <button type="button" class="btn btn-danger  " @click="deletingEmp.index=index;" data-toggle="modal" data-target="#deleteEmpModal"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                                <button type="button" class="btn btn-primary  " @click="modifingEmp=JSON.parse(JSON.stringify(empList[index+pageItemStartIndex]))" data-toggle="modal" data-target="#modifyEmpModal"><i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                                <button type="button" class="btn btn-danger  " @click="deletingEmp.index=index+pageItemStartIndex;" data-toggle="modal" data-target="#deleteEmpModal"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -200,15 +200,13 @@
                                     <nav aria-label="Page navigation example ">
                                         <ul class="pagination">
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
+                                                <a class="page-link" @click.prevent="previousPage()" aria-label="Previous">
                                                     <span aria-hidden="true">&laquo;</span>
                                                 </a>
                                             </li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item" v-for="index in pageInfo.pageNum" :id="'emp_page'+index"><a class="page-link" @click.prevent="showPage(index)">{{index}}</a></li>
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
+                                                <a class="page-link" @click.prevent="nextPage()" aria-label="Next">
                                                     <span aria-hidden="true">&raquo;</span>
                                                 </a>
                                             </li>
@@ -358,6 +356,7 @@
 
                         </div>
                     </div>
+                    <div id="jobManagement"></div>
                 </div>
             </div>
         </div>

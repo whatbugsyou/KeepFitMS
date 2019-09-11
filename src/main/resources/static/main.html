@@ -1,4 +1,5 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,12 +13,13 @@
     <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <script src="js/vue.js"></script>
 </head>
+
 <body>
     <!--左边的侧边栏-->
     <div class="aside">
         <!--空缺部分-->
         <div class="profile">
-            
+
         </div>
         <div class="menu">
             <ul>
@@ -32,12 +34,20 @@
                 <li>
                     <a href="javascript:void(0);" onclick="turnpage('wardrobeManage.html')">衣柜管理</a>
                 </li>
-                 <li>
+                <li>
                     <a href="javascript:void(0);" onclick="javascript:shownext(this)">出售管理</a>
                     <ul class="tog">
                         <li><a href="javascript:void(0);" onclick="turnpage('goods_list.html')">商品/器材检索信息</a></li>
                         <li><a href="javascript:void(0);" onclick="turnpage('goods_manage.html')">商品/器材管理信息</a></li>
                         <li><a href="javascript:void(0);" onclick="turnpage('records.html')">出售记录信息</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" onclick="javascript:shownext(this)">人事管理</a>
+                    <ul class="tog">
+                        <li><a href="javascript:void(0);" onclick="turnpage('personnel_deptManagement.html')">部门管理</a></li>
+                        <li><a href="javascript:void(0);" onclick="turnpage('personnel_empManagement.html')">员工管理</a></li>
+                        <li><a href="javascript:void(0);" onclick="turnpage('personnel_attendanceManagement.html')">考勤统计</a></li>
                     </ul>
                 </li>
                 <li>
@@ -69,15 +79,17 @@
                     <div class="navbar-header">
                         <a class="navbar-brand" href="#" style="font-weight: 600;color:#337ab7">健身管理系统</a>
                     </div>
-            
+
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="#" style="color:#337ab7"><span class="fa fa-user"></span>&nbsp;欢迎您：{{username}}</a></li>
                             <li><a href="#" style="color:#337ab7"><span class="fa fa-sign-out"></span>&nbsp;注销</a></li>
                         </ul>
-                    </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
+                    </div>
+                    <!-- /.navbar-collapse -->
+                </div>
+                <!-- /.container-fluid -->
             </nav>
         </div>
 
@@ -89,40 +101,42 @@
 
     <script>
         //导航栏切换
-        function shownext(a){
-            if($(a).next(".tog").css("display") == 'block'){
-                 $(a).next(".tog").toggle();
-            }else{
-                $(".tog").css("display","none");
+        function shownext(a) {
+            if ($(a).next(".tog").css("display") == 'block') {
+                $(a).next(".tog").toggle();
+            } else {
+                $(".tog").css("display", "none");
                 $(a).next(".tog").toggle();
             }
         }
-        function turnpage(address){
+
+        function turnpage(address) {
             $("iframe").attr("src", address);
         }
-        
+
         var vm = new Vue({
-            el:'#mainApp',
-            data:{
-                username:'',
+            el: '#mainApp',
+            data: {
+                username: '',
             },
             methods: {
-                
+
             },
             mounted() {
-               $.ajax({
-                   url:"getSessionUser.do",
-                   type:"POST",
-                   success:(results)=>{
-                       this.username=results.username;
-                   },
-                   error:function(){
-                       alert("加载异常");
-                   }
-               })
+                $.ajax({
+                    url: "getSessionUser.do",
+                    type: "POST",
+                    success: (results) => {
+                        this.username = results.username;
+                    },
+                    error: function() {
+                        alert("加载异常");
+                    }
+                })
             }
 
         })
     </script>
 </body>
+
 </html>

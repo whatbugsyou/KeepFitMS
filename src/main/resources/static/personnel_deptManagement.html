@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>人事管理</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <script src="framework/echarts.min.js"></script>
+
+</head>
+
+<body>
+    <div id="jumbotron_ref"></div>
+    <div class="container">
+        <div class="col">
+            <div id="deptManagement">
+                <legend>部门列表</legend>
+                <hr class="my-4">
+                <table class="table table-bordered table-striped table-hover ">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>部门名字</th>
+                            <th>总人数</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(dept,index) in deptList.slice(pageItemStartIndex,pageItemEndIndex) " :key="dept.dept_id">
+                            <td>{{index+pageItemStartIndex+1}}</td>
+                            <td>{{dept.dept_name}}</td>
+                            <td>{{dept.dept_memberNum}}</td>
+                            <td style="width: 176px;">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-primary  " @click="modifingDept=JSON.parse(JSON.stringify(deptList[index+pageItemStartIndex]))" data-toggle="modal" data-target="#modifyDeptModal"> <i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                    <button type="button" class="btn btn-danger  " @click="deletingDept.index=index+pageItemStartIndex;" data-toggle="modal" data-target="#deleteDeptModal"> <i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-6 ">
+                        <nav aria-label="Page navigation example ">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" @click.prevent="previousPage()" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" v-for="index in pageInfo.pageNum" :id="'dept_page'+index"><a class="page-link" @click.prevent="showPage(index)">{{index}}</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" @click.prevent="nextPage()" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addDeptModal"> <i class="fa fa-plus-square"></i>&nbsp;添加部门</button>
+                    </div>
+                </div>
+                <!-- modifyDeptModal -->
+                <div class="modal fade" id="modifyDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">修改部门信息</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                         <span aria-hidden="true">&times;</span>
+                                     </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="">部门名</label>
+                                    <input type="text" class="form-control" name="new_dept_name" id="new_dept_name" v-model="modifingDept.dept_name" aria-describedby="helpId">
+                                    <small id="helpId" class="form-text text-muted">提示信息</small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" @click="modifyDept()">保存修改</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- addDeptModal -->
+                <div class="modal fade" id="addDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">添加部门</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                             <span aria-hidden="true">&times;</span>
+                                         </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="">部门名</label>
+                                    <input type="text" class="form-control" name="new_dept_name" id="new_dept_name" v-model="addingDept.dept_name" aria-describedby="helpId">
+                                    <small id="helpId" class="form-text text-muted">提示信息</small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" @click="addDept()">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- deleteDeptModal -->
+                <div class="modal fade" id="deleteDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">
+                                    <div class="alert alert-danger" role="alert">
+                                        删除部门为敏感操作，请确认是否删除。
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" @click="deleteDept(deletingDept.index)">确认删除</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap3-typeahead.js"></script>
+    <script>
+        $('#jumbotron_ref').load("personnel.html #jumbotron");
+    </script>
+    <script src="js/personnel.js"></script>
+
+</body>
+
+</html>

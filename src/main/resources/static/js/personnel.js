@@ -303,7 +303,7 @@ var job_vm = new Vue({
                 dataType: "json",
                 success: (response) => {
                     if (response["code"] == 'ok') {
-                        console.log('获取部门数据成功');
+                        console.log('获取职位数据成功');
                         this.jobList = response["allJobData"];
                     } else {
                         alert('获取失败');
@@ -413,9 +413,63 @@ var emp_vm = new Vue({
         },
         deletingEmp: {
             index: -1
+        },
+        pageInfo: {
+            pageItemNum: 2, //一页显示数目
+            pageNum: 1, //页数
+            currentPageNum: 1, //当前页
         }
     },
+    computed: {
+        pageItemStartIndex: function() {
+            var start = (this.pageInfo.currentPageNum - 1) * this.pageInfo.pageItemNum;
+            return start;
+        },
+        pageItemEndIndex: function() {
+            var end = 0;
+            if (this.pageInfo.pageNum == this.pageInfo.currentPageNum) {
+                if (this.empList.length % this.pageInfo.pageItemNum != 0) {
+                    end = this.pageItemStartIndex + this.empList.length % this.pageInfo.pageItemNum;
+                } else {
+                    end = this.pageItemStartIndex + this.pageInfo.pageItemNum;
+                }
+
+            } else {
+                end = this.pageInfo.currentPageNum * this.pageInfo.pageItemNum;
+            }
+            return end;
+        },
+    },
     methods: {
+        initPageInfo: function() {
+            this.pageInfo.pageNum = Math.ceil(this.empList.length / this.pageInfo.pageItemNum);
+        },
+        nextPage: function() {
+            if (this.pageInfo.currentPageNum != this.pageInfo.pageNum) {
+                var prePageId = "#emp_page" + this.pageInfo.currentPageNum;
+                $(prePageId).removeClass("active")
+                this.pageInfo.currentPageNum = this.pageInfo.currentPageNum + 1;
+                var nowPageId = "#emp_page" + this.pageInfo.currentPageNum;
+                $(nowPageId).addClass("active")
+
+            }
+        },
+        previousPage: function() {
+            if (this.pageInfo.currentPageNum > 1) {
+                var prePageId = "#emp_page" + this.pageInfo.currentPageNum;
+                $(prePageId).removeClass("active")
+                this.pageInfo.currentPageNum = this.pageInfo.currentPageNum - 1;
+                var nowPageId = "#emp_page" + this.pageInfo.currentPageNum;
+                $(nowPageId).addClass("active")
+            }
+        },
+        showPage: function(index) {
+            var prePageId = "#emp_page" + this.pageInfo.currentPageNum;
+            $(prePageId).removeClass("active")
+            this.pageInfo.currentPageNum = index;
+            var nowPageId = "#emp_page" + index;
+            $(nowPageId).addClass("active")
+        },
         deleteEmp: function(index) {
             var emp_id = this.empList[index].emp_id;
             $.ajax({
@@ -429,6 +483,7 @@ var emp_vm = new Vue({
                     if (response["code"] == 'ok') {
                         alert('删除成功');
                         this.empList.splice(index, 1);
+                        this.initPageInfo();
                     } else {
                         alert('删除失败');
                     }
@@ -476,6 +531,7 @@ var emp_vm = new Vue({
                     if (response["code"] == 'ok') {
                         alert('添加成功');
                         this.empList.push(response["newEmp"]);
+                        this.initPageInfo();
                     } else {
                         alert(response["msg"]);
                     }
@@ -491,10 +547,12 @@ var emp_vm = new Vue({
                 url: "getAllEmp.do",
                 data: '',
                 dataType: "json",
+                asysn: false,
                 success: (response) => {
                     if (response["code"] == 'ok') {
                         console.log('获取员工数据成功');
                         this.empList = response["allEmpData"];
+                        this.initPageInfo();
                     } else {
                         alert('获取员工数据失败');
                     }
@@ -504,21 +562,21 @@ var emp_vm = new Vue({
                 }
             });
         },
-        created() {
-            this.getAllEmp();
-        },
         getDeptListRef: function() {
             return dept_vm.deptList;
         },
         getJobListRef: function() {
             return job_vm.jobList;
         }
-
-    }
+    },
+    created() {
+        this.getAllEmp();
+        this.showPage(1);
+    },
 })
 
 var attendance_vm = new Vue({
-    el: 'attendanceManagement',
+    el: '#attendanceManagement',
     data: {
         attendanceData: {
 
