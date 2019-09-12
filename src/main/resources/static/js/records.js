@@ -207,7 +207,7 @@ function findRecords() {
 				$("#recordsNum").html(content);
 
 			}
-		).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
+		);
 	});
 }
 
@@ -265,7 +265,7 @@ function showDataByTime(res) {
 				});
 
 				echartNum(title, data, data1);
-			}).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
+			});
 	}
 }
 

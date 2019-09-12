@@ -13,7 +13,14 @@ $(function () {
             $("#provId").html(content);
 
         }
-    ).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
+    ).error(function(xhr,errorText,errorType) {
+    	if(xhr.status==404){
+    		 layer.msg(xhr.status+"页面内容丢失，请刷新或者联系管理人员")
+    	} 
+    	if(xhr.status==500){
+    		xhr.status+"请求失败，没有结果，请检查操作是否有误或联系管理人员"
+    	}
+    });
 });
 
 
@@ -49,7 +56,7 @@ function findGoods() {
                 });
                
             }
-        ).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
+        )
     });
 }
 

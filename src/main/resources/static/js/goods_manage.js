@@ -44,7 +44,7 @@ function findGoods() {
 					}
 				});
 			}
-		).error(function() { layer.msg(error+"网络异常请重试")});
+		);
 	});
 }
 
