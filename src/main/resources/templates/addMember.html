@@ -160,9 +160,9 @@
                 if (type == "年卡") {
                     shoujia.html("售价:8888")
                 } else if (type == "季卡") {
-                    shoujia.html("售价:4396")
+                    shoujia.html("售价:4999")
                 } else if (type = "月卡") {
-                    shoujia.html("售价:2222")
+                    shoujia.html("售价:2999")
                 }
             }
 
@@ -207,7 +207,7 @@
 
             function checksfz() {
                 var msfz = $("#msfz").val();
-                if (msfz.length != 15 && msfz.length != 18) {
+                if (! /^[0-9]+$/.test(msfz)||(msfz.length != 15 && msfz.length != 18)) {
                     $("#helptext2").html("身份证格式不正确!")
 
                 } else {
@@ -217,7 +217,7 @@
 
             function checktel() {
                 var mtelephone = $("#mtelephone").val();
-                if (mtelephone.length != 11) {
+                if (! /^[0-9]+$/.test(mtelephone)||mtelephone.length != 11) {
                     $("#helptext1").html("手机号格式不正确!")
                 } else {
                     $("#helptext1").html("手机号可使用!")
