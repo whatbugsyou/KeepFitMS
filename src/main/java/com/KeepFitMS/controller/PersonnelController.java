@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.KeepFitMS.entity.Attendance;
 import com.KeepFitMS.entity.Dept;
 import com.KeepFitMS.entity.Emp;
 import com.KeepFitMS.entity.Job;
 import com.KeepFitMS.exception.PersonnelServiceException;
+import com.KeepFitMS.service.AttendanceService;
 import com.KeepFitMS.service.DeptService;
 import com.KeepFitMS.service.EmpService;
 import com.KeepFitMS.service.JobService;
@@ -34,7 +36,8 @@ public class PersonnelController {
 	private DeptService deptService;
 	@Autowired
 	private JobService jobService;
-	
+	@Autowired
+	private AttendanceService attendanceService;
 	// -----------------部门
 
 	/**
@@ -209,6 +212,18 @@ public class PersonnelController {
 		HashMap<String, Object> result = new HashMap<>();
 		result.put("code", "ok");
 		result.put("allJobData", jobList);
+		return result;
+	}
+	
+	
+	//-----------考勤
+	@GetMapping("/getAttendance.do")
+	@ResponseBody
+	public HashMap<String, Object> getAttendanceByEmpIdAndYearMonth(int emp_id, String Year_Month) {
+		List<Attendance>  attendanceList = attendanceService.selectAttendanceByEmpIdAndYearMonth(emp_id,Year_Month);
+		HashMap<String, Object> result = new HashMap<>();
+		result.put("code", "ok");
+		result.put("attendanceList", attendanceList);
 		return result;
 	}
 

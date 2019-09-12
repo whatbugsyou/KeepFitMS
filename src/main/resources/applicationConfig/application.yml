@@ -38,9 +38,6 @@ spring:
     hikari:
       username: root
       password: 123
-      
-
-   
 
      
   redis:

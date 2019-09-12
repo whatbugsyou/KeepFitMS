@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+	<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+	<meta name="renderer" content="webkit">
+	<!--国产浏览器高速模式-->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="author" content="Mr. Yao" />
+	<!-- 作者 -->
+	<meta name="revised" content="Yao.v1, 2018/02/27" />
+	<!-- 定义页面的最新版本 -->
+	<meta name="description" content="网站简介" />
+	<!-- 网站简介 -->
+	<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+	<title>出售/租赁记录表</title>
+
+	<!-- 公共样式 开始 -->
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<link rel="stylesheet" type="text/css" href="css/iconfont.css">
+	<script type="text/javascript" src="framework/jquery-1.11.3.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+	<script type="text/javascript" src="layui/layui.js"></script>
+	<!-- 滚动条插件 -->
+	<link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.css">
+	<script src="framework/jquery-ui-1.10.4.min.js"></script>
+	<script src="framework/jquery.mousewheel.min.js"></script>
+	<script src="framework/jquery.mCustomScrollbar.min.js"></script>
+	<script src="framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+	<!-- 公共样式 结束 -->
+	<script type="text/javascript" src="framework/echarts.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/backHome.css">
+	<script type="text/javascript" src="js/records.js"></script>
+</head>
+
+<body>
+	<div class="cBody">
+		<div class="console">
+			<div class="layui-row" id="recordsNum">
+				<!-- 动态渲染统计数量  findRecords() -->
+			</div>
+			<br /><br />
+			<form class="layui-form" action="">
+		
+				<div class="layui-form-item">
+					<div class="layui-input-inline">
+				        	<input type="text" class="layui-input" name="Time" id="time" placeholder=" - ">
+						</div>
+						<button class="layui-btn" lay-submit lay-filter="formDemo">检索</button>					
+				</div>
+			</form>
+		</div>
+		<div class="reportForm_main">
+			<div class="collectData">
+				<div class="row">
+					<div class="col-md-5">
+						<div class="module">
+							<div class="title"><span></span>
+								<font>订单总量统计</font>
+							</div>
+							<div class="content">
+								<div id="echartsOrderNum" style="width: 100%;height:325px;"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5 no_mr">
+						<div class="module">
+							<div class="title"><span></span>
+								<font>交易金额总量统计</font>
+							</div>
+							<div class="content">
+								<div class="today_data">
+									<div id="echartsMoney" style="width: 100%;height:325px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+			</div>
+
+			<br>
+			<table class="layui-table dataTable" lay-skin="line">
+				<thead>
+					<tr>
+						<th>记录日期</th>
+						<th>订单编号</th>
+						<th>会员卡号</th>
+						<th>商品类型</th>
+						<th>二级类型</th>
+						<th>商品名</th>
+						<th>使用时间</th>
+						<th>金额小计</th>
+					</tr>
+				</thead>
+				<tbody id="recordsList">
+					<!-- 动态渲染记录showRecords(res) -->
+				</tbody>
+			</table>
+		</div>
+		<!-- layUI 分页模块 -->
+		<div id="pages"></div>
+		<script>
+		
+
+		layui.use(['form','laydate', 'layer', 'laypage'], function() {
+			var form = layui.form;
+			var laydate = layui.laydate;
+			var laypage = layui.laypage,
+				layer = layui.layer;
+	
+			//监听提交
+			form.on('submit(formDemo)', function(data) {
+				var time = data.field.Time;
+				console.log("时间差"+data.field.Time);
+				var strs= new Array ();
+				strs=time.split ("~");
+				console.log(strs)
+				var start_time = strs[0];
+				var end_time = strs[1];
+				layui.use('laypage', function () {
+					var laypage = layui.laypage;
+					$.get("http://localhost:8080/findRecords.do", {
+							"curr": 1,
+							"limit": 5
+						},
+						function (res) {
+							//渲染开始一次页面，查出list总数
+							showRecords(res);
+							//总页数大于页码总数
+							laypage.render({
+								elem: 'pages',
+								count: res.count,
+								limit: 5,
+								limits: [5, 10, 15, 20],
+								layout: ['count', 'prev', 'page', 'next', 'limit',
+									'skip'],
+								jump: function (obj) {
+									$.get("http://localhost:8080/findRecords.do", {
+											"startRecords_time":start_time,
+											"endRecords_time":end_time,
+											"curr": obj.curr,
+											"limit": obj.limit
+										},
+										function (res) {
+											//进入回调函数，再次调用渲染页面
+											showRecords(res);
+											showDataByTime(res);
+										})
+								}
+							});
+						}
+					).error(function (xhr, errorText, errorType) {
+						layer.msg(xhr.status + "网络异常请重试")
+					});
+					$.get("http://localhost:8080/findAllRecords.do",
+						function (res) {
+							var content = ""
+							content += "<div class='layui-col-md1 br'>";
+							content += "<div class='layui-col-md6'>";
+							content +=
+								"<div class='title'><span></span><i class='layui-icon ' onclick='reload()'style='font-size: 40px; color: black;'>&#xe62a;</i></div>";
+							content += "<div class='nums'><font></font><span></span></div>";
+							content += "</div>";
+							content += "</div>";
+							content += "<div class='layui-col-md2 br'>";
+							content += "<div class='layui-col-md6'>";
+							content += "<div class='title'>销售总量</div>";
+							content += "<div class='nums'><font>" + res.allCount +
+								"</font><span>笔</span></div>";
+							content += "</div>";
+							content += "</div>";
+							content += "<div class='layui-col-md3 br'>";
+							content += "<div class='layui-col-md6'>";
+							content += "<div class='title'>健身器材售量</div>";
+							content += "<div class='nums'><font>" + res.count1 +
+								"</font><span>笔</span></div>";
+							content += "</div>";
+							content += "<div class='layui-col-md6'>";
+							content += "<div class='title'>运动装备售量</div>";
+							content += "<div class='nums'><font>" + res.count2 +
+								"</font><span>笔</span></div>";
+							content += "</div>";
+							content += "</div>";
+							content += "<div class='layui-col-md3 br'>";
+							content += "<div class='layui-col-md6'>";
+							content += "<div class='title'>健身器材售额</div>";
+							content += "<div class='nums'><font>" + res.money1 +
+								"</font><span>元</span></div>";
+							content += "</div>";
+							content += "<div class='layui-col-md6'>";
+							content += "<div class='title'>运动装备销售额</div>";
+							content += "<div class='nums'><font>" + res.money2 +
+								"</font><span>元</span></div>";
+							content += "</div>";
+							content += "</div>";
+							content += "<div class='layui-col-md2'>";
+							content += "<div class='title'>金额合计</div>";
+							var money = res.money1 + res.money2
+							content +=
+								"<div class='nums'><font style='color: red;font-size:16px;'>" +
+								money + "</font>";
+							content += "</div>";
+							content += "</div>";
+							$("#recordsNum").html(content);
+						
+						}
+					).error(function (xhr, errorText, errorType) {
+						layer.msg(xhr.status + "网络异常请重试")
+					});
+				});
+				return false;
+				
+			});
+			laydate.render({
+			    elem: '#time' 
+		    	,range: '~'
+			});
+		
+		});
+		
+		function reload(){
+			location.reload()
+		}
+		</script>
+	</div>
+</body>
+
+</html>

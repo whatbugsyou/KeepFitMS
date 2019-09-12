@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>人事管理</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <script src="framework/echarts.min.js"></script>
+
+</head>
+
+<body>
+    <div id="jumbotron_ref"></div>
+    <div class="container">
+        <div class="col">
+            <div id="attendanceManagement">
+                <legend>员工考勤统计</legend>
+                <hr class="my-4">
+                <div class="row">
+                    <div class="col">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="">员工：</label>
+                                <!-- 自动提示输入框 -->
+                                <input type="text" name="emp_name" id="" class="form-control typeahead" placeholder="" aria-describedby="helpId" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="">日期：</label>
+                                <input type="date" name="YearMonth" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                <label>至</label>
+                                <input type="date" name="YearMonth" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                            </div>
+                            <button type="button" class="btn btn-primary ml-1">查询</button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/vue.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap3-typeahead.js"></script>
+    <script src="js/personnel.js"></script>
+    <script>
+        $('#jumbotron_ref').load("personnel.html #jumbotron");
+    </script>
+</body>
+
+</html>
