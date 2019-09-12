@@ -79,11 +79,11 @@ public class MemberController {
 		}
 		else if(ctype.equals("季卡")) {
 			cl.add(Calendar.MONTH, 3);//季节卡，开始时间加三个月
-			c.setCprice(4396);
+			c.setCprice(4999);
 		}
 		else if(ctype.equals("月卡")) {
 			cl.add(Calendar.MONTH, 1);//月卡，开始时间加一个月
-			c.setCprice(2222);
+			c.setCprice(2999);
 		}
 		Date edate=cl.getTime();//获取结束时间Date类型
 		c.setEdate(edate);

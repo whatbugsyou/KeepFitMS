@@ -34,16 +34,16 @@ spring:
     url: jdbc:mysql://localhost:3306/keepfitms?useSSL=false&serverTimezone=GMT&characterEncoding=UTF-8&useUnicode=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     data-username: root
-    data-password: suyin
+    data-password: 123
     hikari:
       username: root
-      password: suyin
+      password: 123
 
      
   redis:
     host: localhost
     port: 6379
-    password: admin
+
     
 
 mybatis:

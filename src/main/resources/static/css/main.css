@@ -18,13 +18,11 @@ body{
     left: 0;
     bottom: 0;
     right: 0;
-    border:solid 1px red;
     background-color: #2f4050;
 }
 .aside .profile{
     width: 200px;
     height: 180px;
-    border:solid 1px pink;
 }
 .aside .menu{
     margin-top: 20px;

@@ -6,21 +6,23 @@
     <title>人事管理</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/font-awesome.css">
+    <script src="framework/echarts.min.js"></script>
+
 </head>
 
 <body>
     <!-- 大标题 -->
-    <div class="jumbotron jumbotron-fluid">
+    <div id="jumbotron" class="jumbotron jumbotron-fluid">
         <div class="container">
             <h1 class="display-4">人事管理!</h1>
             <p class="lead">人事管理包含部门管理和员工管理.</p>
-            <hr class="my-4">
-            <dl>
+            <hr class="my-2">
+            <!-- <dl>
                 <dt>部门管理</dt>
                 <dd>以分页的形式展示部门列表，列表页应显示添加、删除、修改按钮，以更改部门信息。数据示例：市场部、教练部、人事部。</dd>
                 <dt>员工管理</dt>
                 <dd>以分页的形式按入职时间由近及远展示员工列表，列表页应显示添加、删除、修改按钮，以更改部门信息。</dd>
-            </dl>
+            </dl> -->
         </div>
     </div>
 
@@ -29,16 +31,16 @@
             <!-- 左侧边栏 -->
             <div class="col-2 border-right">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" onclick="dept_vm.getAllDept()" aria-controls="v-pills-home" aria-selected="true">部门管理</a>
-                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" onclick="emp_vm.getAllEmp()" aria-controls="v-pills-profile" aria-selected="false">员工管理</a>
+                    <a class="nav-link active" id="v-pills-dept-tab" data-toggle="pill" href="#v-pills-dept" role="tab" onclick="dept_vm.getAllDept()" aria-controls="v-pills-dept" aria-selected="true">部门管理</a>
+                    <a class="nav-link" id="v-pills-emp-tab" data-toggle="pill" href="#v-pills-emp" role="tab" onclick="emp_vm.getAllEmp()" aria-controls="v-pills-emp" aria-selected="false">员工管理</a>
+                    <a class="nav-link" id="v-pills-attendance-tab" data-toggle="pill" href="#v-pills-attendance" role="tab" onclick="" aria-controls="v-pills-attendance" aria-selected="false">考勤统计</a>
                 </div>
             </div>
             <!-- 右侧展示区  -->
             <div class="col-10">
                 <div class="tab-content" id="v-pills-tabContent">
                     <!-- 部门 -->
-
-                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    <div class="tab-pane fade show active" id="v-pills-dept" role="tabpanel" aria-labelledby="v-pills-home-tab">
                         <div id="deptManagement">
                             <legend>部门列表</legend>
                             <hr class="my-4">
@@ -52,14 +54,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(dept,index) in deptList " :key="dept.dept_id">
-                                        <td>{{index+1}}</td>
+                                    <tr v-for="(dept,index) in deptList.slice(pageItemStartIndex,pageItemEndIndex) " :key="dept.dept_id">
+                                        <td>{{index+pageItemStartIndex+1}}</td>
                                         <td>{{dept.dept_name}}</td>
                                         <td>{{dept.dept_memberNum}}</td>
                                         <td style="width: 176px;">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-primary  " @click="modifingDept=JSON.parse(JSON.stringify(deptList[index]))" data-toggle="modal" data-target="#modifyDeptModal"> <i class="fa fa-pencil"></i>&nbsp;修改</button>
-                                                <button type="button" class="btn btn-danger  " @click="deletingDept.index=index;" data-toggle="modal" data-target="#deleteDeptModal"> <i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                                <button type="button" class="btn btn-primary  " @click="modifingDept=JSON.parse(JSON.stringify(deptList[index+pageItemStartIndex]))" data-toggle="modal" data-target="#modifyDeptModal"> <i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                                <button type="button" class="btn btn-danger  " @click="deletingDept.index=index+pageItemStartIndex;" data-toggle="modal" data-target="#deleteDeptModal"> <i class="fa fa-trash-o"></i>&nbsp;删除</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -70,15 +72,13 @@
                                     <nav aria-label="Page navigation example ">
                                         <ul class="pagination">
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
+                                                <a class="page-link" @click.prevent="previousPage()" aria-label="Previous">
                                                     <span aria-hidden="true">&laquo;</span>
                                                 </a>
                                             </li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item" v-for="index in pageInfo.pageNum" :id="'dept_page'+index"><a class="page-link" @click.prevent="showPage(index)">{{index}}</a></li>
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
+                                                <a class="page-link" @click.prevent="nextPage()" aria-label="Next">
                                                     <span aria-hidden="true">&raquo;</span>
                                                 </a>
                                             </li>
@@ -161,7 +161,7 @@
 
                     <!-- 员工 -->
 
-                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    <div class="tab-pane fade" id="v-pills-emp" role="tabpanel" aria-labelledby="v-pills-emp-tab">
                         <div id="empManagement">
                             <legend>员工列表</legend>
                             <hr class="my-4">
@@ -178,8 +178,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(emp,index) in empList " :key="emp.emp_id">
-                                        <td>{{index+1}}</td>
+                                    <tr v-for="(emp,index) in empList.slice(pageItemStartIndex,pageItemEndIndex) " :key="emp.emp_id">
+                                        <td>{{index+pageItemStartIndex+1}}</td>
                                         <td>{{emp.emp_name}}</td>
                                         <td>{{emp.job.job_name}}</td>
                                         <td>{{emp.dept.dept_name}}</td>
@@ -187,8 +187,8 @@
                                         <td>{{emp.emp_phone}}</td>
                                         <td style="width: 176px;">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-primary  " @click="modifingEmp=JSON.parse(JSON.stringify(empList[index]))" data-toggle="modal" data-target="#modifyEmpModal"><i class="fa fa-pencil"></i>&nbsp;修改</button>
-                                                <button type="button" class="btn btn-danger  " @click="deletingEmp.index=index;" data-toggle="modal" data-target="#deleteEmpModal"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                                <button type="button" class="btn btn-primary  " @click="modifingEmp=JSON.parse(JSON.stringify(empList[index+pageItemStartIndex]))" data-toggle="modal" data-target="#modifyEmpModal"><i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                                <button type="button" class="btn btn-danger  " @click="deletingEmp.index=index+pageItemStartIndex;" data-toggle="modal" data-target="#deleteEmpModal"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -200,15 +200,13 @@
                                     <nav aria-label="Page navigation example ">
                                         <ul class="pagination">
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
+                                                <a class="page-link" @click.prevent="previousPage()" aria-label="Previous">
                                                     <span aria-hidden="true">&laquo;</span>
                                                 </a>
                                             </li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item" v-for="index in pageInfo.pageNum" :id="'emp_page'+index"><a class="page-link" @click.prevent="showPage(index)">{{index}}</a></li>
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
+                                                <a class="page-link" @click.prevent="nextPage()" aria-label="Next">
                                                     <span aria-hidden="true">&raquo;</span>
                                                 </a>
                                             </li>
@@ -329,6 +327,36 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <!-- 考勤 -->
+                    <div class="tab-pane fade" id="v-pills-attendance" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                        <div id="attendanceManagement">
+                            <legend>员工考勤统计</legend>
+                            <hr class="my-4">
+                            <div class="row">
+                                <div class="col">
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="">员工：</label>
+                                            <!-- 自动提示输入框 -->
+                                            <input type="text" name="emp_name" id="" class="form-control typeahead" placeholder="" aria-describedby="helpId" autocomplete="off">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">日期：</label>
+                                            <input type="date" name="YearMonth" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                            <label>至</label>
+                                            <input type="date" name="YearMonth" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                        </div>
+                                        <button type="button" class="btn btn-primary ml-1">查询</button>
+                                    </form>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="jobManagement"></div>
                 </div>
             </div>
         </div>
@@ -337,6 +365,7 @@
         <script src="js/vue.js"></script>
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="js/bootstrap.js"></script>
+        <script src="js/bootstrap3-typeahead.js"></script>
         <script src="js/personnel.js"></script>
 
 </body>

@@ -18,9 +18,7 @@
         <!---->
         <div>
             <ol class="breadcrumb">
-                <li @click="showICpie"><a href="javascript:void(0)" >收入-类型饼状图</a></li>
-                <li @click="showPopie"><a href="javascript:void(0)">支出-类型饼状图</a></li>
-                <li class="active">Data</li>
+                <li @click="showICpie"><a href="javascript:void(0)" >课程-类型饼状图</a></li>
             </ol>
         </div>
         <div id="container">
@@ -36,7 +34,6 @@
             },
             methods: {
                 showICpie:function(){
-                    alert("show");
                     $.ajax({
                         url:"showCoursepie.do",
                         type:"POST",
