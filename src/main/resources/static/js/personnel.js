@@ -25,7 +25,7 @@ var dept_vm = new Vue({
             index: -1
         },
         pageInfo: {
-            pageItemNum: 2, //一页显示数目
+            pageItemNum: 4, //一页显示数目
             pageNum: 1, //页数
             currentPageNum: 1, //当前页
         }
@@ -415,7 +415,7 @@ var emp_vm = new Vue({
             index: -1
         },
         pageInfo: {
-            pageItemNum: 2, //一页显示数目
+            pageItemNum: 4, //一页显示数目
             pageNum: 1, //页数
             currentPageNum: 1, //当前页
         }
