@@ -120,7 +120,7 @@
 									console.log("状态码：" + res.code + "---错误信息：" + res.msg);
 								}
 							}
-						).error(function(xhr,errorText,errorType) { layer.msg(xhr.status+"网络异常请重试")});
+						);
 						return false;
 					});
 					form.verify({

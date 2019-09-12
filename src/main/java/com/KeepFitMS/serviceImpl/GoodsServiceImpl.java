@@ -78,6 +78,7 @@ public class GoodsServiceImpl implements GoodsService {
 		//首先判断商品是否存在，存在则增加加数量
 		List<Goods> list = goodsDao.selecGoodsByName(goods.getGoods_name());
 		if(list==null) {
+			goodsDao.updateGodosNum(goods);
 			return 0;
 		}else{
 			goodsDao.insertGoods(goods);
