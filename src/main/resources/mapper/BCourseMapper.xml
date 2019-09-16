@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.KeepFitMS.dao.BcourseDao">
+
+
+	<select id="findBcourse" parameterType="Map" resultType="Bcourse">
+		select * from bcourse a,Emp b,course c,Member d
+		<where>
+			a.bc_mid = d.mid and a.bc_coachid = b.emp_id and a.bc_courseid = c.c_id
+			<if test="emp_name !=null and emp_name !='' ">
+				and b.emp_name like #{emp_name}
+			</if>
+			<if test="mname !=null and mname !='' ">
+				and d.mname like #{mname}
+			</if>
+			<if test="c_name !=null and c_name !='' ">
+				and c.c_name like #{c_name}
+			</if>
+			<if test="starttime != null and startime !=''">
+				and a.bc_time &gt;=#{starttime}
+			</if>
+			<if test="endtime != null and endtime !=''">
+				and a.bc_time &lt;=#{endtime}
+			</if>
+		</where>
+		order by a.bc_id desc
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+	</select>
+	
+	<select id="findTotalBcourse" parameterType="Map" resultType="Long">
+		select count(*) from bcourse a,Emp b,course c,Member d
+		<where>
+			a.bc_mid = d.mid and a.bc_coachid = b.emp_id and a.bc_courseid = c.c_id
+			<if test="emp_name !=null and emp_name !='' ">
+				and b.emp_name like #{emp_name}
+			</if>
+			<if test="mname !=null and mname !='' ">
+				and d.mname like #{mname}
+			</if>
+			<if test="c_name !=null and c_name !='' ">
+				and c.c_name like #{c_name}
+			</if>
+			<if test="starttime != null and startime !=''">
+				and a.bc_time &gt;=#{starttime}
+			</if>
+			<if test="endtime != null and endtime !=''">
+				and a.bc_time &lt;=#{endtime}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="addBcourse" parameterType="Bcourse">
+		insert into bcourse(bc_mid,bc_coachid,bc_courseid,bc_time)
+		values(#{bc_mid},#{bc_coachid},#{bc_courseid},#{bc_time});
+	</insert>
+	
+	<delete id="deleteBcourse" parameterType="int">
+		delete from bcourse where bc_id = #{bc_id};
+	</delete>
+	
+</mapper>

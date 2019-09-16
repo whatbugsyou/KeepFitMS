@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.KeepFitMS.dao.AdminDao">
+	<select id="loginUsername" parameterType="Admin" resultType="Admin">
+		select * from `admin` where username = #{username}
+	</select>
+	<select id="loginPassword" parameterType="Admin" resultType="Admin">
+		select * from `admin` where username =#{username} and password =#{password}
+	</select>
+</mapper>

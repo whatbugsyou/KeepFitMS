@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="card">
+
+        <div class="card-body">
+            <h4 class="card-title">会员登记</h4>
+
+        </div>
+        <div class="card-footer text-muted">
+            健身管理系统
+        </div>
+    </div>
+    <form onsubmit="return check();" action="addM_record.do" method="post" role="form">
+        <div class="col-6 form-group">
+            <label for="">会员编号</label>
+            <input type="text" onblur="checkMember()" class="form-control" name="mid" id="mid" aria-describedby="helpId" placeholder="">
+            <span class="form-text text-muted" id="helptext">
+
+                </span>
+        </div>
+        <div class="col-6 form-group">
+            <label for="">登记时间</label>
+            <input type="datetime-local" class="form-control" name="sdate" id="sdate" aria-describedby="helpId" placeholder="">
+        </div>
+        <div class="col-6 form-group">
+            <label for="">退卡时间</label>
+            <input type="datetime-local" class="form-control" name="edate" id="edate" aria-describedby="helpId" placeholder="">
+        </div>
+        <div class="col-6 form-group">
+            <label for="">备注</label>
+            <input type="textarea" style="height:100px" class="form-control " name="remarks" id="" aria-describedby="helpId" placeholder="">
+
+        </div>
+        <div class="col-6 form-group">
+            <button type="submit" class=" btn btn-primary">提交</button>
+                 <span id="msg" style="display:none" th:text="${msg}"></span>
+        </div>
+    </form>
+    <div class="jumbotron jumbotron-fluid mb-0 fixed-bottom p-3">
+        <p class="text-center">copyright@2019 健身管理系统</p>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script>
+        function checkMember() {
+            var mid = $("#mid").val();
+
+            $.get("checkMember2.do?mid=" + mid, function(result) {
+                if (result == "no exsit") {
+                    $("#helptext").html("会员编号不存在!")
+
+                } else if (result == "guoqi") {
+                    $("#helptext").html("会员卡已过期")
+
+                } else {
+                    $("#helptext").html("会员卡可用!")
+                }
+            });
+        }
+
+        function check() {
+            var sdate = $("#sdate").val();
+            var edate = $("#edate").val();
+            if ($("#helptext").html() == "会员卡可用!") {
+                if (edate == "" || sdate == "") {
+
+                    alert("日期未填")
+                    return false;
+
+                } else {
+                    if (edate < sdate) {
+                        alert("结束时间早于开始时间!")
+                        return false;
+                    }
+                    return true;
+                }
+            } else {
+                alert($("#helptext").html());
+                return false;
+            }
+        }　
+        $(function() {
+        	var msg=$("#msg").html()
+    		if(msg!=""){
+    			if(msg=="ok"){
+    				var a=confirm("添加成功，是否返回主页?")
+    				if(a){
+    					window.location.href="index";
+    				}else{
+    					msg="";
+    				}
+    			}else{
+    				alert("添加失败，请检查后重新输入!")
+    				msg="";
+    			}
+    			
+    		}
+        })
+    </script>
+
+</body>
+
+</html>

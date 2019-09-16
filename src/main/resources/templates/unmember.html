@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="card">
+
+        <div class="card-body">
+            <h4 class="card-title">游客中心</h4>
+
+        </div>
+        <div class="card-footer text-muted">
+            健身管理系统
+        </div>
+    </div>
+    <form action="addUnmember.do" method="post" role="form">
+        <div class="col-6 form-group">
+            <label for="">游客姓名</label>
+            <input type="text" class="form-control" name="umname" aria-describedby="helpId" placeholder="">
+
+        </div>
+        <div class="col-6 form-group">
+            <label for="">游客电话</label>
+            <input type="text" class="form-control" name="umtelephone" aria-describedby="helpId" placeholder="">
+
+        </div>
+        <div class="col-6 form-group">
+            <button type="submit" class=" btn btn-primary">登记</button>
+            <span style="display: none" id="msg" th:text="${msg}"></span>
+        </div>
+    </form>
+    <div class="jumbotron jumbotron-fluid mb-0 fixed-bottom p-3">
+        <p class="text-center">copyright@2019 健身管理系统</p>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script>
+    
+    	$(function(){
+    		var msg=$("#msg").html()
+    		if(msg!=""){
+    			alert(msg);
+    			window.location.href="index";
+    		}
+    		
+    	})
+    	
+		
+        
+    </script>
+</body>
+
+</html>

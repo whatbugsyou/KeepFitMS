@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>人事管理</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <script src="framework/echarts.min.js"></script>
+
+</head>
+
+<body>
+    <div id="jumbotron_ref"></div>
+    <div class="container">
+        <div class="col">
+            <div id="empManagement">
+                <legend>员工列表</legend>
+                <hr class="my-4">
+                <table class="table table-bordered table-striped table-hover ">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>姓名</th>
+                            <th>职位</th>
+                            <th>所属部门</th>
+                            <th onclick="javascript:alert('按照受雇日期排序（等待实现）')">受雇日期</th>
+                            <th>电话号码</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(emp,index) in empList.slice(pageItemStartIndex,pageItemEndIndex) " :key="emp.emp_id">
+                            <td>{{index+pageItemStartIndex+1}}</td>
+                            <td>{{emp.emp_name}}</td>
+                            <td>{{emp.job.job_name}}</td>
+                            <td>{{emp.dept.dept_name}}</td>
+                            <td>{{emp.emp_hiredate}}</td>
+                            <td>{{emp.emp_phone}}</td>
+                            <td style="width: 176px;">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-primary  " @click="modifingEmp=JSON.parse(JSON.stringify(empList[index+pageItemStartIndex]))" data-toggle="modal" data-target="#modifyEmpModal"><i class="fa fa-pencil"></i>&nbsp;修改</button>
+                                    <button type="button" class="btn btn-danger  " @click="deletingEmp.index=index+pageItemStartIndex;" data-toggle="modal" data-target="#deleteEmpModal"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col ">
+                        <!-- 分页条 -->
+                        <nav aria-label="Page navigation example ">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" @click.prevent="previousPage()" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" v-for="index in pageInfo.pageNum" :id="'emp_page'+index"><a class="page-link" @click.prevent="showPage(index)">{{index}}</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" @click.prevent="nextPage()" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addEmpModal"><i class="fa fa-plus-square"></i>&nbsp;添加员工</button>
+                    </div>
+                </div>
+                <!-- modifyEmpModal -->
+                <div class="modal fade" id="modifyEmpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">修改员工信息</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                         <span aria-hidden="true">&times;</span>
+                                     </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="">员工姓名</label>
+                                    <input type="text" class="form-control" name="emp_name" id="modify_emp_name" v-model="modifingEmp.emp_name" aria-describedby="helpId">
+                                    <small id="helpId" class="form-text text-muted">提示信息</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">所属部门</label>
+                                    <select class="form-control" v-model="modifingEmp.dept.dept_id" name="dept_id" id="modify_dept_id">
+                                            <option v-for="dept in getDeptListRef()" :key="dept.dept_id" :value="dept.dept_id">{{dept.dept_name}}</option>
+                                        </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">职位</label>
+                                    <select class="form-control" v-model="modifingEmp.job.job_id" name="job_id" id="modify_job_id">
+                                             <option v-for="job in getJobListRef()" :key="job.job_id" :value="job.job_id">{{job.job_name}}</option>
+                                         </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">入职日期</label>
+                                    <input type="date" class="form-control" name="emp_hiredate" id="modify_emp_hiredate" v-model="modifingEmp.emp_hiredate" aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">电话号码</label>
+                                    <input type="text" class="form-control" name="emp_phone" id="modify_emp_phone" v-model="modifingEmp.emp_phone" aria-describedby="helpId">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" @click="modifyEmp()">保存修改</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- addEmpModal -->
+                <div class="modal fade" id="addEmpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">添加员工</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                             <span aria-hidden="true">&times;</span>
+                                         </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="">员工姓名</label>
+                                    <input type="text" class="form-control" name="emp_name" id="add_emp_name" v-model="addingEmp.emp_name" aria-describedby="helpId">
+                                    <small id="helpId" class="form-text text-muted">提示信息</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">所属部门</label>
+                                    <select class="form-control" v-model="addingEmp.dept.dept_id" name="dept_id" id="add_dept_id">
+                                            <option v-for="dept in getDeptListRef()" :key="dept.dept_id" :value="dept.dept_id">{{dept.dept_name}}</option>
+                                        </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">职位</label>
+                                    <select class="form-control" v-model="addingEmp.job.job_id" name="job_id" id="add_job_id">
+                                             <option v-for="job in getJobListRef()" :key="job.job_id" :value="job.job_id">{{job.job_name}}</option>
+                                         </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">入职日期</label>
+                                    <input type="date" class="form-control" name="emp_hiredate" id="add_emp_hiredate" v-model="addingEmp.emp_hiredate" aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">电话号码</label>
+                                    <input type="text" class="form-control" name="emp_phone" id="add_emp_phone" v-model="addingEmp.emp_phone" aria-describedby="helpId">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" @click="addEmp()">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- deleteEmpModal -->
+                <div class="modal fade" id="deleteEmpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">
+                                    <div class="alert alert-danger" role="alert">
+                                        删除员工为敏感操作，请确认是否删除。
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" @click="deleteEmp(deletingEmp.index)">确认删除</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap3-typeahead.js"></script>
+    <script src="js/personnel.js"></script>
+    <script>
+        $('#jumbotron_ref').load("personnel.html #jumbotron");
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.KeepFitMS.dao.m_recordDao" >
+  <resultMap id="RecordMap" type="com.KeepFitMS.entity.M_record" >
+  <id column="mrid" property="mrid"></id>
+    <result column="mid" property="mid" jdbcType="INTEGER" />
+    <result column="sdate" property="sdate"/>
+    <result column="edate" property="edate"/>
+    <result column="remarks" property="remarks"/>
+    
+   
+   <association property="member" javaType="com.KeepFitMS.entity.Member" >
+
+  		 <result column="mname" property="mname" jdbcType="VARCHAR" />
+ 
+    <result column="mtelephone" property="mtelephone"></result>
+  	</association>
+  </resultMap>
+
+  <select id="getAllM_records" resultMap="RecordMap" >
+    SELECT * FROM m_record mr left join Member m on mr.mid=m.mid  ORDER BY mr.edate DESC
+  </select>
+  
+   <select id="shaixuanM_records" parameterType="com.KeepFitMS.entity.M_record" resultMap="RecordMap">
+		 select *from m_record record left join member m on record.mid=m.mid where 1=1
+		  <if test="mid !=-1">
+		
+		 and record.mid=#{mid}
+		  </if>
+		  <if test="member.mname !=null and member.mname!='' ">
+		
+		  	and m.mname like concat(#{member.mname},'%') 
+		  </if>
+		  <if test="sdate !='' and edate !='' " >
+		
+		  and record.sdate &gt; #{sdate} and record.edate &lt; #{edate}
+		  </if>
+		   <if test="sdate !='' and edate =='' " >
+		
+		  and record.sdate &gt; #{sdate} 
+		  </if>
+		   <if test="sdate =='' and edate !='' " >
+		
+		  and record.edate &lt; #{edate}
+		  </if>
+		order by record.edate desc
+  </select>
+
+ 
+</mapper>

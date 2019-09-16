@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+	<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+	<meta name="renderer" content="webkit">
+	<!--国产浏览器高速模式-->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>器械</title>
+
+	<!-- 公共样式 开始 -->
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<link rel="stylesheet" type="text/css" href="css/iconfont.css">
+	<script type="text/javascript" src="framework/jquery-1.11.3.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+	<script type="text/javascript" src="layui/layui.js"></script>
+	<!-- 滚动条插件 -->
+	<link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.css">
+	<script src="framework/jquery-ui-1.10.4.min.js"></script>
+	<script src="framework/jquery.mousewheel.min.js"></script>
+	<script src="framework/jquery.mCustomScrollbar.min.js"></script>
+	<script src="framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+	<!-- 公共样式 结束 -->
+
+	<style>
+		.layui-form-label {
+			width: 100px;
+		}
+
+		.layui-input-block {
+			margin-left: 130px;
+		}
+
+		.layui-form {
+			margin-right: 30%;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class="cBody">
+		<form id="addForm" class="layui-form" id="shopTool" action="">
+			<div class="layui-form-item">
+				<label class="layui-form-label">会员卡号</label>
+				<div class="layui-input-block">
+					<input type="text" name="cardId" required lay-verify="required" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">结束时间</label>
+				<div class="layui-inline">
+					<input type="text" name="endTime" class="layui-input" id="timeEnd" required lay-verify="required">
+				</div>
+			</div>
+
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="submitBut">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+
+
+		<script>
+
+			function use1Function(goods) {
+				layui.use(['upload', 'form', 'laydate'], function () {
+					var form = layui.form;
+					var upload = layui.upload;
+					var laydate = layui.laydate;
+
+					//监听提交
+					form.on('submit(submitBut)', function (data) {
+						var myDate = new Date();
+						var year = myDate.getFullYear();        // 获取当前年
+						var month = myDate.getMonth() + 1;   // 获取当前月
+						var date = myDate.getDate();            // 获取当前日
+						var h = myDate.getHours();              // 获取当前小时数 (0-23)
+						var m = myDate.getMinutes();          // 获取当前分钟数 (0-59)
+						var s = myDate.getSeconds()
+						var now = year + '-' + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ':' + getNow(m) + ":" + getNow(s);
+						var endTime = data.field.endTime;
+						var money = changeTime(now, endTime, goods.goods_price); 
+						//获取数据，传给后端
+						$.get("http://localhost:8080/use.do", {
+							"start_time": now,
+							"end_time": endTime,
+							"records_money": money,
+							"goods_id": goods.goods_id,
+							"cid": data.field.cardId,
+							"goods_num":1
+						},
+							function (res) {
+								if (res.code == "ok") {
+									layer.msg(res.msg);
+									if(res.msg=="添加了一条出售记录"){
+										var index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index);	
+									}
+								} else {
+									layer.msg(code + "出现了一个不可预期的错误，请联系程序员");
+									console.log("状态码：" + res.code + "---错误信息：" + res.msg);
+								}
+							}
+						);
+
+						return false;
+					});
+
+					form.verify({
+						//数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+						ZHCheck: [
+							/^[\u0391-\uFFE5]+$/, '只允许输入中文'
+						]
+					});
+					//拖拽上传
+					upload.render({
+						elem: '#goodsPic',
+						url: '/upload/',
+						done: function (res) { }
+					});
+
+					//时间控件
+					laydate.render({
+						elem: '#timeStart' //指定元素
+						,
+						type: 'datetime',
+						min: 0,
+						max: 0,
+						trigger: 'click'
+					});
+					laydate.render({
+						elem: '#timeEnd' //指定元素
+						,
+						type: 'datetime',
+						min: 0 //7天前
+						,
+						max: 1 //7天后
+						,
+						trigger: 'click'
+					});
+				});
+			}
+
+
+			//时间转化整数工具
+			function changeTime(startTime, endTime, price) {
+				//如果时间格式是正确的，那下面这一步转化时间格式就可以不用了
+				var dateBegin = new Date(startTime.replace(/-/g, "/")); //将-转化为/，使用new Date，获取结束时间
+				var dateEnd = new Date(endTime.replace(/-/g, "/")); //获取开始时间
+				var dateDiff = dateEnd.getTime() - dateBegin.getTime(); //时间差的毫秒数
+				var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000)); //计算出相差天数
+				var leave1 = dateDiff % (24 * 3600 * 1000) //计算天数后剩余的毫秒数
+				var hours = Math.floor(leave1 / (3600 * 1000)) //计算出小时数
+				var money = dayDiff * 24 * price + hours * price;
+				return money;
+			}
+			function getNow(s) {
+				return s < 10 ? '0' + s : s;
+			}
+		</script>
+
+	</div>
+</body>
+
+</html>

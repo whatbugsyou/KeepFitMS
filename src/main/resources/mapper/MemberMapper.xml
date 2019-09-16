@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.KeepFitMS.dao.MemberDao" >
+  <resultMap id="MemberMap" type="com.KeepFitMS.entity.Member" >
+    <id column="mid" property="mid" jdbcType="INTEGER" />
+    <result column="mname" property="mname" jdbcType="VARCHAR" />
+    <result column="mdate" property="mdate"  />
+    <result column="msfz" property="msfz"  />
+    <result column="mtelephone" property="mtelephone"></result>
+    <result column="maddress" property="maddress"  />
+  	<result column="msex" property="msex"  />
+  	<result column="coach_id" property="coach_id"  />
+  	<result column="needs" property="needs"  />
+  	<result column="icon" property="icon"  />
+  	<association property="card" javaType="com.KeepFitMS.entity.Card" >
+  	<id column="cid" property="cid"></id>
+  	<result column="ctype" property="ctype"/>
+  	  	<result column="cprice" property="cprice"/>
+  	<result column="cmoney" property="cmoney"/>
+  	<result column="cpoints" property="cpoints"/>
+  	<result column="mid" property="mid"/>
+  	<result column="sdate" property="sdate"/>
+  	<result column="edate" property="edate"/>
+
+  	
+  	</association>
+  </resultMap>
+
+  <select id="getAllMember" resultMap="MemberMap" >
+    select * from member m,card c where m.mid=c.mid order by m.mid 
+  </select>
+  <select id="getMemberByMid" resultMap="MemberMap">
+  select *from member m,card c where m.mid=#{mid} and c.mid=m.mid
+  </select>
+  
+  <select id="shaixuanMember" resultMap="MemberMap">
+		 select *from (select *from member  where 1=1 
+		  <if test="mid !=-1">
+		
+		 and mid=#{mid} 
+		  </if>
+		  <if test="mname !=null and mname!='' ">
+		
+		  	and mname like concat(#{mname},'%') 
+		  </if>
+		  <if test="mtelephone!=null and mtelephone !='' ">
+		
+		  and mtelephone=#{mtelephone}
+		  </if>
+		  <if test="msex !=null and msex!=''">
+		  
+		  and msex=#{msex}
+		  </if>
+		  ) m ,card c where m.mid=c.mid 
+		  <if test="card.cid !=-1">
+		 and c.cid=#{card.cid}
+		  </if>
+		  order by m.mid
+  </select>
+ <update id="updateMemberByMid" >
+ 		update  member 
+	<trim prefix="set" suffixOverrides=",">
+	<if test="mtelephone!=''">
+ 		mtelephone=#{mtelephone},
+ 	</if>
+ 	
+	<if test="maddress!=''">
+		maddress=#{maddress},
+	</if>
+	<if test="needs !=''">
+		needs=#{needs}
+	</if>
+	</trim>
+
+ where mid=#{mid}
+ </update>
+</mapper>

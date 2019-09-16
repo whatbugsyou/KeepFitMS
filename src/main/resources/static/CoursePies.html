@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>收入支出饼状图</title>
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.css">
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script src="Highcharts-7.1.1/code/highcharts.js"></script>
+    <script src="Highcharts-7.1.1/code/highcharts-3d.js"></script>
+    <script src="Highcharts-7.1.1/code/modules/exporting.js"></script>
+</head>
+<body>
+    <div id="tcapp">
+        <!---->
+        <div>
+            <ol class="breadcrumb">
+                <li @click="showICpie"><a href="javascript:void(0)" >课程-类型饼状图</a></li>
+            </ol>
+        </div>
+        <div id="container">
+
+        </div>
+    </div>
+    <script>
+        
+        var vm = new Vue({
+            el:'#tcapp',
+            data:{
+
+            },
+            methods: {
+                showICpie:function(){
+                    $.ajax({
+                        url:"showCoursepie.do",
+                        type:"POST",
+                        data:{
+                            "starttime":this.starttime,
+                            "incomer":this.incomer,
+                            "endtime":this.endtime
+                        },
+                        success:(res)=>{
+                            $("#container").highcharts({
+                                chart: {
+                                    type: 'pie',
+                                    options3d: {
+                                        enabled: true,
+                                        alpha: 45,
+                                        beta: 0
+                                    }
+                                },
+                                title: {
+                                    text: '课程--类型饼状图'
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        allowPointSelect: true,
+                                        cursor: 'pointer',
+                                        depth: 35,
+                                        dataLabels: {
+                                            enabled: true,
+                                        }
+                                    }
+                                },
+                                series: [
+                                    {
+                                        title: '课程类型占比',
+                                        data: res
+                                    }
+                                ]
+                            })
+                        }
+                    })
+                },
+                showPopie:function(){
+
+                }
+            },
+        });
+
+    </script>
+</body>
+</html>

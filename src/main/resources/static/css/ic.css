@@ -1,0 +1,33 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+#imApp{
+    height: 582px;
+    width: 95%;
+    position: absolute;
+    margin-left: 33px;
+}
+.container .panel-body{
+    padding: 10px;
+}
+.container .panel-body .sub{
+    margin-left: 20px;
+}
+.container .panel-body .form-group{
+    margin-left: 5px;
+}
+.container .panel-body .form-group input{
+    width: 134px;
+}
+#imApp .fenye_bottom{
+    position: absolute;
+    left: 1px;
+    bottom: 1px;
+    height: 50px;
+}
+
+
+#imApp .modal-body select{
+    width: 134px;
+}

@@ -1,0 +1,74 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    padding: 1;
+    margin:0;
+    font-family: "Hiragino Sans GB","Microsoft YaHei","微软雅黑",tahoma,arial,"宋体";
+}
+
+
+.aside{
+    width: 200px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #2f4050;
+}
+.aside .profile{
+    width: 200px;
+    height: 180px;
+}
+.aside .menu{
+    margin-top: 20px;
+}
+.aside .menu ul {
+    padding: 0;
+    margin: 0;
+}
+.aside .menu li {
+    list-style: none;
+    padding: 2px 0;
+}
+
+.aside .menu li a{
+    display: block;
+    line-height: 1;
+    padding: 10px 40px;
+    color: #a9b0c2;
+    text-decoration: none;
+    font-weight: bolder;
+}
+.aside .menu li li a{
+    padding-left: 60px;
+}
+.aside .menu li a:hover{
+    background-color:#243443;
+    color: #f6f6f6;
+}
+
+.aside .menu ul .tog{
+    display: none;
+    transition: all 1s linear;
+}
+
+
+
+
+.main{
+    background-color: #f4f6f8;
+    height: 588px;
+    margin-left: 200px;
+}
+.header .container-fluid{
+    background-color:#fff;
+}
+
+.main .navbar-collapse{
+    padding: 0;
+}

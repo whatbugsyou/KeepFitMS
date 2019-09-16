@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+
+<body>
+
+
+    <head>
+        <title>Title</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+
+    <body>
+
+        <div class="card">
+
+            <div class="card-body">
+                <h4 class="card-title">注册新会员</h4>
+
+            </div>
+            <div class="card-footer text-muted">
+                健身管理系统
+            </div>
+        </div>
+        <form class="center-block" onsubmit="return check();" action="addMember.do" method="post" enctype="multipart/form-data" role="form">
+            <div class="col-6 form-group">
+                <label for="name">会员编号</label>
+                <input type="text" onblur="checkMember()" name="mid" class="form-control" id="mid" placeholder="请输入编号">
+                <span class="form-text text-muted" id="helptext">
+
+                </span>
+            </div>
+            <div class="col-6 form-group">
+                <label for="name">会员姓名</label>
+                <input type="text" name="mname" class="form-control" id="name" placeholder="请输入名称">
+            </div>
+
+
+            <div class="col-6 form-group">
+                <label for="">手机号</label>
+                <input type="text" onblur="checktel()" class="form-control" name="mtelephone" id="mtelephone" aria-describedby="helpId" placeholder="">
+                <span class="form-text text-muted" id="helptext1">
+
+                </span>
+            </div>
+
+            <div class="col-6 form-group">
+                <label for="">生日</label>
+                <input type="date" class="form-control" name="mdate" id="mdate" aria-describedby="helpId">
+
+            </div>
+            <div class="col-6 form-group">
+                <label for="">身份证</label>
+                <input type="text" class="form-control" onblur="checksfz()" name="msfz" id="msfz" aria-describedby="helpId" placeholder="">
+                <span class="form-text text-muted" id="helptext2">
+
+                </span>
+            </div>
+            <div class="col-6 form-group">
+                <label for="">地址</label>
+                <input type="text" class="form-control" name="maddress" id="" aria-describedby="helpId" placeholder="">
+
+            </div>
+            <div class="col-6 form-group">
+                性别:
+                <input type="radio" name="msex" id="" value="男">男
+                <input type="radio" name="msex" id="" value="女">女
+
+            </div>
+            <div class="col-6 form-group">
+                <label for="">教练编号</label>
+                <input type="text" class="form-control" name="coach_id" id="coach_id" aria-describedby="helpId" placeholder="">
+                <small id="helpId" class="form-text text-muted">若无教练填0</small>
+            </div>
+          
+            <div class="col-6 form-group">
+                <label for="">健身需求</label>
+                <select class="form-control" name="needs" id="">
+                            <option>减肥</option>
+                            <option>增肌</option>
+                            <option>塑形</option>
+                            <option>其他</option>
+                          </select>
+            </div>
+            <div class="col-6 form-group">
+                <label for="">照片</label>
+                <input type="file" accept="图片" class="form-control-file" name="image" id="image" placeholder="" aria-describedby="fileHelpId">
+
+            </div>
+
+
+            <hr>
+            <p class="form-text text-muted">
+                会员卡绑定
+            </p>
+
+            <div class="col-6 form-group">
+                <label for="name">会员卡类型</label>
+                <select class="form-control" name="ctype" onchange="change()" id="ctype">
+                    <option>年卡</option>
+                    <option>季卡</option>
+                    <option>月卡</option>
+                  </select>
+                <label for="name" id="shoujia">售价:8888</label>
+            </div>
+            <div class="col-6 form-group">
+                <label for="">入会时间</label>
+                <input type="date" class="form-control" name="sdate" id="sdate" aria-describedby="helpId">
+
+            </div>
+            <div class="col-6 form-group">
+                <button type="submit" class=" btn btn-primary">提交</button>
+                <span style="display: none" id="msg" th:text="${msg}"></span>
+            </div>
+
+        </form>
+        <br>
+        <br>
+        <br>
+<div class="jumbotron jumbotron-fluid mb-0 fixed-bottom p-3">
+            <p class="text-center">copyright@2019 健身管理系统</p>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+
+        <script>
+        $(function(){
+        	
+    		var msg=$("#msg").html()
+    		if(msg!=""){
+    			if(msg=="ok"){
+    				var a=confirm("添加成功，是否返回主页?")
+    				if(a){
+    					window.location.href="index";
+    				}else{
+    					msg="";
+    				}
+    			}else{
+    				alert("添加失败，请检查后重新输入!")
+    				msg="";
+    			}
+    			
+    		}
+    		
+    	})
+            function change() {
+                var type = $("#ctype").val();
+                var shoujia = $("#shoujia");
+                if (type == "年卡") {
+                    shoujia.html("售价:8888")
+                } else if (type == "季卡") {
+                    shoujia.html("售价:4999")
+                } else if (type = "月卡") {
+                    shoujia.html("售价:2999")
+                }
+            }
+
+            function check() {
+
+                var msfz = $("#msfz").val();
+                var mtelephone = $("#mtelephone").val();
+                var image = $("#image").val();
+                var str = image.split(".")
+                var type = str[str.length - 1];
+
+                var date = $("#mdate").val();
+                var sdate = $("#sdate").val();
+                if(! /^[0-9]+$/.test($("#mid").val())){
+            		alert("会员编号格式有误，请重新输入")
+            		return false;
+            	}else if($("#mid").val().length>4){
+            		alert("会员编号不能超过4位，请重新输入")
+            		return false;
+            	}
+               	 else if (msfz.length != 15 && msfz.length != 18) {
+                    alert("请输入正确的身份证号")
+                    return false
+                } else if (mtelephone.length != 11) {
+                    alert("请输入正确的手机号")
+                    return false
+                } else if (type != "jpg" && type != "png" && type != "jpeg" && type != "bmp") {
+                    alert("请上传正确格式的图片")
+                    return false;
+                } else if (date == "" || sdate == "") {
+
+                    alert("日期未填")
+                    return false;
+
+                }else if($("#helptext").html()=="会员编号已被占用"){
+                	alert("会员编号已被占用");
+                	return false
+                }
+
+                return true;
+            }
+
+            function checksfz() {
+                var msfz = $("#msfz").val();
+                if (! /^[0-9]+$/.test(msfz)||(msfz.length != 15 && msfz.length != 18)) {
+                    $("#helptext2").html("身份证格式不正确!")
+
+                } else {
+                    $("#helptext2").html("身份证可使用!")
+                }
+            }
+
+            function checktel() {
+                var mtelephone = $("#mtelephone").val();
+                if (! /^[0-9]+$/.test(mtelephone)||mtelephone.length != 11) {
+                    $("#helptext1").html("手机号格式不正确!")
+                } else {
+                    $("#helptext1").html("手机号可使用!")
+                }
+            }
+
+            function checkMember() {
+                var mid = $("#mid").val();
+                if(! /^[0-9]+$/.test(mid)){
+                	 $("#helptext").html("会员编号格式有误，请重新输入")
+            		return false;
+            	}else if(mid.length>4){
+            		$("#helptext").html("会员编号不能超过4位，请重新输入")
+            		return false;
+            	}
+                $.get("checkMember.do?mid=" + mid, function(result) {
+                    if (result == "ok") {
+                        $("#helptext").html("会员编号可以使用")
+
+                    } else if (result == "exist") {
+                        $("#helptext").html("会员编号已被占用")
+
+                    }
+                });
+            }
+        </script>
+    </body>
+
+    </html>
+
+
